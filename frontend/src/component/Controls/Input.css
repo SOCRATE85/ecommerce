@@ -1,0 +1,42 @@
+.input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+}
+.input label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+.inputElement {
+    outline: none;
+    border: 2px solid #ccc;
+    font-size: 14px;
+    padding: 6px 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #000;
+    height: 44px;
+}
+.inputElement:focus {
+    box-shadow: 0 0 5px 0 rgb(204,204,204);    
+}
+.textarea { height: 100px;}
+.invalid {border: 2px solid red;box-shadow: 0 0 5px 0 rgb(255,1,1);}
+
+#createProductFormImage {width: 100%; overflow: auto; display: grid; grid-template-columns: repeat(3, minmax(33%, 1fr));}
+#createProductFormImage > div {
+    width: 115px;
+    position: relative;
+    border: 1px solid;
+    overflow: hidden;
+    margin: 10px 10px 0 0;
+}
+#createProductFormImage > div > Svg {position: absolute; top: 10px; right: 10px; cursor: pointer; color: red;}
+#createProductFormImage > div > img {width: 100%;}

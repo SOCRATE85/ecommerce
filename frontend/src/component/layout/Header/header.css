@@ -1,0 +1,20 @@
+.header .Logo{
+    height: 65px;
+}
+.DesktopOnly{
+        display: block;
+}
+@media (max-width: 768px){
+    .DesktopOnly{
+        display: none !important;
+    }
+    .header .Logo{
+        max-width: 300px !important;
+        text-align: center;
+        height: auto !important;
+    }
+
+    .Logo > a> img{
+        height: 65px !important;
+    }
+}

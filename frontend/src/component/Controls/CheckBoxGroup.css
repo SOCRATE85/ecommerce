@@ -1,0 +1,9 @@
+.CheckBoxGroup {
+    width: 100%;
+}
+.CheckBoxGroup label{
+    display: flex;
+}
+.CheckBoxGroup label input {
+    margin-right: 10px;
+}

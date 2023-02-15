@@ -1,0 +1,119 @@
+.updateCategoryContainer {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.updateCategoryContainer h1 {
+    color: rgba(0, 0, 0, 0.733);
+    font-weight: 300;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.updateCategoryForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    padding: 2vmax;
+    height: 70%;
+    transition: all 0.5s;
+    margin-top: 0;
+}
+
+.updateCategoryForm > div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 2vmax;
+}
+
+.updateCategoryForm > div > input,
+.updateCategoryForm > div > select,
+.updateCategoryForm > div > textarea {
+    padding: 1vmax 4vmax;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0,0, 0.267);
+    border-radius: 4px;
+    font: 300 14px 'Roboto', sans-serif;
+    outline: none;
+}
+
+.updateCategoryForm > div > svg {
+    position: absolute;
+    transform: translateX(1vmax);
+    font-size: 16px;
+    color: rgba(0, 0,0, 0.678);
+}
+
+#updateCategoryFormFile > img {
+    width: 3vmax;
+    border-radius: 100%;
+}
+
+#updateCategoryFormFile > input {
+    padding: 0%;
+    display: flex;
+}
+
+#updateCategoryFormFile > input::file-selector-button,
+#updateCategoryFormFile > input::file-upload-button,
+#updateCategoryFormFile > input::-webkit-file-upload-button {
+    cursor: pointer;
+    width: 100%;
+    z-index: 2;
+    height: 5vh;
+    border: none;
+    margin: 0;
+    font: 400 14px 'Roboto', sans-serif;
+    transition: all 0.5s;
+    padding: 0 1vmax;
+    color: rgba(0, 0,0, 0.623);
+    background-color: rgb(255, 255, 255);
+}
+
+#updateCategoryBtn {
+    border: none;
+    background-color: tomato;
+    color: white;
+    font: 300 16px 'Roboto', sans-serif;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.5s;
+    border-radius: 4px;
+    outline: none;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 22%);
+    margin-left: 23px;
+    margin-bottom: 23px;
+}
+
+#updateCategoryFormImage {
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+#updateCategoryFormImage > img {
+    width: 100px;
+    margin: 1rem 1rem 0rem 0rem;
+}
+
+@media screen and (max-width: 600px) {
+    .updateCategoryForm{
+        padding: 5vmax;
+    }
+    .updateCategoryForm > div > input {
+        padding: 2.5vmax 5vmax;
+        font: 300 14px 'Roboto', sans-serif;
+    }
+    .updateCategoryForm > div > svg {
+        font-size: 16px;
+    }
+    #updateCategoryFormFile > img {
+        width: 8vmax;
+        border-radius: 100%;
+    }
+}

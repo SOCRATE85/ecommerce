@@ -1,0 +1,31 @@
+.Catalog {
+    width: 100%;
+}
+
+.Catalog .setting_row {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.Catalog .setting-title {
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.733);
+}
+
+.Catalog .setting_row label {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.Catalog .setting_row select,
+.Catalog .setting_row input {
+    padding: 8px;
+    border: 1px solid #cbc9c987;
+    border-radius: 3px;
+}
+
+.Catalog .setting_row span {
+    margin-top: 5px;
+}

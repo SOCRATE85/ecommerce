@@ -1,0 +1,19 @@
+.attributeSetListContainer {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+.attributeSetListContainer .empty {
+    width: 65px;
+}
+.attributeSetListContainer .titleContainer {
+    display: flex;
+    justify-content: space-between;
+}
+.attributeSetListContainer .titleContainer h1 {
+    color: rgba(0, 0, 0, 0.733);
+    font-weight: 300;
+    font-size: 2rem;
+    text-align: center;
+}

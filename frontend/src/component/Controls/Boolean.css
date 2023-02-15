@@ -1,0 +1,70 @@
+.Boolean {
+    width: 50px;
+    height: 25px;    
+    border-radius: 25px;
+    position: relative;
+    cursor: pointer;
+}
+
+@keyframes moveHandleLefttoRight {
+    0% {
+        left: 0px;
+    }
+
+    50% {
+        left: 10px;
+    }
+
+    100% {
+        left: 25px
+    }
+}
+
+@keyframes moveHandleRighttoLeft {
+    100% {
+        left: 0px;
+    }
+    50% {
+        left: 10px;
+    }
+    0% {
+        left: 25px
+    }
+}
+
+.Boolean.lefthandlebgcolor {
+    background-color: rgba(168, 168, 168, 0.4);
+}
+
+.Boolean.righthandlebgcolor {
+    background-color: rgba(17, 245, 17, 0.795);
+}
+
+.Boolean .handle {
+    border-radius: 100%;
+    width: 25px;
+    height: 25px;
+    background-color:cornflowerblue;
+    transition: left 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.Boolean .handle input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    visibility: hidden;
+}
+
+.Boolean .left {
+    position: absolute;
+    left: 0;
+    top: 0;    
+}
+
+.Boolean .right {
+    position: absolute;
+    left: 25px;
+    top: 0;
+}

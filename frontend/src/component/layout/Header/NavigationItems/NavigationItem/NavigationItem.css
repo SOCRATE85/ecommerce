@@ -1,0 +1,88 @@
+.NavigationItem{
+    margin: 10px 0;
+    box-sizing: border-box;
+    display: block;
+    width: auto;
+    position: relative;
+    z-index: 1;
+}
+.NavigationItem a{
+    color: #8f5c2c;
+    text-decoration: none;
+    padding: 16px 10px;
+    display: block;
+    font-size: 14px;
+}
+.NavigationItem a:active, .NavigationItem.active{
+    color: #40a4cb;
+}
+
+.NavigationItem ul {
+    display: none;
+    position: absolute;
+}
+
+.NavigationItem:hover ul {
+    display: block;
+    top: 40px;
+    left: 0px;    
+}
+
+@media (min-width: 768px) {
+    .NavigationItem {
+        margin: 0;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+    }
+    .NavigationItem a{
+        color: #000;
+        text-decoration: none;
+        padding: 8px 10px;
+        box-sizing: border-box;
+        text-transform: uppercase;
+    }
+    .NavigationItem a:hover{
+        color: #c01e2e !important;
+    }
+    .NavigationItem a:after{
+        background-color: #fff;
+        bottom: 50%;
+        content: "";
+        height: 0;
+        left: 50%;
+        position: absolute;
+        transition: all 0.4s ease 0s;
+        width: 0%;
+        z-index: -1;
+    }
+    .NavigationItem a:hover:after{
+        height: 100%;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        transition: all 0.2s ease 0s;
+    }
+    .NavigationItem a:active,
+    .NavigationItem a.active{
+        color: #fff;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .NavigationItem a{
+        font-size: 12px;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .NavigationItem a{
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .NavigationItem a{
+        font-size: 16px;
+    }
+}

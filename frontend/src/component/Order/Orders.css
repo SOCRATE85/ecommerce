@@ -1,0 +1,44 @@
+.myOrderPage {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    background-color: rgba(235, 235, 235);
+    display: flex;
+    flex-direction: column;
+}
+
+.myOrdersTable {
+    background-color: white;
+}
+
+.myOrdersTable a {
+    color: rgba(0, 0, 0, 527);
+    transition: all 0.5s;
+}
+
+.myOrdersTable a:hover {
+    color: tomato;
+}
+
+.MuiDataGrid-columnHeaders {background-color: tomato;}
+
+.MuiDataGrid-columnHeader {
+    background-color: tomato;
+}
+
+.MuiDataGrid-columnHeader div {
+    color: rgb(255, 255,255);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.MuiDataGrid-iconSeparator {
+    display: none !important;
+}
+.MuiDataGrid-columnHeaderCheckbox,
+.MuiDataGrid-cellCheckbox {
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+}

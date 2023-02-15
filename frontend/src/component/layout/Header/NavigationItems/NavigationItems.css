@@ -1,0 +1,149 @@
+.nav-btn {
+    flex: 3;
+    display: flex;
+}
+
+.nav-links {
+    flex: 2;
+}
+
+.nav-links > ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    align-self: center;
+    list-style: none;
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link > a {
+    color: #000;
+    padding: 13px 10px;
+    letter-spacing: 1px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.5s;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-decoration: none;
+    height: 40px;
+}
+
+.nav-link > a > svg {
+    margin-left: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.nav-link:hover > a {
+    background: #3498db;
+    color: #fff;
+    border-bottom: none;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 17rem;
+    transform: translateY(10px);
+    display: none;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.dropdown.first{
+    border-top: none;
+}
+
+.dropdown ul {
+    position: relative;
+    list-style: none;
+    border: 1px solid #666;
+    border-top: none;
+}
+
+.dropdown-link > a, 
+.dropdown-link > button {
+    display: flex;
+    background-color: #3498db;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    width: 100%;
+    position: relative;
+    z-index: 100;
+}
+
+.dropdown-link > .dropdown.second a{
+    padding: 10px;
+}
+
+.dropdown-link:hover > a,
+.dropdown-link:hover> button {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.dropdown-link svg {
+    transform: rotate(-90deg);
+}
+
+.arrow {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    top: -5.5px;
+    left: 32px;
+    background-color: #fff;
+    transform: rotate(45deg);
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 1;
+}
+
+.dropdown-link:first-child:hover ~ .arrow {
+    background-color: #3498db;
+}
+
+.dropdown-link {
+    position: relative;
+    border-top: 1px solid #666;
+}
+
+.dropdown.first .dropdown-link:first-child{ border: none; }
+.dropdown.second .dropdown-link:first-child{border-top: 1px solid #666;}
+.dropdown.second {
+    top: 0;
+    left: 100%;
+    padding-left: 0;
+    cursor: pointer;
+    transform: translateX(10px);
+}
+
+.dropdown.reverse {
+    left: -100% !important;
+}
+
+.dropdown.second .arrow {
+    top: 10px;
+    left: -5.5px;
+}
+
+.nav-link:hover > .dropdown,
+.dropdown-link:hover > .dropdown {
+    transform: translate(0, 0);
+    display: block;
+    pointer-events: auto;
+}

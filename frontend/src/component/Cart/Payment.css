@@ -1,0 +1,94 @@
+.paymentContainer{
+    display: grid;
+    place-items: center;
+    background-color: rgba(255, 255, 255);
+    height: 65vh;
+    margin: 2vmax;
+}
+
+.paymentForm {
+    width: 300px;
+    height: 100%;
+}
+
+.paymentForm > p {
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(0, 0, 0,0.755);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    padding: 1vmax 0;
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    white-space: nowrap;
+}
+
+.paymentForm > div {
+    display: flex;
+    align-items: center;
+    margin: 2vmax 0;
+}
+
+.paymentInput {
+    padding: 1vmax 4vmax;
+    padding-right: 1vmax;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.267);
+    border-radius: 4px;
+    outline: none;
+}
+
+.paymentForm > div > svg {
+    position: absolute;
+    transform: translateX(1vmax);
+    font-size: 14px;
+    color: rgba(0, 0, 0,0.623);
+}
+
+.paymentFormBtn {
+    border: none;
+    background-color: tomato;
+    color: white;
+    font-size: 14px;
+    font-weight: 300;
+    width: 100%;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.5s;
+    outline: none;
+}
+
+.paymentFormBtn:hover{
+    background-color: rgb(179, 66, 46);
+}
+
+@media screen and (max-width: 600px) {
+    .paymentForm {
+        width: 90%;
+    }
+    .paymentForm > p {
+        font-size: 14px;
+        font-weight: 400;
+        width: 60%;
+    }
+
+    .paymentForm > div {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    } 
+
+    .paymentInput {
+        padding: 10px 20px;
+    }
+
+    .paymentForm > div > svg {
+        font-size: 14px;
+    }
+
+    .paymentFormBtn {
+        font-size: 16px;
+        font-weight: 300;
+    }
+}

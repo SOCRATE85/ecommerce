@@ -1,0 +1,30 @@
+.updateOrderForm {
+    margin: 20px 0;
+    padding: 30px;
+    background-color: white;
+}
+
+.updateOrderForm > div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.updateOrderForm > div > select {
+    padding: 10px 40px;
+    margin: 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.267);
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 14px;
+    outline: none;
+}
+
+.updateOrderForm > div > svg {
+    position: absolute;
+    transform: translateX(10px);
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.623);
+}
