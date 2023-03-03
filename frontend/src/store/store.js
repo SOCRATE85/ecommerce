@@ -36,7 +36,8 @@ import {
     createBlogCategoryReducer,
     updateBlogCategoryReducer
 } from './reducers/blogCategoryReducer';
-import { listAllBlogReducer, newBlogeducer } from './reducers/blogReducer';
+import { listAllBlogReducer, newBlogeducer, blogDetailReducer, updateBlogReducer } from './reducers/blogReducer';
+import { deleteReducer, uploadReducer } from './reducers/uploadReducer';
 
 const reducer = combineReducers({
     products: productReducer,
@@ -88,7 +89,11 @@ const reducer = combineReducers({
     blogCategory: blogCategoryReducer,
     deleteBlogCategory: deleteBlogCategoryReducer,
     createBlog: newBlogeducer,
-    blogs: listAllBlogReducer
+    updateBlog: updateBlogReducer,
+    blogDetail: blogDetailReducer,
+    blogs: listAllBlogReducer,
+    uploadImage: uploadReducer,
+    deleteImage: deleteReducer
 });
 
 const initialStore = {

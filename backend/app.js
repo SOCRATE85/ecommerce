@@ -49,6 +49,9 @@ const blogCategory = require("./routes/blogCategoryRoute");
 //manage blogs
 const blog = require("./routes/blogRoute");
 
+//upload files
+const upload = require("./routes/uploadRoute");
+
 app.use("/api/v1", product)
 app.use("/api/v1", user);
 app.use("/api/v1", order);
@@ -60,11 +63,14 @@ app.use("/api/v1", settings);
 app.use("/api/v1", address);
 app.use("/api/v1", blogCategory);
 app.use("/api/v1", blog);
+app.use("/api/v1", upload);
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "./public")));
+
+/*app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("*", (_req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
-});
+});*/
 
 //Middleware for errors
 app.use(errorMiddleware)

@@ -8,12 +8,12 @@ const demoBaseConfig = {
   autosave_ask_before_unload: false,
   powerpaste_allow_local_images: true,
   plugins: [
-    'a11ychecker', 'advcode', 'advlist', 'anchor', 'autolink', 'codesample', 'fullscreen', 'help',
-    'image', 'editimage', 'tinydrive', 'lists', 'link', 'media', 'powerpaste', 'preview',
-    'searchreplace', 'table', 'template', 'tinymcespellchecker', 'visualblocks', 'wordcount'
+    'advlist', 'anchor', 'autolink', 'codesample', 'fullscreen', 'help',
+    'image', 'tinydrive', 'lists', 'link', 'media', 'preview',
+    'searchreplace', 'table', 'template', 'visualblocks', 'wordcount'
   ],
   templates: [],
-  toolbar: 'insertfile a11ycheck undo redo | bold italic | forecolor backcolor | template codesample | alignleft aligncenter alignright alignjustify | bullist numlist | link image',
+  toolbar: 'insertfile undo redo | bold italic | forecolor backcolor | template codesample | alignleft aligncenter alignright alignjustify | bullist numlist | link image',
   spellchecker_dialog: true,
   spellchecker_ignore_list: ['Ephox', 'Moxiecode'],
   tinydrive_token_provider: (success, _failure) => {
@@ -21,25 +21,29 @@ const demoBaseConfig = {
   },
   content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
   image_title: true,
-  automatic_uploads: true,
   file_picker_types: 'image',
+  images_upload_url: '/api/v1/listofimages/',
+  images_upload_base_path: process.env.BASE_PATH,
   file_picker_callback: function(cb, value, meta) {
     var input = document.createElement("input");
     input.setAttribute('type', 'file');
     input.setAttribute("accept", "image/*");
     input.onChange = function() {
         var file = this.files[0];
-
+        console.log("Uplaoded", file)
         var reader = new FileReader();
         reader.onload = function() {
+            console.log("Uplaoded")
+            /*
             var id = 'blobid' + (new Date()).getTime();
             var blobCache = this.activeEditor.editorUpload.blobCache;
             var base64 = reader.result.split(',')[1];
             var blobInfo = blobCache.create(id, file, base64);
             blobCache.add(blobInfo);
-
             cb(blobInfo.blobUrl(), { title: file.name})
+            */
         }
+        console.log("Uplaoded")
         reader.readAsDataURL(file);
     }
     input.click();

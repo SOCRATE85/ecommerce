@@ -30,7 +30,7 @@
 .textarea { height: 100px;}
 .invalid {border: 2px solid red;box-shadow: 0 0 5px 0 rgb(255,1,1);}
 
-#createProductFormImage {width: 100%; overflow: auto; display: grid; grid-template-columns: repeat(3, minmax(33%, 1fr));}
+#createProductFormImage {width: 100%; overflow: auto; display: grid; grid-template-columns: repeat(4, minmax(25%, 1fr));}
 #createProductFormImage > div {
     width: 115px;
     position: relative;

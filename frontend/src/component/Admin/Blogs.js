@@ -15,14 +15,13 @@ const Blogs = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {blogs, loading, error} = useSelector(state => state.blogs);
-    let columns = [                
-        { field: "id", headerName: "Order Id", flex: 1},
-        { field: "status", headerName: "Status", cellClassName: (params) => {
-            return params.getValue(params.id, "status") === "Delivered" ? "grrenColor" : "redColor";
+    let columns = [
+        { field: "id", headerName: "Id", flex: 1},
+        { field: "status", headerName: "Status", renderCell: (params) => {
+            return params.row.status === 1 ? "Enabled" : "Disabled";
         }, flex: 1},
-        { field: "itemsQty", headerName: "Items Qty", type: "number", flex: 1},
-        { field: "amount", headerName: "Amount", type: "number", flex: 1},
-        { 
+        { field: "title", headerName: "Title", type: "number", flex: 1},
+        {
             field: "actions", 
             headerName: "Actions",
             type: "number",
@@ -30,16 +29,26 @@ const Blogs = () => {
             sortable: false,
             renderCell: (params) => {
                 return (<>
-                    <Link to = {`/admin/blog/${params.rows.id}`}><Edit /></Link>
-                    <Button onClick={() => deleteBlogHandler(params.rows.id)}><Delete /></Button>
+                    <Link to = {`/admin/blog/${params.row.id}`}><Edit /></Link>
+                    <Button onClick={() => deleteBlogHandler(params.row.id)}><Delete /></Button>
                 </>);
             }
         }    
     ];
-    let rows = [];
+
+    const rows = [];
+    blogs && blogs.forEach(blog => {
+        rows.push({
+            id: blog._id,
+            title: blog.title,
+            status:blog.status
+        });
+    });
+
     useEffect(() => {
         dispatch(getAllBlog());
     },[dispatch]);
+
     useEffect(() => {
         if(error) {
             alert.error(error);
@@ -50,16 +59,17 @@ const Blogs = () => {
     const deleteBlogHandler = (id) => {
         console.log(id);
     }
+
     if(loading) {return <Loader />}
-    console.log(blogs);
+
     return (<FormContainer pagetitle={"Blog Listing"}>
-        {loading ? <Loader /> : <>
+        {loading || rows.length === 0 ? <Loader /> : <>
             <div className="text-left flex justify-end"><Button onClick={() => navigate("/admin/blog/new")}>Add Blog</Button></div>
             <DataGrid
                 columns={columns} 
                 rows={rows} 
                 pageSize={10} 
-                disableSelectionOnClick 
+                disableSelectionOnClick
                 className='productListTable'
                 autoHeight
                 rowsPerPageOptions={[5, 10, 15, 20, 25]}

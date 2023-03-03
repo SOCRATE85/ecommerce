@@ -8,8 +8,10 @@ import { checkValidation, validate, validatedForm } from "../../common/validatio
 import Loader from "../layout/Loader/Loader";
 import { getAllBlogCategories } from "../../store/actions/blogCategoryAction";
 import { createBlog } from "../../store/actions/blogAction";
+import { uploadFiles } from "../../store/actions/uploadAction";
 import { CREATE_BLOG_RESET } from "../../store/contants/blogContent";
 import { FormContainer } from "../../common/components/FormContainer";
+import { slugify } from "../../common/slugify";
 
 const NewBlog = () => {
     const dispatch = useDispatch();
@@ -17,6 +19,7 @@ const NewBlog = () => {
     const alert = useAlert();
     const {loading: loadingBlog, success} = useSelector( state => state.createBlog );
     const { blogcategories, loading } = useSelector(state => state.blogCategories);
+    const {images: uploadedImage /*, loading: loadImages*/} = useSelector(state=>state.uploadImage);
     const [ images, setImages ] = useState([]);
     const [ imageIdentifier, setImageIdentifier ] = useState([]);
     const [ imageUpload, setImageUpload ] = useState(false);
@@ -36,7 +39,22 @@ const NewBlog = () => {
             valid: false,
             touched: false
         },
-        fullContent: {
+        url_path: {
+            elementType: "input",
+            elementConfig: {
+                type: "text",
+                placeholder: "Url Path",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        full_content: {
             elementType: "editor",
             elementConfig: {
                 type: "editor",
@@ -51,7 +69,7 @@ const NewBlog = () => {
             valid: false,
             touched: false
         },
-        shortContent: {
+        short_content: {
             elementType: "editor",
             elementConfig: {
                 type: "editor",
@@ -67,7 +85,7 @@ const NewBlog = () => {
             touched: false
         },
         categories: {
-            elementType: "select",
+            elementType: "multiselect",
             elementConfig: {
                 placeholder: "Blog Category",
                 error: "",
@@ -84,6 +102,7 @@ const NewBlog = () => {
             },
             hideLabel: false,
             valid: false,
+            isMulti: true,
             touched: false
         },
         blogimages: {
@@ -102,7 +121,7 @@ const NewBlog = () => {
             valid: false,
             touched: false
         },
-        metaTitle: {
+        meta_title: {
             elementType: "input",
             elementConfig: {
                 type: "text",
@@ -117,7 +136,7 @@ const NewBlog = () => {
             valid: false,
             touched: false
         },
-        metaTags: {
+        meta_tags: {
             elementType: "input",
             elementConfig: {
                 type: "text",
@@ -132,7 +151,7 @@ const NewBlog = () => {
             valid: false,
             touched: false
         },
-        metaDescription: {
+        meta_description: {
             elementType: "textarea",
             elementConfig: {
                 type: "text",
@@ -210,18 +229,18 @@ const NewBlog = () => {
             const _updatedFormElement = {...formState};
             const updatedFormElement = {..._updatedFormElement[imageIdentifier]};
             updatedFormElement.touched = true;
-            updatedFormElement.value = images;
-            const validation = checkValidation(images , updatedFormElement.validation);
+            updatedFormElement.value = [...updatedFormElement.value, ...uploadedImage];
+            const validation = checkValidation(uploadedImage , updatedFormElement.validation);
             updatedFormElement.valid = validation.isValid;
             updatedFormElement.elementConfig.error = validation.message;
             _updatedFormElement[imageIdentifier] = updatedFormElement;
             setFormState(_updatedFormElement);
             setImageUpload(false);
         }
-        if(imageUpload && images.length > 0) {
+        if(imageUpload && uploadedImage.length > 0) {
             loadOption();
         }
-    }, [imageIdentifier, images, formState, imageUpload]);
+    }, [imageIdentifier, uploadedImage, formState, imageUpload]);
 
     const selectOptionChangeHandler = (value, identifier) => {
         const _updatedFormElement = {...formState};
@@ -238,7 +257,10 @@ const NewBlog = () => {
     const createBlogImageChange = (e, identifier) => {
         const files = Array.from(e.target.files);
         setImageIdentifier(identifier);
-        files.forEach((file) => {
+        setImageUpload(true);
+        dispatch(uploadFiles(files));
+        
+        /*files.forEach((file) => {
             const reader = new FileReader();
             reader.onload = () => {
                 if(reader.readyState === 2) {
@@ -247,7 +269,7 @@ const NewBlog = () => {
                 }
             }
             reader.readAsDataURL(file);
-        });
+        });*/
     }
     
     const checkboxOptionChangeHandler = (event, identifier) => {
@@ -271,7 +293,21 @@ const NewBlog = () => {
         updatedFormElement.valid = validation.isValid;
         updatedFormElement.elementConfig.error = validation.message;
         _updatedFormElement[identifier] = updatedFormElement;
-        setFormState(_updatedFormElement);
+
+        if(identifier === 'title') {
+            const __updatedFormElement = {..._updatedFormElement};
+            const updatedFormElement = {...__updatedFormElement["url_path"]};
+            updatedFormElement.touched = true;
+            const url = slugify(event.target.value);
+            updatedFormElement.value = url;
+            const validation = checkValidation(event.target.value, updatedFormElement.validation);
+            updatedFormElement.valid = validation.isValid;
+            updatedFormElement.elementConfig.error = validation.message;
+            __updatedFormElement["url_path"] = updatedFormElement;
+            setFormState(__updatedFormElement);
+        } else {
+            setFormState(_updatedFormElement);
+        }
     }
 
     const chkEditorHandler = (data, identifier) => {
@@ -299,6 +335,7 @@ const NewBlog = () => {
 
     const createBlogSubmitHandler = (e) => {
         e.preventDefault();
+        
         const validatedData = validate(formState);
         setFormState(validatedData);
         const validated = validatedForm(formState);
@@ -306,18 +343,20 @@ const NewBlog = () => {
             return;
         }
         const myForm = new FormData();
+        const _categories = formState.categories.value.reduce((result, item) => {return result.concat(item.value)}, []).filter(item => item !=='');
+        myForm.set("categories", _categories);
         myForm.set("title", formState.title.value);
-        myForm.set("full_content", formState.fullContent.value);
-        myForm.set("short_content", formState.shortContent.value);
-        myForm.set("categories", formState.categories.value.value);
+        myForm.set("full_content", formState.full_content.value);
+        myForm.set("short_content", formState.short_content.value);
+        
         const blogimages = formState.blogimages.value;
         blogimages.map((image) => {
             myForm.append("blogimages", image);
             return true;
         });
-        myForm.set("meta_title", formState.metaTitle.value);
-        myForm.set("meta_tags", formState.metaTags.value);
-        myForm.set("meta_description", formState.metaDescription.value);
+        myForm.set("meta_title", formState.meta_title.value);
+        myForm.set("meta_tags", formState.meta_tags.value);
+        myForm.set("meta_description", formState.meta_description.value);
         myForm.set("status", formState.status.value.value);
         dispatch(createBlog(myForm));
     }
@@ -431,7 +470,7 @@ const NewBlog = () => {
                         return null
                 }
             })}
-            <Button id="createCategoryBtn" type="submit">Create</Button>
+            <Button id="createCategoryBtn" type="submit">Create Post</Button>
         </form>}
     </FormContainer>);
 }

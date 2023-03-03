@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const catchAsyncError = require("../middleware/catchAsyncError");
-const slugify = require("../utils/slugify");
 
 const blogPostSchema = new mongoose.Schema({
     title: {
@@ -25,14 +24,22 @@ const blogPostSchema = new mongoose.Schema({
         required: [true, "Please enter the fill content"],
         trim: true
     },
-    blogimages: {
-         type: String,
-         required: [true, "Please select the images"],
-         trim: true
-    },
+    blogimages: [
+        {
+            type: String,
+            required: [true, "Please select the images"],
+            trim: true
+        }
+    ],
     url_key: {
         type: String,
-        required: true
+        required: true,
+        trim: true
+    },
+    url_path: {
+        type: String,
+        required: true,
+        trim: true
     },
     meta_title: {
         type: String,
@@ -79,7 +86,6 @@ const blogPostSchema = new mongoose.Schema({
 blogPostSchema.index({ title: 1, url_key: 1}, {unique: true});
 blogPostSchema.pre("save", catchAsyncError(async function(next) {
     this.updated_at = Date.now();
-    this.url_key = slugify(this.title);
     next();
 }));
 module.exports = mongoose.model("BlogPosts", blogPostSchema);

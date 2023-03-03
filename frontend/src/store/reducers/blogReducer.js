@@ -3,6 +3,13 @@ import {
     CREATE_BLOG_SUCCESS,
     CREATE_BLOG_FAIL,
     CREATE_BLOG_RESET,
+    GET_BLOG_REQUEST,
+    GET_BLOG_SUCCESS,
+    GET_BLOG_FAIL,
+    UPDATE_BLOG_REQUEST,
+    UPDATE_BLOG_SUCCESS,
+    UPDATE_BLOG_FAIL,
+    UPDATE_BLOG_RESET,
     LIST_BLOG_REQUEST,
     LIST_BLOG_SUCCESS,
     LIST_BLOG_FAIL,
@@ -47,7 +54,72 @@ export const newBlogeducer = (state = { blog: {}}, action ) => {
             return state;
     } 
 }
- 
+
+
+export const updateBlogReducer = (state={}, action) => {
+    switch(action.type){
+        case UPDATE_BLOG_REQUEST:
+            return {
+                loading: true,
+                ...state
+            };
+        case UPDATE_BLOG_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isUpdated: action.payload
+            };
+        case UPDATE_BLOG_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
+        case UPDATE_BLOG_RESET:
+            return {
+                ...state,
+                isUpdated: false
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null
+            }
+        default:
+            return state;
+    }
+}
+
+
+export const blogDetailReducer = (state={blog: undefined}, action) => {
+    switch (action.type) {
+        case GET_BLOG_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case GET_BLOG_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                blog: action.payload
+            };
+        case GET_BLOG_FAIL:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                loading: false,
+                error: null
+            }
+        default:
+            return state;
+    }
+}
+
 export const listAllBlogReducer = (state={blogs:[]}, action) => {
     switch (action.type) {
         case LIST_BLOG_REQUEST:

@@ -1,10 +1,10 @@
 import React from "react";
 import CheckBoxGroup from './CheckBoxGroup';
 import RadioBoxGroup from './RadioBoxGroup';
-import { Delete } from '@mui/icons-material';
 import Editor from './Editor';
 import Boolean from "./Boolean";
 import Select from 'react-select';
+import Images from "./Images";
 import "./Input.css";
 
 const Input = (props) => {
@@ -36,10 +36,11 @@ const Input = (props) => {
                 {props.value && <div id="createProductFormImage">
                     {
                         props.value.map((image, index) => {
-                            return (<div key={index}>
-                                <Delete onClick={() => props.removeImage(index, props.id)} />
-                                <img key={index} src={image} alt="Avatar Preview" />
-                            </div>)
+                            return <Images 
+                                key={index} 
+                                image={image} 
+                                removeImage={() => props.removeImage(index, props.id)}
+                            />
                         })
                     }
                 </div>}
