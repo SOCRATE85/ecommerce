@@ -1,64 +1,54 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import webFont from 'webfontloader';
 import { useLocation, Route } from 'react-router-dom';
-import Home from './component/Home/Home';
-import Search from './component/Product/Search';
-import ProductDetails from './component/Product/ProductDetails';
-import LoginSignUp from './component/User/LoginSignUp';
-import Profile from './component/User/Profile';
-import EditProfile from './component/User/EditProfile';
-import UpdatePassword from './component/User/UpdatePassword';
-import ForgotPassword from './component/User/ForgotPassword';
-import ResetPassword from './component/User/ResetPassword';
-import Cart from './component/Cart/Cart';
-import Shipping from './component/Cart/Shipping';
-import ConfirmOrder from './component/Cart/ConfirmOrder';
-import Payment from './component/Cart/Payment';
-import OrderSuccess from './component/Cart/OrderSuccess';
-import Orders from './component/Order/Orders';
-import OrderDetails from './component/Order/OrderDetails';
-import Dashboard from './component/Admin/Dashboard';
-import CategoryList from './component/Admin/CategoryList';
-import NewCategory from './component/Admin/NewCategory';
-import UpdateCategory from './component/Admin/UpdateCategory';
-import ProductList from './component/Admin/ProductList';
-import NewProduct from './component/Admin/NewProduct';
-import Attributes from './component/Admin/Attributes';
-import EditAttribute from './component/Admin/EditAttribute';
-import AddAttribute from './component/Admin/AddAttribute';
-import UpdateProduct from './component/Admin/UpdateProduct';
-import OrderList from './component/Admin/OrderList';
-import ProcessOrder from './component/Admin/ProcessOrder';
-import UpdateUser from './component/Admin/UpdateUser';
-import Users from './component/Admin/Users';
-import Reviews from './component/Admin/Reviews';
-import Settings from './component/Admin/Settings';
-import About from './component/layout/About/About';
-import NotFound from './component/layout/NotFound/NotFound';
+import Home from './components/Home/Home';
+import Search from './components/Product/Search';
+import ProductDetails from './components/Product/ProductDetails';
+import LoginSignUp from './components/User/LoginSignUp';
+import Profile from './components/User/Profile';
+import EditProfile from './components/User/EditProfile';
+import UpdatePassword from './components/User/UpdatePassword';
+import ForgotPassword from './components/User/ForgotPassword';
+import ResetPassword from './components/User/ResetPassword';
+import Cart from './components/Cart/Cart';
+import Shipping from './components/Cart/Shipping';
+import ConfirmOrder from './components/Cart/ConfirmOrder';
+import Payment from './components/Cart/Payment';
+import OrderSuccess from './components/Cart/OrderSuccess';
+import Orders from './components/Order/Orders';
+import OrderDetails from './components/Order/OrderDetails';
+
+import Dashboard from './components/Admin/Dashboard';
+import {AddAttribute, Attributes, EditAttribute} from './components/Admin/Attributes';
+import {AddAttributeSet, AttributeSet, EditAttributeSet} from './components/Admin/AttributeSet';
+import {AddBlogCategory, ListBlogCategory, UpdateBlogCategory } from './components/Admin/Blogcategory'
+ import {ListBlogs, AddNewBlog, UpdateBlog} from './components/Admin/Blogs';
+import {NewCategory, CategoryList, UpdateCategory} from './components/Admin/Category';
+import {NewProduct, ProductList, UpdateProduct} from './components/Admin/Product';
+import {OrderList, ProcessOrder} from './components/Admin/Order';
+import {Users, UpdateUser} from './components/Admin/User';
+
+import Reviews from './components/Admin/Reviews';
+import Settings from './components/Admin/Settings';
+
+import {AddSlider, ListSliders, UpdateSlider} from './components/Admin/Sliders';
+import {ListBanners, AddBanner, UpdateBanner} from './components/Admin/Banners';
+
+import About from './components/About/About';
+import NotFound from './components/NotFound/NotFound';
 import store from './store/store';
 import { loadUser } from './store/actions/userAction';
 import { getCategoryForFrontEnd, getAllCategoriesForFrontEnd } from './store/actions/categoryAction';
-import { getProducts } from './store/actions/productAction';
-import ProtectedRoute from './component/Route/ProtectedRoute';
+import { fetchProducts } from './store/actions/productAction';
+import ProtectedRoute from './components/Route/ProtectedRoute';
 import './App.css';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import Contact from './component/layout/Contact/Contact';
-import Category from './component/Category/Category';
-import Loader from './component/layout/Loader/Loader';
-import AttributeSet from './component/Admin/AttributeSet';
-import AddAttributeSet from "./component/Admin/AddAttributeSet";
-import EditAttributeSet from "./component/Admin/EditAttributeSet";
-import ManageBlogCategory from './component/Admin/ManageBlogCategory';
-import NewBlogCategory from './component/Admin/NewBlogCategory';
-import UpdateBlogCategory from './component/Admin/UpdateBlogCategory';
-import Blogs from "./component/Admin/Blogs";
-import NewBlog from './component/Admin/NewBlog';
-import UpdateBlog from './component/Admin/UpdateBlog';
+import Contact from './components/Contact/Contact';
+import Category from './components/Category/Category';
 
-import { FrontLayout } from './component/layout/FrontLayout';
-import { AdminLayout } from './component/layout/AdminLayout';
+import { FrontLayout, AdminLayout, Loader } from './components/layout';
 
 function App() {
   const [stripeApikey, setStripeApikey] = useState("");
@@ -82,7 +72,7 @@ function App() {
           await store.dispatch(loadUser());
           await store.dispatch(getCategoryForFrontEnd());
           await store.dispatch(getAllCategoriesForFrontEnd());
-          await store.dispatch(getProducts());
+          await store.dispatch(fetchProducts());
           setCategory(await store.getState().categories.categories);
           setProducts(await store.getState().products.products);
           getStripeApiKey();
@@ -100,7 +90,7 @@ function App() {
   if(category.length === 0 || !products) {
     return <Loader />
   }
-  
+
   return (
     <>
       {location.pathname.indexOf("admin") === -1 ? <FrontLayout>
@@ -167,12 +157,21 @@ function App() {
         <Route path='/admin/users' element={<ProtectedRoute isAdmin={true}><Users /></ProtectedRoute>} />
         <Route path='/admin/user/:id' element={<ProtectedRoute isAdmin={true}><UpdateUser /></ProtectedRoute>} />
         <Route path='/admin/reviews' element={<ProtectedRoute isAdmin={true}><Reviews /></ProtectedRoute>} />
-        <Route path='/admin/blogs' element={<ProtectedRoute isAdmin={true}><Blogs /></ProtectedRoute>} />
-        <Route path='/admin/blog/new' element={<ProtectedRoute isAdmin={true}><NewBlog /></ProtectedRoute>} />
+        
+        <Route path='/admin/blogs' element={<ProtectedRoute isAdmin={true}><ListBlogs /></ProtectedRoute>} />
+        <Route path='/admin/blog/new' element={<ProtectedRoute isAdmin={true}><AddNewBlog /></ProtectedRoute>} />
         <Route path='/admin/blog/:id' element={<ProtectedRoute isAdmin={true}><UpdateBlog /></ProtectedRoute>} />
-        <Route path='/admin/blog/categories' element={<ProtectedRoute isAdmin={true}><ManageBlogCategory /></ProtectedRoute>} />
-        <Route path='/admin/blog/category/new' element={<ProtectedRoute isAdmin={true}><NewBlogCategory /></ProtectedRoute>} />
+        <Route path='/admin/blog/categories' element={<ProtectedRoute isAdmin={true}><ListBlogCategory /></ProtectedRoute>} />
+        <Route path='/admin/blog/category/new' element={<ProtectedRoute isAdmin={true}><AddBlogCategory /></ProtectedRoute>} />
         <Route path='/admin/blog/category/:id' element={<ProtectedRoute isAdmin={true}><UpdateBlogCategory /></ProtectedRoute>} />
+        
+        <Route path='/admin/slider/new' element={<ProtectedRoute isAdmin={true}><AddSlider /></ProtectedRoute>} />
+        <Route path='/admin/slider/:id' element={<ProtectedRoute isAdmin={true}><UpdateSlider /></ProtectedRoute>} />
+        <Route path='/admin/sliders' element={<ProtectedRoute isAdmin={true}><ListSliders /></ProtectedRoute>} />
+        <Route path='/admin/banner/new' element={<ProtectedRoute isAdmin={true}><AddBanner /></ProtectedRoute>} />
+        <Route path='/admin/banners' element={<ProtectedRoute isAdmin={true}><ListBanners /></ProtectedRoute>} />
+        <Route path='/admin/banner/:id' element={<ProtectedRoute isAdmin={true}><UpdateBanner /></ProtectedRoute>} />
+        
         <Route path='/admin/settings' element={<ProtectedRoute isAdmin={true}><Settings /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </AdminLayout>}

@@ -1,7 +1,15 @@
-import { combineReducers, applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { productReducer, productDetailsReducer, newProductReducer, deleteProductReducer, updateProductReducer, reviewReducer, productReviewsReducer } from './reducers/productReducer';
+import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit'
+import { 
+    productReducer,
+    adminProductReducer,
+    productDetailsReducer,
+    newProductReducer,
+    deleteProductReducer,
+    updateProductReducer,
+    reviewReducer,
+    productReviewsReducer
+} from './reducers/productReducer';
 import { allUsersReducer, userDetailsReducer, userReducer } from './reducers/userReducer';
 import { profileReducer } from './reducers/profileReducer';
 import { forgotPasswordReducer } from './reducers/forgotPasswordReducer';
@@ -38,9 +46,24 @@ import {
 } from './reducers/blogCategoryReducer';
 import { listAllBlogReducer, newBlogeducer, blogDetailReducer, updateBlogReducer } from './reducers/blogReducer';
 import { deleteReducer, uploadReducer } from './reducers/uploadReducer';
+import {
+    addSliderReducer,
+    updateSliderReducer,
+    sliderReducer,
+    slidersReducer,
+    deleteSliderReducer
+} from './reducers/sliderReducer';
+import {
+    addBannerReducer,
+    updateBannerReducer,
+    bannerReducer,
+    bannersReducer,
+    deleteBannerReducer
+} from './reducers/bannerReducer';
 
 const reducer = combineReducers({
     products: productReducer,
+    adminProduct: adminProductReducer,
     productDetails: productDetailsReducer,
     user: userReducer,
     profile: profileReducer,
@@ -93,7 +116,17 @@ const reducer = combineReducers({
     blogDetail: blogDetailReducer,
     blogs: listAllBlogReducer,
     uploadImage: uploadReducer,
-    deleteImage: deleteReducer
+    deleteImage: deleteReducer,
+    addBanner: addBannerReducer,
+    updateBanner: updateBannerReducer,
+    banner: bannerReducer,
+    banners: bannersReducer,
+    deleteBanner: deleteBannerReducer,
+    addSlider: addSliderReducer,
+    updateSlider: updateSliderReducer,
+    slider: sliderReducer,
+    sliders: slidersReducer,
+    deleteSlider: deleteSliderReducer
 });
 
 const initialStore = {
@@ -102,8 +135,11 @@ const initialStore = {
         shippingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")) : {},
     }
 };
-const middleware = [thunk];
 
-const store = createStore(reducer, initialStore, composeWithDevTools(applyMiddleware(...middleware)));
+export const store = configureStore({
+  reducer,
+  devTools: process.env.NODE_ENV !== 'production',
+  preloadedState: initialStore
+})
 
 export default store;

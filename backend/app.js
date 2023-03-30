@@ -52,6 +52,12 @@ const blog = require("./routes/blogRoute");
 //upload files
 const upload = require("./routes/uploadRoute");
 
+//manage slider
+const slider = require("./routes/sliderRoute");
+
+//manage banner
+const banner = require("./routes/bannerRoute");
+
 app.use("/api/v1", product)
 app.use("/api/v1", user);
 app.use("/api/v1", order);
@@ -64,6 +70,8 @@ app.use("/api/v1", address);
 app.use("/api/v1", blogCategory);
 app.use("/api/v1", blog);
 app.use("/api/v1", upload);
+app.use("/api/v1", slider);
+app.use("/api/v1", banner);
 
 app.use(express.static(path.join(__dirname, "./public")));
 

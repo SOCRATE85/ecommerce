@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "../../component/Admin/Sidebar";
-import MetaData from "../../component/layout/MetaData";
+import Sidebar from "../../components/Admin/Sidebar";
+import {MetaData} from "../../components/layout";
 
 export const FormContainer = ({children, pagetitle}) => {
     return (<>
