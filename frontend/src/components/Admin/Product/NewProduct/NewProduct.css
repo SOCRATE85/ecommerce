@@ -81,8 +81,6 @@
     border: none;
     background-color: tomato;
     color: white;
-    font: 300 16px 'Roboto', sans-serif;
-    width: 100%;
     padding: 8px;
     cursor: pointer;
     transition: all 0.5s;

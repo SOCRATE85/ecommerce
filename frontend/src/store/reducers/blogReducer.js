@@ -1,182 +1,128 @@
-import {
-    CREATE_BLOG_REQUEST,
-    CREATE_BLOG_SUCCESS,
-    CREATE_BLOG_FAIL,
-    CREATE_BLOG_RESET,
-    GET_BLOG_REQUEST,
-    GET_BLOG_SUCCESS,
-    GET_BLOG_FAIL,
-    UPDATE_BLOG_REQUEST,
-    UPDATE_BLOG_SUCCESS,
-    UPDATE_BLOG_FAIL,
-    UPDATE_BLOG_RESET,
-    LIST_BLOG_REQUEST,
-    LIST_BLOG_SUCCESS,
-    LIST_BLOG_FAIL,
-    DELETE_BLOG_REQUEST,
-    DELETE_BLOG_SUCCESS,
-    DELETE_BLOG_FAIL,
-    DELETE_BLOG_RESET,
-    CLEAR_ERRORS
- } from "../contants/blogContent";
+import { createSlice } from "@reduxjs/toolkit";
+import { createBlog, updateBlog, getBlog, getAllBlog, deleteBlog } from "../actions/blogAction";
+import { clearErrors } from "../actions/clearformAction";
 
-export const newBlogeducer = (state = { blog: {}}, action ) => {
-    switch(action.type){
-        case CREATE_BLOG_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case CREATE_BLOG_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                blog: action.payload.blog,
-                success: action.payload.success
-            };
-        case CREATE_BLOG_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CREATE_BLOG_RESET:
-            return {
-                ...state,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
-
-
-export const updateBlogReducer = (state={}, action) => {
-    switch(action.type){
-        case UPDATE_BLOG_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_BLOG_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_BLOG_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_BLOG_RESET:
-            return {
-                ...state,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const newBlogSlice = createSlice({
+    name: "blog",
+    initialState: {blog:{}},
+    reducers: {
+        createBlogReset: (state) => {
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(createBlog.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(createBlog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.blog = action.payload.blog;
+            state.success = action.payload.success;
+        });
+        builder.addCase(createBlog.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-
-export const blogDetailReducer = (state={blog: undefined}, action) => {
-    switch (action.type) {
-        case GET_BLOG_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case GET_BLOG_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                blog: action.payload
-            };
-        case GET_BLOG_FAIL:
-            return {
-                ...state,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const updateBlogSlice = createSlice({
+    name: "blog",
+    initialState: {},
+    reducers: {
+        updateBlogReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateBlog.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateBlog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateBlog.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const listAllBlogReducer = (state={blogs:[]}, action) => {
-    switch (action.type) {
-        case LIST_BLOG_REQUEST:
-            return {
-                ...state,
-                loading: true
-            }
-        case LIST_BLOG_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                blogs: action.payload
-            }
-        case LIST_BLOG_FAIL:
-            return {
-                ...state,
-                error: action.payload
-            }
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const blogDetailSlice = createSlice({
+    name: "blog",
+    initialState: {blog:{}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getBlog.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getBlog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.blog = action.payload;
+        });
+        builder.addCase(getBlog.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const deleteBlogReducer = (state={}, action) => {
-    switch (action.type) {
-        case DELETE_BLOG_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case DELETE_BLOG_SUCCESS: 
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_BLOG_FAIL:
-            return {
-                ...state,
-                error: action.payload
-            }
-        case DELETE_BLOG_RESET:
-            return {
-                ...state,
-                isDeleted: false
-            }
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const listAllBlogSlice = createSlice({
+    name: "blogs",
+    initialState: {blogs:[]},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllBlog.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllBlog.fulfilled, (state, action) => {
+            state.loading = false;
+            state.blogs = action.payload;
+        });
+        builder.addCase(getAllBlog.rejected, (state, action) => {
+            state.error = action.payload
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
+
+export const deleteBlogSlice = createSlice({
+    name: "blog",
+    initialState: {},
+    reducers: {
+        deleteBlogReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteBlog.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteBlog.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteBlog.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});

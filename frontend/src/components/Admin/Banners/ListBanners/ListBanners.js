@@ -1,12 +1,11 @@
 import React, {useEffect} from "react";
 import { useAlert } from "react-alert";
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import { getAllBanner, clearErrors, deleteBanner } from '../../../../store/actions/bannerAction';
-import { DELETE_BANNER_RESET } from "../../../../store/contants/bannerContant";
+import { getAllBanner, clearErrors, deleteBanner, deleteBannerReset } from '../../../../store';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import Loader from "../../../layout/Loader/Loader";
 import './ListBanners.css';
@@ -23,9 +22,20 @@ const ListBanners = () => {
             alert.success("Banner deleted successfully");
             navigate("/admin/banners");
             dispatch(getAllBanner());
-            dispatch({ type: DELETE_BANNER_RESET });
+            dispatch(deleteBannerReset());
         }
     }, [isDeleted, alert, dispatch, banners, navigate]);
+    
+    useEffect(() => {
+        dispatch(getAllBanner());
+    },[dispatch]);
+
+    useEffect(() => {
+        if(error) {
+            alert.error(error.error);
+            dispatch(clearErrors);
+        }
+    },[alert, dispatch, error]);
 
     const deleteBannerHandler = (id) => {
         dispatch(deleteBanner(id));
@@ -61,16 +71,6 @@ const ListBanners = () => {
         });
     });
 
-    useEffect(() => {
-        dispatch(getAllBanner());
-    },[dispatch]);
-
-    useEffect(() => {
-        if(error) {
-            alert.error(error);
-            dispatch(clearErrors);
-        }
-    },[alert, dispatch, error]);
     if(loading) {return <Loader />}
     
     return <FormContainer pagetitle={"Manage Banner"}>
@@ -78,15 +78,7 @@ const ListBanners = () => {
          <div className="text-left flex justify-end">
             <Button onClick={() => navigate("/admin/banner/new")}>Add Banner</Button>
         </div>
-        <DataGrid
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        /></>}
+        <DataListing columns={columns} rows={rows} /></>}
     </FormContainer>
 }
 

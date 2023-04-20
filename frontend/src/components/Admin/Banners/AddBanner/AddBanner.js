@@ -6,11 +6,9 @@ import { Button } from "@mui/material";
 import Input from '../../../Controls/Input';
 import ActionControl from '../../../../common/ActionControl';
 import { FormContainer } from '../../../../common/components/FormContainer';
-import "./AddBanner.css";
 import { getAllSlider } from '../../../../store/actions/sliderAction';
-import { addNewBanner, clearErrors, getAllBanner } from "../../../../store/actions/bannerAction";
-import { uploadFiles } from "../../../../store/actions/uploadAction";
-import { ADD_BANNER_RESET } from '../../../../store/contants/bannerContant';
+import { addNewBanner, clearErrors, getAllBanner, addBannerReset, uploadFiles } from "../../../../store";
+import "./AddBanner.css";
 
 const AddBanner = () => {
     const dispatch = useDispatch();
@@ -190,7 +188,7 @@ const AddBanner = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [dispatch, alert, error]);
@@ -200,7 +198,7 @@ const AddBanner = () => {
             alert.success("New banner added successfully");
             dispatch(getAllBanner());
             navigate('/admin/banners');
-            dispatch({type: ADD_BANNER_RESET });
+            dispatch(addBannerReset());
         }
     },[dispatch, success, alert, navigate]);
 
@@ -264,7 +262,7 @@ const AddBanner = () => {
         }
         return _formElementArray;
     }, [actioncontrol]);
-    console.log('formElementArray: ', formElementArray);
+    
     return (<FormContainer pagetitle={"Add New Banner"}>
         <form
             className="createCategoryForm md:w-full mx-auto" 

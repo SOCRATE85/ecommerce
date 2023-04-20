@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Tabs, Tab } from "@mui/material";
 import {
     AccountTreeOutlined, 
     DescriptionOutlined,
-    SpellcheckOutlined 
+    SpellcheckOutlined
 } from "@mui/icons-material";
-import { getAdminProducts } from '../../../../store/actions/productAction';
-import { updateCategory, getAllCategories, getCategoryDetails, clearErrors } from '../../../../store/actions/categoryAction';
+import {
+    updateCategory,
+    getAllCategories,
+    getCategoryDetails,
+    clearErrors,
+    updateCategoryReset,
+    getAdminProducts
+} from '../../../../store';
 import { FormContainer } from "../../../../common/components/FormContainer";
 import Loader from "../../../layout/Loader/Loader";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAlert } from 'react-alert';
-import { UPDATE_CATEGORY_RESET } from "../../../../store/contants/categoryConstant";
+import { getValue } from "../../../../common/attribute";
+import DataListing from "../../../../common/DataListing";
 import "./UpdateCategory.css";
 
 function TabPanel(props) {
@@ -58,7 +64,7 @@ const UpdateCategory = () => {
     const { products, error: productError } = useSelector( state => state.products );
     const { categories, error: categoriesError } = useSelector( state => state.categories );
     const [ name, setName ] = useState("");
-    const [ parent, setParent] = useState(null);
+    const [ parent, setParent] = useState("");
     const [ description, setDescription ] = useState("");
     const [ oldImages, setOldImages ] = useState([]);
     const [ imagePreview, setImagePreview ] = useState([]);
@@ -66,12 +72,12 @@ const UpdateCategory = () => {
     const [value, setValue] = useState(0);
     const [ selectedProducts, setSelectedProducts ] = useState([]);
     const categoryId = params.id;
-    
+
     useEffect(() => {
         if(isUpdated) {
             alert.success("Category is updated successfully");
             navigate("/admin/categories");
-            dispatch({ type: UPDATE_CATEGORY_RESET });
+            dispatch(updateCategoryReset());
         }
     }, [alert, isUpdated, navigate, dispatch]);
 
@@ -86,26 +92,26 @@ const UpdateCategory = () => {
             setName(category.name);
             setDescription(category.description);
             setSelectedProducts(_productid);
-            setParent(category.parent);
+            setParent(category.parent ? category.parent : "");
             setOldImages(category.images);           
         }       
     },[dispatch, category, categoryId]);
 
     useEffect(() => {
         if(categoryError) {
-            alert.error(categoryError);
+            alert.error(categoryError.error);
             dispatch(clearErrors());
         }
         if(productError) {
-            alert.error(productError);
+            alert.error(productError.error);
             dispatch(clearErrors());
         }
         if(categoriesError) {
-            alert.error(categoriesError);
+            alert.error(categoriesError.error);
             dispatch(clearErrors());
         }
         if(updateCategoryError) {
-            alert.error(updateCategoryError);
+            alert.error(updateCategoryError.error);
             dispatch(clearErrors());
         }
     },[dispatch, alert, categoryError, productError, categoriesError, updateCategoryError]);
@@ -123,16 +129,19 @@ const UpdateCategory = () => {
         { field: "price", headerName: "Price", type: "number", minWidth: 100, flex: 0.5 }
     ];
 
-    const rows = [];
-    products && products.forEach(product => {
-        rows.push({
-            __check__: true,
-            id: product._id,
-            name: product.name,
-            price: product.price,
-            stock: product.stock
+    const rows = useMemo(() => {
+        const _rows = [];
+        products && products.forEach(product => {
+            _rows.push({
+                __check__: true,
+                id: product._id,
+                name: getValue("name", product.data),
+                price: getValue("price", product.data),
+                stock: getValue("stock", product.data)
+            });
         });
-    });
+        return _rows;
+    }, [products])
 
     const handleChange = (_event, newValue) => {
       setValue(newValue);
@@ -148,6 +157,8 @@ const UpdateCategory = () => {
         myForm.set("name", name);
         if(parent !== null){
             myForm.set("parent", parent);
+        } else {
+            myForm.set("parent", null);
         }
         myForm.set("description", description);
         if(products !== null){
@@ -158,7 +169,7 @@ const UpdateCategory = () => {
             return true;
         });
 
-        dispatch(updateCategory(myForm, categoryId));
+        dispatch(updateCategory({categoryData: myForm, categoryId}));
         dispatch(getCategoryDetails(categoryId));
     }
 
@@ -181,9 +192,9 @@ const UpdateCategory = () => {
     }
 
     if(loading || updateLoading) {
-        return (<Loader></Loader>);
+        return <Loader />;
     }
-
+    
     return (<FormContainer pagetitle={"Update Category"}>
         {loading? <Loader /> : <form encType="multipart/form-data" onSubmit={(e) => updateCategorySubmitHandler(e)}>
             <Box sx={{ width: '100%' }}>
@@ -207,10 +218,7 @@ const UpdateCategory = () => {
                         </div>
                         <div>
                             <AccountTreeOutlined />
-                            <select 
-                                onChange={(e) => setParent(e.target.value)} 
-                                defaultValue={parent}
-                            >
+                            <select onChange={(e) => setParent(e.target.value)} value={parent}>
                                 <option value={""}>Choose Parent Category</option>
                                 {
                                     categories && categories.map(cat => {
@@ -256,17 +264,11 @@ const UpdateCategory = () => {
                     </div>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                <DataGrid 
+                    <DataListing 
                         columns={columns} 
                         rows={rows} 
-                        pageSize={10} 
-                        disableSelectionOnClick 
-                        className='productListTable'
-                        autoHeight
-                        rowsPerPageOptions={[5, 10, 15, 20, 25]}
-                        checkboxSelection
-                        onSelectionModelChange={onSelectionModelChange}
-                        selectionModel={selectedProducts}
+                        onSelectionModelChange={onSelectionModelChange} 
+                        selectedProducts={selectedProducts} 
                     />
                 </TabPanel>
             </Box>  

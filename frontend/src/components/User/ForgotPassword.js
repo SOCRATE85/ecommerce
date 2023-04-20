@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../layout/Loader/Loader';
-import { clearErrors, forgotPassword } from '../../store/actions/userAction';
+import { clearErrors, forgotPassword } from '../../store';
 import { useAlert} from 'react-alert';
 import MetaData from '../layout/MetaData';
 import "./ForgotPassword.css";
@@ -15,7 +15,7 @@ const ForgotPassword = () => {
 
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(message){

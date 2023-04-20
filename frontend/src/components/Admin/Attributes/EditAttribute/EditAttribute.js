@@ -9,13 +9,11 @@ import { Typography, Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import Input from "../../../Controls/Input";
 import { useAlert } from "react-alert";
-import MetaData from '../../../layout/MetaData';
 import Loader from '../../../layout/Loader/Loader';
-import Sidebar from '../../Sidebar';
-import { clearErrors, getAttribute, updateAttribute } from '../../../../store/actions/attributeAction';
-import { UPDATE_ATTRIBUTE_RESET } from "../../../../store/contants/attributeConstant";
+import { clearErrors, getAttribute, updateAttribute, updateAttributeReset } from '../../../../store';
 import Boolean from "../../../Controls/Boolean";
 import './EditAttribute.css';
+import { FormContainer } from "../../../../common/components/FormContainer";
 
 const EditAttribute = () => {
     const params = useParams();
@@ -114,12 +112,12 @@ const EditAttribute = () => {
 
     useEffect(() => {
         if(attributeError) {
-            alert.error(attributeError);
+            alert.error(attributeError.error);
             dispatch(clearErrors());
         }
 
         if(updateError) {
-            alert.error(updateError);
+            alert.error(updateError.error);
             dispatch(clearErrors());
         }
     },[alert, dispatch, attributeError, updateError]);
@@ -128,7 +126,7 @@ const EditAttribute = () => {
         if(isUpdated) {
             alert.success("Attribute is updated successfully");
             navigate("/admin/attributes");
-            dispatch({ type: UPDATE_ATTRIBUTE_RESET });
+            dispatch(updateAttributeReset());
         }
     }, [alert, isUpdated, navigate, dispatch]);
 
@@ -206,7 +204,7 @@ const EditAttribute = () => {
         if(attributeOption.length !== 0) {
             myForm.set("attribute_options", JSON.stringify(attributeOption));
         }
-        dispatch(updateAttribute(myForm, attributeId));
+        dispatch(updateAttribute({attributeData: myForm, attributeId}));
         dispatch(getAttribute(attributeId));
     }
 
@@ -322,128 +320,123 @@ const EditAttribute = () => {
         return <Loader />
     }
    
-    return (<>
-        <MetaData title={"Edit Attributes"} />
-        <div className='dashboard'>
-            <Sidebar />
-            <div className='addAttributeContainer'>
-                <form className="createAttributeForm" encType="multipart/form-data" onSubmit={updateAttributeSubmitHandler}>
-                    <Typography component={"h1"}>Edit Attribute</Typography>
-                    <div>
+    return (<><FormContainer pagetitle={"Edit Attributes"}>
+        {loadingAttributeDetails || updateLoading ? <Loader /> : <form className="createAttributeForm" encType="multipart/form-data" onSubmit={updateAttributeSubmitHandler}>
+            <Typography component={"h1"}>Edit Attribute</Typography>
+                <div>
+                    <SpellcheckOutlined />
+                    <input 
+                        type={"text"} 
+                        placeholder="Attribute Name" 
+                        required 
+                        value={frontendLabel}
+                        onChange={(e) => frontendLabelHandler(e.target.value)} 
+                    />
+                </div>
+                <div>
+                    <SpellcheckOutlined />
+                    <input 
+                        type={"text"} 
+                        placeholder="Attribute Code" 
+                        required
+                        disabled
+                        value={attributeCode}
+                        onChange={(e) => setAttributeCode(e.target.value)} 
+                    />
+                </div>
+                <div>
+                    <AccountTreeOutlined />
+                    <select disabled onChange={(e) => chooseAttributeTypeHandler(e.target.value)} value={frontendInput}>
+                        <option value={"text"}>Text Field</option>
+                        <option value={"price"}>Price</option>
+                        <option value={"select"}>Select</option>
+                        <option value={"multiselect"}>Multi Select</option>
+                        <option value={"checkbox"}>CheckBox</option>
+                        <option value={"radio"}>Radio Button</option>
+                        <option value={"textarea"}>Textarea</option>
+                        <option value={"file"}>File</option>
+                        <option value={"date"}>Date</option>
+                    </select>
+                </div>
+                <div>
+                    <label className="title">Use in Filter</label>
+                    <Boolean id="useInFilter" value={useInFilter} onChange={()=>setUseInFilter(prev => !prev)}/>
+                </div>
+                <div>
+                    <label className="title">Use in Sorting</label>
+                    <Boolean id="useInSorting" value={useInSorting} onChange={()=>setUseInSorting(prev => !prev)}/>
+                </div>
+                {(
+                    frontendInput !== "select" &&
+                    frontendInput !== "multiselect" &&
+                    frontendInput !== "checkbox" &&
+                    frontendInput !== "radio") ? (
+                    <>
+                    {frontendInput === 'boolean' ? <>
+                        <div>
+                            <label className="title">Default Value</label>
+                            <Boolean id="defaultValue" value={defaultValue} onChange={()=>setDefaultValue(prev => !prev)}/>
+                        </div> 
+                    </> : <div>
                         <SpellcheckOutlined />
                         <input 
                             type={"text"} 
-                            placeholder="Attribute Name" 
-                            required 
-                            value={frontendLabel}
-                            onChange={(e) => frontendLabelHandler(e.target.value)} 
+                            placeholder="Default Value"
+                            value={defaultValue}
+                            onChange={(e) => setDefaultValue(e.target.value)} 
                         />
-                    </div>
-                    <div>
-                        <SpellcheckOutlined />
-                        <input 
-                            type={"text"} 
-                            placeholder="Attribute Code" 
-                            required
-                            disabled
-                            value={attributeCode}
-                            onChange={(e) => setAttributeCode(e.target.value)} 
-                        />
-                    </div>
-                    <div>
-                        <AccountTreeOutlined />
-                        <select disabled onChange={(e) => chooseAttributeTypeHandler(e.target.value)} value={frontendInput}>
-                            <option value={"text"}>Text Field</option>
-                            <option value={"price"}>Price</option>
-                            <option value={"select"}>Select</option>
-                            <option value={"multiselect"}>Multi Select</option>
-                            <option value={"checkbox"}>CheckBox</option>
-                            <option value={"radio"}>Radio Button</option>
-                            <option value={"textarea"}>Textarea</option>
-                            <option value={"file"}>File</option>
-                            <option value={"date"}>Date</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="title">Use in Filter</label>
-                        <Boolean id="useInFilter" value={useInFilter} onChange={()=>setUseInFilter(prev => !prev)}/>
-                    </div>
-                    <div>
-                        <label className="title">Use in Sorting</label>
-                        <Boolean id="useInSorting" value={useInSorting} onChange={()=>setUseInSorting(prev => !prev)}/>
-                    </div>
-                    {(
-                        frontendInput !== "select" &&
-                        frontendInput !== "multiselect" &&
-                        frontendInput !== "checkbox" &&
-                        frontendInput !== "radio") ? (
-                        <>
-                        {frontendInput === 'boolean' ? <>
-                            <div>
-                                <label className="title">Default Value</label>
-                                <Boolean id="defaultValue" value={defaultValue} onChange={()=>setDefaultValue(prev => !prev)}/>
-                            </div> 
-                        </> : <div>
-                            <SpellcheckOutlined />
-                            <input 
-                                type={"text"} 
-                                placeholder="Default Value"
-                                value={defaultValue}
-                                onChange={(e) => setDefaultValue(e.target.value)} 
-                            />
-                        </div>}
-                        </>
-                    ): <></>}
-                    <div>
-                        <AccountTreeOutlined />
-                        <select onChange={(e) => setIsRequired(e.target.value)} value={isRequired}>
-                            <option value={1}>Options</option>
-                            <option value={2}>Required</option>
-                        </select>
-                    </div>
-                    { (frontendInput === "select" || frontendInput === "multiselect" || frontendInput === "checkbox" || frontendInput === "radio") && (
-                        <>
-                            <div>
-                                <Button onClick={() => addNewAttributeValue()}>Add New Option</Button>
-                            </div>
-                            <div className="attributeOptionContainer">
-                                {
-                                    attributeOptionFormElementArray.length !== 0 && attributeOptionFormElementArray.map((option, oIndex) => {
-                                        return (<div className="optionGroup" key={oIndex}>
-                                            {
-                                                option.map((attribute, iIndex) => {
-                                                    return <div className="field" key={iIndex} style={attribute.config.elementType === "hidden" ? { width: 0 } : {}}>
-                                                        <Input 
-                                                            id={attribute.id}
-                                                            hideLabel={attribute.config.hideLabel}
-                                                            elementType={attribute.config.elementType}
-                                                            label={attribute.config.elementConfig.placeholder}
-                                                            elementConfig={attribute.config.elementConfig}
-                                                            value={attribute.config.value}
-                                                            shouldValidate={attribute.config.validation.required}
-                                                            touched={attribute.config.touched}
-                                                            changed={(event)=> {
-                                                                inputOptionChangeHandler(event, oIndex, attribute.id)
-                                                            }}
-                                                        />
-                                                    </div>
-                                                })
-                                            }
-                                            <div className="field">
-                                                <button type="button" className="delete" onClick={() => removeOptionValue(oIndex)}>
-                                                    <Delete />
-                                                </button>
-                                            </div>
-                                        </div>)
-                                    })
-                                }
-                            </div>
-                        </>
-                    )}
-                    <Button id="createProductBtn" type="submit">Update</Button>
-                </form>               
-            </div>
-        </div>
+                    </div>}
+                    </>
+                ): <></>}
+                <div>
+                    <AccountTreeOutlined />
+                    <select onChange={(e) => setIsRequired(e.target.value)} value={isRequired}>
+                        <option value={1}>Options</option>
+                        <option value={2}>Required</option>
+                    </select>
+                </div>
+                { (frontendInput === "select" || frontendInput === "multiselect" || frontendInput === "checkbox" || frontendInput === "radio") && (
+                    <>
+                        <div>
+                            <Button onClick={() => addNewAttributeValue()}>Add New Option</Button>
+                        </div>
+                        <div className="attributeOptionContainer">
+                            {
+                                attributeOptionFormElementArray.length !== 0 && attributeOptionFormElementArray.map((option, oIndex) => {
+                                    return (<div className="optionGroup" key={oIndex}>
+                                        {
+                                            option.map((attribute, iIndex) => {
+                                                return <div className="field" key={iIndex} style={attribute.config.elementType === "hidden" ? { width: 0 } : {}}>
+                                                    <Input 
+                                                        id={attribute.id}
+                                                        hideLabel={attribute.config.hideLabel}
+                                                        elementType={attribute.config.elementType}
+                                                        label={attribute.config.elementConfig.placeholder}
+                                                        elementConfig={attribute.config.elementConfig}
+                                                        value={attribute.config.value}
+                                                        shouldValidate={attribute.config.validation.required}
+                                                        touched={attribute.config.touched}
+                                                        changed={(event)=> {
+                                                            inputOptionChangeHandler(event, oIndex, attribute.id)
+                                                        }}
+                                                    />
+                                                </div>
+                                            })
+                                        }
+                                        <div className="field">
+                                            <button type="button" className="delete" onClick={() => removeOptionValue(oIndex)}>
+                                                <Delete />
+                                            </button>
+                                        </div>
+                                    </div>)
+                                })
+                            }
+                        </div>
+                    </>
+                )}
+                <Button id="createProductBtn" type="submit">Update</Button>
+            </form>}
+        </FormContainer>
     </>);
 }
 

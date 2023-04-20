@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Tabs, Tab } from "@mui/material";
@@ -11,9 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAlert } from 'react-alert';
 import { FormContainer } from '../../../../common/components/FormContainer'
 import Loader from "../../../layout/Loader/Loader";
-import { clearErrors, getBlogCategoryDetail, updateBlogCategory } from "../../../../store/actions/blogCategoryAction";
-import { getAllBlog } from "../../../../store/actions/blogAction";
-import { UPDATE_BLOG_CATEGORY_RESET } from "../../../../store/contants/blogCategoryContent";
+import { clearErrors, getBlogCategoryDetail, updateBlogCategory, updateBlogCategoryReset, getAllBlog } from "../../../../store";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,13 +79,13 @@ const UpdateBlogCategory = () => {
             alert.success("Category is updated successfully");
             navigate("/admin/blog/categories");
             dispatch(getBlogCategoryDetail(categoryId));
-            dispatch({ type: UPDATE_BLOG_CATEGORY_RESET});
+            dispatch(updateBlogCategoryReset());
         }
     },[dispatch, isUpdated, alert, navigate, categoryId]);
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[dispatch, alert, error]);
@@ -104,11 +102,10 @@ const UpdateBlogCategory = () => {
         myForm.set("meta_tags", metaTags);
         myForm.set("meta_description", metaDescription);
         myForm.set("status", status);
-        console.log('selectedBlogs: ', selectedBlogs);
         if(selectedBlogs.length > 0){
             myForm.set("posts", selectedBlogs);
         }
-        dispatch(updateBlogCategory(myForm, categoryId));
+        dispatch(updateBlogCategory({categoryData: myForm, categoryId}));
     }
 
     const handleChange = (_event, newValue) => {
@@ -122,12 +119,12 @@ const UpdateBlogCategory = () => {
     if(loading || loadingUpdate) {return <Loader/>}
     
     const columns = [
-        { field: "__check__", sortable: false},
-        { field: "id", headerName: "ID"},
-        { field: "title", headerName: "Title"},
-        { field: "status", headerName: "Status", type: "number"},
-        { field: "created_at", headerName: "Created At", type: "number"},
-        { field: "updated_at", headerName: "Updated At", type: "number"}
+        { field: "__check__", sortable: false, minWidth: 40},
+        { field: "id", headerName: "ID", minWidth: 200},
+        { field: "title", headerName: "Title", minWidth: 200},
+        { field: "status", headerName: "Status", type: "number", minWidth: 50},
+        { field: "created_at", headerName: "Created At", type: "number", minWidth: 200},
+        { field: "updated_at", headerName: "Updated At", type: "number", minWidth: 200}
     ];
     const rows = [];
     blogs && blogs.forEach(blog => {
@@ -202,16 +199,12 @@ const UpdateBlogCategory = () => {
                     </div>                        
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <DataGrid 
+                    <DataListing 
                         columns={columns} 
-                        rows={rows} 
-                        pageSize={10} 
-                        disableSelectionOnClick 
-                        className='productListTable'
-                        autoHeight
-                        rowsPerPageOptions={[5, 10, 15, 20, 25]}
+                        rows={rows}
                         checkboxSelection
                         onSelectionModelChange={onSelectionModelChange}
+                        selectedProducts = {selectedBlogs}
                     />
                 </TabPanel>
             </Box>

@@ -1,191 +1,133 @@
-import { 
-    ADD_SLIDER_REQUEST,
-    ADD_SLIDER_SUCCESS,
-    ADD_SLIDER_FAIL,
-    ADD_SLIDER_RESET,
-    UPDATE_SLIDER_REQUEST,
-    UPDATE_SLIDER_SUCCESS,
-    UPDATE_SLIDER_FAIL,
-    UPDATE_SLIDER_RESET,
-    DELETE_SLIDER_REQUEST,
-    DELETE_SLIDER_SUCCESS,
-    DELETE_SLIDER_FAIL,
-    DELETE_SLIDER_RESET,
-    ALL_SLIDER_REQUEST,
-    ALL_SLIDER_SUCCESS,
-    ALL_SLIDER_FAIL,
-    GET_SLIDER_REQUEST,
-    GET_SLIDER_SUCCESS,
-    GET_SLIDER_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/sliderContant';
+import { createSlice } from '@reduxjs/toolkit';
+import { clearErrors } from '../actions/clearformAction';
+import { addNewSlider, updateSlider, deleteSlider, getAllSlider, getSlider } from '../actions/sliderAction';
 
-export const addSliderReducer = (state = {slider:{}}, action) => {
-    switch (action.type) {
-        case ADD_SLIDER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case ADD_SLIDER_SUCCESS:
-            return {
-                loading: false,
-                slider: action.payload.slider,
-                success: action.payload.success
-            };
-        case ADD_SLIDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case ADD_SLIDER_RESET:
-            return {
-                ...state,
-                loading: false,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const addSliderSlice = createSlice({
+    name: "slider",
+    initialState: {slider:{}},
+    reducers: {
+        addNewSliderReset: (state) => {
+            state.loading = false;
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(addNewSlider.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addNewSlider.fulfilled, (state, action) => {
+            state.loading = false;
+            state.slider = action.payload.slider;
+            state.success = action.payload.success;
+        });
+        builder.addCase(addNewSlider.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const updateSliderReducer = (state={}, action) => {
-    switch(action.type){
-        case UPDATE_SLIDER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_SLIDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_SLIDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_SLIDER_RESET:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const updateSliderSlice = createSlice({
+    name: "slider",
+    initialState: {},
+    reducers: {
+        updateSliderReset: (state) => {
+            state.loading = false;
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateSlider.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateSlider.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateSlider.rejected, (state, action) => {
+            state.loading = false;
+            state.error  = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading  = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const sliderReducer = (state={slider:{}}, action) => {
-    switch (action.type) {
-        case GET_SLIDER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                slider: {}
-            }
-        case GET_SLIDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                slider: action.payload
-            }
-        case GET_SLIDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const sliderSlice = createSlice({
+    name: "slider",
+    initialState: {slider:{}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getSlider.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getSlider.fulfilled, (state, action) => {
+            state.loading = false;
+            state.slider = action.payload;
+        });
+        builder.addCase(getSlider.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+            state.loading = false;
+        });
     }
-}
+});
 
-export const slidersReducer = (state={sliders:[]}, action) => {
-    switch (action.type) {
-        case ALL_SLIDER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                sliders: []
-            }
-        case ALL_SLIDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                sliders: action.payload
-            }
-        case ALL_SLIDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const slidersSlice = createSlice({
+    name: "sliders",
+    initialState: {},
+    reducers: {sliders:[]},
+    extraReducers: (builder) => {
+        builder.addCase(getAllSlider.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllSlider.fulfilled, (state, action) => {
+            state.loading = false;
+            state.sliders = action.payload;
+        });
+        builder.addCase(getAllSlider.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+            state.loading = false;
+        });
     }
-}
+});
 
-export const deleteSliderReducer = (state={}, action) => {
-    switch (action.type) {
-        case DELETE_SLIDER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_SLIDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_SLIDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case DELETE_SLIDER_RESET:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const deleteSliderSlice = createSlice({
+    name: "slider",
+    initialState: {},
+    reducers: {
+        deleteSliderReset: (state) => {
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteSlider.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteSlider.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteSlider.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});

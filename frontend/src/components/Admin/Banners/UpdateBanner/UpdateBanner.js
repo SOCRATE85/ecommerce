@@ -7,9 +7,8 @@ import Input from '../../../Controls/Input';
 import ActionControl from '../../../../common/ActionControl';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import "./UpdateBanner.css";
-import { updateBanner, clearErrors, getBanner, getAllBanner } from "../../../../store/actions/bannerAction";
+import { updateBanner, clearErrors, getBanner, getAllBanner, updateBannerReset } from "../../../../store";
 import { getAllSlider } from '../../../../store/actions/sliderAction';
-import { UPDATE_BANNER_RESET } from "../../../../store/contants/bannerContant";
 
 const UpdateBanner = () => {
     const params = useParams();
@@ -217,7 +216,7 @@ const UpdateBanner = () => {
         }
         if(banner && banner._id !== bannerId) {
             dispatch(getBanner(bannerId));
-        }else { console.log('banner: ', banner);
+        }else {
             !status && actioncontrol.setFormDataValues(banner, setStatus);
         }
         dispatch(getAllSlider());
@@ -225,7 +224,7 @@ const UpdateBanner = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [error, alert, dispatch]);
@@ -236,7 +235,7 @@ const UpdateBanner = () => {
             dispatch(getAllBanner());
             dispatch(getBanner(bannerId));
             navigate('/admin/banners');
-            dispatch({type: UPDATE_BANNER_RESET });
+            dispatch(updateBannerReset());
         }
     },[dispatch, isUpdated, alert, navigate, bannerId]);
 
@@ -329,7 +328,7 @@ const UpdateBanner = () => {
                             shouldValidate={element.config.validation.required}
                             touched={element.config.touched}
                             removeImage={actioncontrol.removeImage}
-                            changed={(e)=> actioncontrol.createBlogImageChange(e, element.id)}
+                            changed={(e)=> actioncontrol.createImageChange(e, element.id)}
                         />
                     case "input":
                         return <Input 

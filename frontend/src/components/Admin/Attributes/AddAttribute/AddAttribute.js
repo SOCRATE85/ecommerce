@@ -6,15 +6,14 @@ import {
     Delete
 } from "@mui/icons-material"
 import { Button } from "@mui/material";
-import { createAttribute, clearErrors } from '../../../../store/actions/attributeAction';
-import { NEW_ATTRIBUTE_RESET } from '../../../../store/contants/attributeConstant';
+import { createAttribute, clearErrors, newAttributeReset } from '../../../../store';
 import { FormContainer } from "../../../../common/components/FormContainer";
-import "./AddAttribute.css";
 import Input from "../../../Controls/Input";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../layout/Loader/Loader";
 import Boolean from "../../../Controls/Boolean";
+import "./AddAttribute.css";
 
 const AddAttribute = () => {
     const dispatch = useDispatch();
@@ -35,13 +34,13 @@ const AddAttribute = () => {
         if(success) {
             alert.success("Attribute created successfully");
             navigate("/admin/attributes");
-            dispatch({ type: NEW_ATTRIBUTE_RESET });
+            dispatch(newAttributeReset());
         }
     }, [alert, success, navigate, dispatch]);
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, dispatch, error]);

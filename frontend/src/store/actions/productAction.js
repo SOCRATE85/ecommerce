@@ -1,17 +1,6 @@
 import axios from 'axios';
+import { thunkError } from './clearformAction';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-    NEW_REVIEW_REQUEST,
-    NEW_REVIEW_SUCCESS,
-    NEW_REVIEW_FAIL,
-    ALL_REVIEW_REQUEST,
-    ALL_REVIEW_SUCCESS,
-    ALL_REVIEW_FAIL,
-    DELETE_REVIEW_REQUEST,
-    DELETE_REVIEW_SUCCESS,
-    DELETE_REVIEW_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/productConstant';
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts", async (_, thunkAPI) => {
@@ -19,7 +8,7 @@ export const fetchProducts = createAsyncThunk(
         const { data } = await axios.get(`/api/v1/products`);
         return data;
       } catch (error) {
-        return thunkAPI.rejectWithValue({ error: error.message });
+        return thunkError(error, thunkAPI);
       }
 });
 
@@ -30,7 +19,7 @@ export const getAdminProducts = createAsyncThunk(
         const { data } = await axios.get(`/api/v1/admin/products`);
         return data;
       } catch (error) {
-        return thunkAPI.rejectWithValue({ error: error.message });
+        return thunkError(error, thunkAPI);
       }
 });
 
@@ -39,9 +28,9 @@ export const productDetails = createAsyncThunk(
     "product/productDetails", async (productId, thunkAPI) => {
         try {
             const { data } = await axios.get(`/api/v1/product/${productId}`);
-        return  data.product
+            return  data.product
         } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
+            return thunkError(error, thunkAPI);
         }
     }
 );
@@ -49,12 +38,12 @@ export const productDetails = createAsyncThunk(
 // DELETE PRODUCT
 export const deleteProduct = createAsyncThunk(
   "product/deleteProduct", async (productId, thunkAPI) => {
-     try {
+    try {
         const { data } = await axios.delete(`/api/v1/admin/product/${productId}`);
         return data.success;
-      } catch (error) {
-        return thunkAPI.rejectWithValue({ error: error.message });
-      }
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
 });
 
 // Create new product
@@ -69,84 +58,61 @@ export const createProduct = createAsyncThunk(
             const { data } = await axios.post(`/api/v1/admin/product/new`, productData, config);
             return data;
         } catch (error) {
-           return thunkAPI.rejectWithValue({ error: error.message }); 
+           return thunkError(error, thunkAPI);
         }
     }
 );
 
 // Update product
 export const updateProduct = createAsyncThunk(
-    "product/updateProduct", async (productId, productData, thunkAPI) => {
+    "product/updateProduct", async (formdata, thunkAPI) => {
         try {
             const config = {
                 headers: {
                     "Content-Type": "application/json"
                 }
             };
-            const { data } = await axios.put(`/api/v1/admin/product/${productId}`, productData, config);
+            const { data } = await axios.put(`/api/v1/admin/product/${formdata.productId}`, formdata.productData, config);
             return data.success;
         } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
+            return thunkError(error, thunkAPI);
         }
 });
 
 // Create new review
-export const newReview = (reviewData) => async (dispatch) => {
+export const newReview = createAsyncThunk(
+    "product/createReview", async (reviewData, thunkAPI) => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        dispatch({ type: NEW_REVIEW_REQUEST });
-        const { data } = await axios.put(`/api/v1/review`, reviewData, config);        
-        dispatch({ type: NEW_REVIEW_SUCCESS, payload: data.success });
-    }catch(error) {
-        dispatch({ type: NEW_REVIEW_FAIL, payload: error.response.data.message });
+        const { data } = await axios.put(`/api/v1/review`, reviewData, config); 
+        return data.success;
+    } catch (error) {
+        return thunkError(error, thunkAPI);
     }
-};
+});
 
 // get all review
-export const getAllReviews = (id) => async (dispatch) => {
-    try {
-        dispatch({ 
-            type: ALL_REVIEW_REQUEST 
-        });
-        const { data } = await axios.get(`/api/v1/reviews?id=${id}`);        
-        dispatch({ 
-            type: ALL_REVIEW_SUCCESS, 
-            payload: data.reviews 
-        });
-    }catch(error) {
-        dispatch({ 
-            type: ALL_REVIEW_FAIL, 
-            payload: error.response.data.message 
-        });
-    }
-};
+export const getAllReviews = createAsyncThunk(
+    "product/getAllReviews", async (id, thunkAPI) => {
+        try {
+            const { data } = await axios.get(`/api/v1/reviews?id=${id}`);
+            return data.reviews;
+        } catch (error) {
+            return thunkError(error, thunkAPI);
+        }
+});
 
 // delete review of product
-export const deleteReview = (reviewId, productId) => async (dispatch) => {
-    try {
-        dispatch({ 
-            type: DELETE_REVIEW_REQUEST 
-        });
-        const { data } = await axios.delete(`/api/v1/reviews?id=${reviewId}&productId=${productId}`);        
-        dispatch({ 
-            type: DELETE_REVIEW_SUCCESS,
-            payload: data.success 
-        });
-    }catch(error) {
-        dispatch({ 
-            type: DELETE_REVIEW_FAIL, 
-            payload: error.response.data.message 
-        });
-    }
-};
-
-//clear all errors
-export const clearErrors = () => async (dispatch) => { 
-    dispatch({
-        type: CLEAR_ERRORS
-    });
-};
+export const deleteReview = createAsyncThunk(
+    "product/deleteReview", async (reviewId, productId, thunkAPI) => {
+        try {
+            const { data } = await axios.delete(`/api/v1/reviews?id=${reviewId}&productId=${productId}`);
+            return data.success;
+        } catch (error) {
+            return thunkError(error, thunkAPI);
+        }
+});

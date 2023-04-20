@@ -1,86 +1,58 @@
 import axios from "axios";
-import {
-    CREATE_BLOG_REQUEST,
-    CREATE_BLOG_SUCCESS,
-    CREATE_BLOG_FAIL,
-    UPDATE_BLOG_REQUEST,
-    UPDATE_BLOG_SUCCESS,
-    UPDATE_BLOG_FAIL,
-    GET_BLOG_REQUEST,
-    GET_BLOG_SUCCESS,
-    GET_BLOG_FAIL,
-    LIST_BLOG_REQUEST,
-    LIST_BLOG_SUCCESS,
-    LIST_BLOG_FAIL,
-    DELETE_BLOG_REQUEST,
-    DELETE_BLOG_SUCCESS,
-    DELETE_BLOG_FAIL,
-    CLEAR_ERRORS
-} from "../contants/blogContent";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { thunkError } from "./clearformAction";
 
-export const createBlog = (blogData) => async dispatch => {
+export const createBlog = createAsyncThunk("blog/createBlog", async (blogData, thunkAPI) => {
     try {
-        dispatch({ type: CREATE_BLOG_REQUEST});
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
         const { data } = await axios.post('/api/v1/admin/blog/new', blogData, config);
-        dispatch({ type: CREATE_BLOG_SUCCESS, payload: data });
+        return data;
     } catch (error) {
-        dispatch({ type: CREATE_BLOG_FAIL, payload: error.response.data.message });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const updateBlog = (blogData, blogId) => async dispatch => {
+export const updateBlog = createAsyncThunk("blog/updateBlog", async ({blogData, blogId}, thunkAPI) => {
     try {
-        dispatch({ type: UPDATE_BLOG_REQUEST});
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
         const { data } = await axios.put(`/api/v1/admin/blog/${blogId}`, blogData, config);
-        dispatch({ type: UPDATE_BLOG_SUCCESS, payload: data });
+        return data;
     } catch (error) {
-        dispatch({ type: UPDATE_BLOG_FAIL, payload: error.response.data.message });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getBlog = (blogId) => async dispatch => {
+export const getBlog = createAsyncThunk("blog/getBlog", async (blogId, thunkAPI) => {
     try {
-        dispatch({ type: GET_BLOG_REQUEST });
         const { data } = await axios.get(`/api/v1/admin/blog/${blogId}`);
-        dispatch({ type: GET_BLOG_SUCCESS, payload: data.blog });
+        return data.blog;
     } catch (error) {
-        dispatch({ type: GET_BLOG_FAIL, payload: error.response.data.message });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getAllBlog = () => async dispatch => {
+export const getAllBlog = createAsyncThunk("blogs/getAllBlog", async (_, thunkAPI) => {
     try {
-        dispatch({ type: LIST_BLOG_REQUEST });
         const { data } = await axios.get("/api/v1/admin/blogs");
-        dispatch({ type: LIST_BLOG_SUCCESS, payload: data.blogs });
+        return data.blogs;
     } catch (error) {
-        dispatch({ type: LIST_BLOG_FAIL, payload: error.response.data.message });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const deleteBlog = (id) => async dispatch => {
+export const deleteBlog = createAsyncThunk("blog/deleteBlog", async (blogId, thunkAPI) => {
     try {
-        dispatch({ type: DELETE_BLOG_REQUEST });
-        const { data } = await axios.delete(`/api/v1/admin/blog/${id}`);
-        dispatch({ type: DELETE_BLOG_SUCCESS, payload: data.blogs });
+        const { data } = await axios.delete(`/api/v1/admin/blog/${blogId}`);
+        return data.success;
     } catch (error) {
-        dispatch({ type: DELETE_BLOG_FAIL, payload: error.response.data.message });
+        return thunkError(error, thunkAPI);
     }
-}
-
-//clear all errors
-export const clearErrors = () => async (dispatch) => {
-    dispatch({
-        type: CLEAR_ERRORS
-    });
-};
+});

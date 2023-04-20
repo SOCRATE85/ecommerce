@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getAllOrders, clearErrors, deleteOrder } from '../../../../store/actions/orderAction';
+import { getAllOrders, clearErrors, deleteOrder, deleteOrderReset } from '../../../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import Loader from '../../../layout/Loader/Loader';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-
 import "./OrderList.css";
-import { DELETE_ORDER_RESET } from '../../../../store/contants/orderConstant';
 
 const OrderList = () => {
     const dispatch = useDispatch();
@@ -61,7 +59,7 @@ const OrderList = () => {
             alert.success("Order deleted successfully.");
             navigate("/admin/orders");
             dispatch(getAllOrders());
-            dispatch({ type: DELETE_ORDER_RESET });
+            dispatch(deleteOrderReset());
         }
     },[alert, isDeleted, dispatch, navigate]);
 
@@ -71,28 +69,20 @@ const OrderList = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, error, dispatch]);
 
     useEffect(() => {
         if(deleteError) {
-            alert.error(deleteError);
+            alert.error(deleteError.error);
             dispatch(clearErrors());
         }
     },[alert, deleteError, dispatch]);
 
     return <FormContainer pagetitle={"Admin Order Listing"}>
-        {loading ? <Loader /> : <DataGrid 
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick 
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        />}
+        {loading ? <Loader /> : <DataListing columns={columns} rows={rows} />}
     </FormContainer>
 }
 

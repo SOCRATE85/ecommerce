@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { clearErrors } from '../../../../store/actions/productAction';
-import { getAdminProducts, deleteProduct } from '../../../../store/actions/productAction';
+import { getAdminProducts, deleteProduct, clearErrors, deleteProductReset } from '../../../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../../layout/Loader/Loader';
 import { Edit, Delete } from '@mui/icons-material';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import { getValue } from '../../../../common/attribute';
 import { Button } from '@mui/material';
-import { DELETE_PRODUCT_RESET } from '../../../../store/contants/productConstant';
 import Hoc from '../../../layout/Hoc';
 import "./ProductList.css";
 
@@ -82,7 +80,7 @@ const ProductList = () => {
             alert.success("Product deleted successfully.");
             navigate("/admin/products");
             dispatch(getAdminProducts());
-            dispatch({ type: DELETE_PRODUCT_RESET });
+            dispatch(deleteProductReset());
         }
     },[alert, isDeleted, dispatch, navigate]);
 
@@ -92,28 +90,20 @@ const ProductList = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, error, dispatch]);
 
     useEffect(() => {
         if(deleteError) {
-            alert.error(deleteError);
+            alert.error(deleteError.error);
             dispatch(clearErrors());
         }
     },[alert, deleteError, dispatch]);
 
     return <FormContainer pagetitle={"Admin Product Listing"}>
-        {loading ? <Loader /> : <DataGrid 
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick 
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        />}
+        {loading ? <Loader /> : <DataListing columns={columns} rows={rows} />}
     </FormContainer>
 }
 

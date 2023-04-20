@@ -6,13 +6,12 @@ import ReactStars from 'react-rating-stars-component';
 import { useAlert } from 'react-alert';
 import { Dialog, DialogActions, DialogContent, DialogTitle,Button, Rating } from "@mui/material";
 import Loader from '../layout/Loader/Loader';
-import { clearErrors, productDetails, newReview } from "../../store/actions/productAction";
+import { clearErrors, productDetails, newReview, newReviewReset } from "../../store";
 import ReviewCard from './ReviewCard';
 import MetaData from '../layout/MetaData';
-import { addItemsToCart } from "../../store/actions/cartAction";
+import { addItemsToCart } from "../../store";
 import { getValue } from '../../common/attribute';
 import './productDetails.css';
-import { NEW_REVIEW_RESET } from "../../store/contants/productConstant";
 
 const ProductDetails = (props) => {
     const navigate = useNavigate();
@@ -34,20 +33,20 @@ const ProductDetails = (props) => {
         if(success){
             alert.success("Review submitted successfully");
             dispatch(productDetails(props.productId));
-            dispatch({ type: NEW_REVIEW_RESET });
+            dispatch(newReviewReset());
         }
     }, [dispatch, errorReview, alert, success, props]);
 
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         dispatch(productDetails(props.productId));
     }, [dispatch, props.productId, error, alert]);
     
     const addToCartHandler = () => {
-        dispatch(addItemsToCart(props.productId, quantity));
+        dispatch(addItemsToCart({id: props.productId, quantity}));
         alert.success("Item added To Cart");
         navigate("/cart");
     }

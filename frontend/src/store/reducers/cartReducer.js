@@ -1,35 +1,29 @@
-import { 
-    ADD_TO_CART,
-    REMOVE_CART_ITEM,
-    SAVE_SHIPPING_INFO,
-    REMOVE_CART_ITEM_AFTER_ORDER_PLACE,
-    VALIDATE_ADDRESS_REQUEST,
-    VALIDATE_ADDRESS_SUCCESS,
-    VALIDATE_ADDRESS_FAIL
-} from "../contants/cartConstant";
+import { createSlice } from "@reduxjs/toolkit";
+import { clearErrors } from "../actions/clearformAction";
+import { validateAddress, addItemsToCart, removeItemFromcart, removeItemFromcartAfterOrderSuccess, saveShippingInfo } from '../actions/cartAction';
 
-export const cartReducer = (state = { cartItems: [], shippingInfo: {}}, action) => {
-    switch (action.type) {
-        case VALIDATE_ADDRESS_REQUEST:
-            return {
-                ...state,
-                loading: true
-            }
-        case VALIDATE_ADDRESS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                success: action.payload
-            }
-        case VALIDATE_ADDRESS_FAIL:
-            return {
-                ...state,
-                error: action.payload
-            }
-        case ADD_TO_CART:
+export const cartSlice = createSlice({
+    name: "cart",
+    initialState: {cartItems: [], shippingInfo: {}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(validateAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(validateAddress.fulfilled, (state, action) => {
+            state.loading = false;
+            state.success = action.payload;
+        });
+        builder.addCase(validateAddress.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(addItemsToCart.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addItemsToCart.fulfilled, (state, action) => {
             const item = action.payload;
             const isItemExist = state.cartItems.find(i=> i.product._id === item.product._id);
-            
             if(isItemExist){
                 return {
                     ...state,
@@ -41,22 +35,45 @@ export const cartReducer = (state = { cartItems: [], shippingInfo: {}}, action) 
                     cartItems:[...state.cartItems, item]
                 };
             }
-        case REMOVE_CART_ITEM:
-            return {
-                ...state,
-                cartItems: state.cartItems.filter((i) => i.product._id !== action.payload)
-            };
-        case REMOVE_CART_ITEM_AFTER_ORDER_PLACE:
-            return {
-                ...state,
-                cartItems: []
-            };
-        case SAVE_SHIPPING_INFO:
-            return {
-                ...state,
-                shippingInfo: action.payload
-            }
-        default:
-            return state
+        });
+        builder.addCase(addItemsToCart.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(removeItemFromcart.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(removeItemFromcart.fulfilled, (state, action) => {
+            state.cartItems = state.cartItems.filter((i) => i.product._id !== action.payload)
+        });
+        builder.addCase(removeItemFromcart.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(removeItemFromcartAfterOrderSuccess.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(removeItemFromcartAfterOrderSuccess.fulfilled, (state, action) => {
+            state.cartItems = action.payload;
+        });
+        builder.addCase(removeItemFromcartAfterOrderSuccess.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(saveShippingInfo.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(saveShippingInfo.fulfilled, (state, action) => {
+            state.loading = false;
+            state.shippingInfo = action.payload;
+        });
+        builder.addCase(saveShippingInfo.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});

@@ -1,181 +1,132 @@
-import { 
-    ALL_ATTRIBUTES_REQUEST, 
-    ALL_ATTRIBUTES_SUCCESS, 
-    ALL_ATTRIBUTES_FAIL,
-    ATTRIBUTE_DETAILS_REQUEST,
-    ATTRIBUTE_DETAILS_SUCCESS,
-    ATTRIBUTE_DETAILS_FAIL,
-    NEW_ATTRIBUTE_REQUEST,
-    NEW_ATTRIBUTE_SUCCESS,
-    NEW_ATTRIBUTE_RESET,
-    NEW_ATTRIBUTE_FAIL,
-    UPDATE_ATTRIBUTE_REQUEST,
-    UPDATE_ATTRIBUTE_SUCCESS,
-    UPDATE_ATTRIBUTE_RESET,
-    UPDATE_ATTRIBUTE_FAIL,
-    DELETE_ATTRIBUTE_REQUEST,
-    DELETE_ATTRIBUTE_SUCCESS,
-    DELETE_ATTRIBUTE_RESET,
-    DELETE_ATTRIBUTE_FAIL,
-    CLEAR_ERRORS
-} from '../contants/attributeConstant';
+import { createSlice } from '@reduxjs/toolkit';
+import { clearErrors } from '../actions/clearformAction';
+import {
+    createAttribute,
+    getAllAttributes,
+    getAttribute,
+    updateAttribute,
+    deleteAttribute
+} from '../actions/attributeAction';
 
-export const createAttributeReducer = (state = { attribute:{}}, action) => {
-    switch(action.type){
-        case NEW_ATTRIBUTE_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case NEW_ATTRIBUTE_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                attribute: action.payload.attribute,
-                success: action.payload.success
-            };
-        case NEW_ATTRIBUTE_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case NEW_ATTRIBUTE_RESET:
-            return {
-                ...state,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const createAttributeSlice = createSlice({
+    name: "attribute",
+    initialState: {attribute:{}},
+    reducers: {
+        newAttributeReset: (state) => {
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(createAttribute.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(createAttribute.fulfilled, (state, action) => {
+            state.loading = false;
+            state.attribute = action.payload.attribute;
+            state.success = action.payload.success;
+        });
+        builder.addCase(createAttribute.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const attributesReducer = (state = { attributes: []}, action ) => {
-    switch(action.type){
-        case ALL_ATTRIBUTES_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                attributes: []
-            };
-        case ALL_ATTRIBUTES_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                attributes: action.payload.attributes,
-            };
-        case ALL_ATTRIBUTES_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const attributesSlice = createSlice({
+    name: "attributes",
+    initialState: {attributes: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllAttributes.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllAttributes.fulfilled, (state, action) => {
+            state.loading = false;
+            state.attributes = action.payload.attributes;
+        });
+        builder.addCase(getAllAttributes.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const deleteAttributeReducer = (state = {}, action ) => {
-    switch(action.type){
-        case DELETE_ATTRIBUTE_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_ATTRIBUTE_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_ATTRIBUTE_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case DELETE_ATTRIBUTE_RESET:
-            return {
-                ...state,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const deleteAttributeSlice = createSlice({
+    name: "attribute",
+    initialState: {},
+    reducers: {
+        deleteAttributeReset: (state) => {
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteAttribute.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteAttribute.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteAttribute.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const attributeDetailsReducer = (state = { attribute: {}}, action ) => {
-    switch(action.type){
-        case ATTRIBUTE_DETAILS_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case ATTRIBUTE_DETAILS_SUCCESS:
-            return {
-                loading: false,
-                attribute: action.payload
-            };
-        case ATTRIBUTE_DETAILS_FAIL:
-            return {
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const attributeDetailSlice = createSlice({
+    name: "attribute",
+    initialState: {attribute: {}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAttribute.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAttribute.fulfilled, (state, action) => {
+            state.loading = false;
+            state.attribute = action.payload;
+        });
+        builder.addCase(getAttribute.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const updateAttributeReducer = (state = {}, action ) => {
-    switch(action.type){
-        case UPDATE_ATTRIBUTE_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_ATTRIBUTE_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_ATTRIBUTE_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_ATTRIBUTE_RESET:
-            return {
-                ...state,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const updateAttributeSlice = createSlice({
+    name: "attribute",
+    initialState: {},
+    reducers: {
+        updateAttributeReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateAttribute.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateAttribute.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateAttribute.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});

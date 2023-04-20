@@ -6,9 +6,8 @@ import { Button } from "@mui/material";
 import Input from '../../../Controls/Input';
 import ActionControl from '../../../../common/ActionControl';
 import { FormContainer } from '../../../../common/components/FormContainer';
+import { addNewSlider, clearErrors, getAllSlider, addNewSliderReset } from "../../../../store";
 import "./AddSlider.css";
-import { addNewSlider, clearErrors, getAllSlider } from "../../../../store/actions/sliderAction";
-import { ADD_SLIDER_RESET } from "../../../../store/contants/sliderContant";
 
 const AddSlider = () => {
     const dispatch = useDispatch();
@@ -205,7 +204,7 @@ const AddSlider = () => {
     
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [dispatch, alert, error]);
@@ -215,7 +214,7 @@ const AddSlider = () => {
             alert.success("New Slider added successfully");
             dispatch(getAllSlider());
             navigate('/admin/sliders');
-            dispatch({type: ADD_SLIDER_RESET});
+            dispatch(addNewSliderReset());
         }
     },[dispatch, success, alert, navigate]);
 

@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, productDetails, updateProduct } from "../../../../store/actions/productAction";
+import { clearErrors, productDetails, updateProduct, updateProductReset } from "../../../../store";
 import { useAlert } from "react-alert";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from '@mui/material';
-import { UPDATE_PRODUCT_RESET } from "../../../../store/contants/productConstant";
-import { getAttributesets } from '../../../../store/actions/attributesetAction';
-import { getAllCategories } from '../../../../store/actions/categoryAction';
+import { getAttributeSets, getAllCategories } from '../../../../store';
 import Select from 'react-select';
 import Loader from "../../../layout/Loader/Loader";
 import Input from '../../../Controls/Input';
@@ -38,7 +36,7 @@ const UpdateProduct = () => {
     const productId = params.id;
 
     useEffect(() => {
-        dispatch(getAttributesets());
+        dispatch(getAttributeSets());
         dispatch(getAllCategories());
     }, [dispatch]);
 
@@ -401,21 +399,21 @@ const UpdateProduct = () => {
         if(isUpdated) {
             alert.success("Product updated successfully");
             dispatch(productDetails(productId));
-            dispatch({ type: UPDATE_PRODUCT_RESET });
+            dispatch(updateProductReset());
             navigate("/admin/products");
         }
     }, [alert, isUpdated, navigate, dispatch, productId]);
 
     useEffect(() => {
         if(productError) {
-            alert.error(productError);
+            alert.error(productError.error);
             dispatch(clearErrors());
         }
     },[alert, dispatch, productError]);
 
     useEffect(() => {
         if(updateError) {
-            alert.error(updateError);
+            alert.error(updateError.error);
             dispatch(clearErrors());
         }
     }, [updateError, dispatch, alert]);
@@ -459,7 +457,7 @@ const UpdateProduct = () => {
         const name = getValue("name", _attributeGroup);
         myForm.set("name", name);
         myForm.set("data", JSON.stringify(_attributeGroup));
-        dispatch(updateProduct(myForm, productId));
+        dispatch(updateProduct({ productData: myForm, productId }));
     }
 
     const createProductImageChange = async (e, index, identifier) => {

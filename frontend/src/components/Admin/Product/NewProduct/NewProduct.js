@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, createProduct } from "../../../../store/actions/productAction";
+import { clearErrors, createProduct, reserAddNewProduct } from "../../../../store";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { NEW_PRODUCT_RESET } from "../../../../store/contants/productConstant";
-import { getAttributesets } from '../../../../store/actions/attributesetAction';
-import { getAllCategories } from '../../../../store/actions/categoryAction';
+import { getAllCategories, getAttributeSets } from '../../../../store';
 import Select from 'react-select';
 import Loader from "../../../layout/Loader/Loader";
 import Input from '../../../Controls/Input';
@@ -33,7 +31,7 @@ const NewProduct = () => {
     const [ imageUpload, setImageUpload ] = useState(false);
 
     useEffect(() => {
-        dispatch(getAttributesets());
+        dispatch(getAttributeSets());
         dispatch(getAllCategories());
     }, [dispatch]);
 
@@ -267,13 +265,13 @@ const NewProduct = () => {
         if(success) {
             alert.success("Product created successfully");
             navigate("/admin/products");
-            dispatch({ type: NEW_PRODUCT_RESET });
+            dispatch(reserAddNewProduct());
         }
     }, [alert, success, navigate, dispatch]);
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, dispatch, error]);

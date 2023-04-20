@@ -39,7 +39,7 @@ const Products = () => {
 
     useEffect(() =>{
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         setTimeout(()=> {

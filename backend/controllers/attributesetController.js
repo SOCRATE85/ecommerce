@@ -32,10 +32,15 @@ async function getAttrubteGroupList(copyAttributeSet) {
 }
 
 exports.createAttributeSet = catchAsyncError(async (req, res, next) => {
+    console.log('req.body: ', req.body);
     const attributeSetName = req.body.attributeSetName;
     const attributeSetReference = req.body.attributeSetReference;
     let attributeSet = await AttributeSet.find({ attribute_set_name: attributeSetName });
     
+    if(req.body.attributeSetReference === '') {
+        return next(new ErrorHandler("Something went wrong to create attribute sets.", 404));
+    }
+
     if(attributeSet.length > 0) {
         return next(new ErrorHandler("Attribute Set with same name already exists.", 404));
     }

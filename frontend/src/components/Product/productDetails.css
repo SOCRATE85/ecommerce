@@ -82,24 +82,25 @@
 
 .detailsBlock-3-1-1>input{
     border: none;
-    padding: 5px;
-    width: 24px;
+    padding: 5px 0;
+    width: 41px;
     text-align: center;
     outline: none;
     font-weight: 400;
     font-size: 12px;
+    padding-left: 10px;
 }
 
 .detailsBlock-3-1> button:last-child{
     border: none;
     cursor: pointer;
     color: white;
-    font: 500 0.8vmax 'Roboto', sans-serif;
+    font: 500 14px 'Roboto', sans-serif;
     background-color: tomato;
     transition: all 0.5s;
     border-radius: 20px;
-    padding: 0.5vmax 2vmax;
-    margin: 1vmax;
+    padding: 7px 20px;
+    margin: 10px;
     outline: none;
 }
 
@@ -131,10 +132,10 @@
 .submitReview{
     border: none;
     background-color: tomato;
-    font: 500 1vmax 'Roboto', sans-serif;
+    font: 500 14px 'Roboto', sans-serif;
     border-radius: 20px;
-    padding: 0.6vmax 2vmax;
-    margin: 1vmax 0;
+    padding: 7px 20px;
+    margin: 10px 0;
     color: white;
     cursor: pointer;
     transition: all 0.5s;
@@ -191,7 +192,6 @@
     align-items: center;
    }
    .detailsBlock-1>h2{
-    font-size: 2.0vmax;
     text-align: center;
    }
    .detailsBlock-2{
@@ -201,14 +201,12 @@
     font-size: 16px;
    }
    .detailsBlock-3>h1{
-    font: 700 3vmax 'Roboto', sans-serif;
     text-align: center;
    }
    .detailsBlock-3>p{
     text-align: center;
    }
    .detailsBlock-3-1{
-    padding: 2vmax 0;
     flex-direction: column;
    }
    .detailsBlock-3-1-1{display: flex;}
@@ -219,17 +217,11 @@
    .detailsBlock-3-1-1>input{
         padding: 10px;
         width: 30px;
-        font: 400 14px 'Roboto', sans-serif;
    }
    .detailsBlock-3-1 > button:last-child{
-        font: 500 14px 'Roboto', sans-serif;
         padding: 10px;
-        width: 20vmax;
-        margin: 3vmax 0;
    }
    .detailsBlock-3 > p {
-        padding: 2.5vmax 0;
         text-align: center;
-        font: 400 14px 'Roboto', sans-serif;
    }
 }

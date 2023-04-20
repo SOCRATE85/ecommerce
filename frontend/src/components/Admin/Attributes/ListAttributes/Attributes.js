@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import { DataGrid } from '@mui/x-data-grid';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
+import DataListing from "../../../../common/DataListing";
 import Loader from '../../../layout/Loader/Loader';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useAlert } from "react-alert";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { DELETE_ATTRIBUTE_RESET } from '../../../../store/contants/attributeConstant';
-import { getAllAttributes, deleteAttribute, clearErrors } from "../../../../store/actions/attributeAction";
+import { getAllAttributes, deleteAttribute, clearErrors, deleteAttributeReset } from "../../../../store";
 import "./Attributes.css";
 
 const Attributes = () => {
@@ -28,20 +26,20 @@ const Attributes = () => {
             alert.success("Attribute deleted successfully.");
             navigate("/admin/attributes");
             dispatch(getAllAttributes());
-            dispatch({ type: DELETE_ATTRIBUTE_RESET });
+            dispatch(deleteAttributeReset());
         }
     },[alert, isDeleted, dispatch, navigate]);
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, error, dispatch]);
 
     useEffect(() => {
         if(deleteError) {
-            alert.error(deleteError);
+            alert.error(deleteError.error);
             dispatch(clearErrors());
         }
     },[alert, deleteError, dispatch]);
@@ -105,15 +103,7 @@ const Attributes = () => {
     }
 
     return (<FormContainer pagetitle={"Attributes Listing"}>
-        {loading || loadingIsDelete ? <Loader /> : <DataGrid 
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick 
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        />}
+        {loading || loadingIsDelete ? <Loader /> : <DataListing columns={columns} rows={rows} />}
     </FormContainer>);
 }
 

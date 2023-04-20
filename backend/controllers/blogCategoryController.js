@@ -5,6 +5,7 @@ const slugify = require("../utils/slugify");
 
 exports.createBlogCatgory = catchAsyncError(async (req, res, _next) => {
     req.body.url_key = slugify(req.body.name);
+    console.log('req.body: ', req.body);
     const blogCategory = await BlogCategory.create(req.body);
     res.status(200)
     .json({

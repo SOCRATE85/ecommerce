@@ -6,8 +6,7 @@ import { useAlert } from 'react-alert';
 import { Accordion } from './Accordion';
 import { AccordionSummary } from './AccordionSummary';
 import { AccordionDetails } from './AccordionDetails';
-import { createUpdateSettings, getAllSettings, clearErrors } from '../../../store/actions/settingsAction';
-import { CREATE_SETTING_RESET } from "../../../store/contants/settingsConstent";
+import { createUpdateSettings, getAllSettings, clearErrors, createSettingsReset } from '../../../store';
 import { getToolbarValue } from '../../../common/attribute';
 import "./Catalog.css";
 
@@ -41,13 +40,13 @@ export const Catalog = (props) => {
     useEffect(() => {
         if(success) {
             alert.success("Settings saved successfully");
-            dispatch({ type: CREATE_SETTING_RESET });
+            dispatch(createSettingsReset());
         }
     }, [alert, success, dispatch]);
 
     useEffect(() => {
         if(error) {
-            alert.error("There are issue in saving settings");
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [alert, error, dispatch]);

@@ -14,7 +14,7 @@ import {
 import { Doughnut, Line } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { clearErrors, fetchProducts } from '../../store/actions/productAction';
+import { clearErrors, fetchProducts } from '../../store';
 import { FormContainer } from "../../common/components/FormContainer";
 import Loader from "../layout/Loader/Loader";
 import { getAllOrders } from "../../store/actions/orderAction";

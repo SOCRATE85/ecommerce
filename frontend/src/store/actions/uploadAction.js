@@ -1,41 +1,25 @@
-import { 
-    UPLOAD_FILE_REQUEST,
-    UPLOAD_FILE_SUCCESS,
-    UPLOAD_FILE_FAIL,
-    DELETE_FILE_REQUEST,
-    DELETE_FILE_SUCCESS,
-    DELETE_FILE_FAIL
-} from "../contants/uploadContant";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { thunkError } from "./clearformAction";
 
 // uploadFiles
-export const uploadFiles = (fileData) => async (dispatch) => {
+export const uploadFiles = createAsyncThunk("upload/uploadFiles", async (fileData, thunkAPI) => {
     try {
-        dispatch({type: UPLOAD_FILE_REQUEST});
-        const config = { headers: { "Content-Type": "multipart/form-data" }
-        };
+        const config = {headers:{ "Content-Type": "multipart/form-data"}};
         const { data } = await axios.post("/api/v1/admin/upload", fileData, config);
-        dispatch({ type: UPLOAD_FILE_SUCCESS, payload: data.images });
+        return data.images;
     } catch (error) {
-        dispatch({
-            type: UPLOAD_FILE_FAIL,
-            payload: error.response.data.message
-        });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
 // deleteFiles
-export const deleteFiles = (fileData) => async (dispatch) => {
+export const deleteFiles = createAsyncThunk("upload/deleteFiles", async (fileData, thunkAPI) => {
     try {
-        dispatch({type: DELETE_FILE_REQUEST});
-        const config = { headers: { "Content-Type": "application/json" }
-        };
-        const { data } = await axios.post("/api/v1/login",fileData, config);
-        dispatch({ type: DELETE_FILE_SUCCESS, payload: data });
+        const config = {headers:{ "Content-Type": "multipart/form-data"}};
+        const { data } = await axios.post("/api/v1/admin/upload", fileData, config);
+        return data.images;
     } catch (error) {
-        dispatch({
-            type: DELETE_FILE_FAIL,
-            payload: error.response.data.message
-        });
+        return thunkError(error, thunkAPI);
     }
-}
+});

@@ -104,7 +104,7 @@ class ActionControl {
             }
         }
         
-        if(rules.isImage) {
+        if(rules.isImage && value.length !== 0) {
             isValid = value.length !== 0 && isValid;
             if (!isValid) {
                 message = "This is required!";
@@ -293,7 +293,7 @@ class ActionControl {
     }
     createSubmitHandler = (event, callback) => {
         event.preventDefault();
-        const validatedData = this.validate();
+        const validatedData = this.validate(); console.log('validatedData: ', validatedData);
         this.setFormState(validatedData);
         const validated = this.validatedForm();
         if(!validated) {

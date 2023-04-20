@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { LaunchOutlined } from "@mui/icons-material";
 import MetaData from "../layout/MetaData";
-import { myOrders, clearErrors } from "../../store/actions/orderAction";
+import { myOrders, clearErrors } from "../../store";
 import Loader from "../layout/Loader/Loader";
 import "./Orders.css";
 
@@ -40,7 +40,7 @@ const Orders = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [alert, error, dispatch]);

@@ -36,7 +36,11 @@ exports.createCategory = catchAsyncError(async (req, res, _next) => {
     }else{
         images = req.body.images;
     }
-
+    
+    if(req.body.parent === '') {
+        req.body.parent = null;
+    }
+    
     let imagesLink = [];
     
     for (let index = 0; index < images.length; index++) {
@@ -198,7 +202,9 @@ exports.updateCategory = catchAsyncError(async (req, res, next) => {
     if(!category){
         return next(new ErrorHandler("Category not Found", 404));
     }
-
+    if(req.body.parent === '') {
+        req.body.parent = null;
+    }
     // images start here
     let images = [];
 
@@ -236,6 +242,8 @@ exports.updateCategory = catchAsyncError(async (req, res, next) => {
             products.push(productIds[index]);
         }
         req.body.products = products;
+    } else {
+        req.body.products = [];
     }
 
     category = await Category.findByIdAndUpdate(req.params.id, req.body,{

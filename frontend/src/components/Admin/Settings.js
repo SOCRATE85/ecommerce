@@ -1,20 +1,14 @@
 import React from 'react';
 import { Catalog } from './Settings/Catalog';
-
-import MetaData from "../layout/MetaData";
-import Sidebar from "./Sidebar";
+import { FormContainer } from '../../common/components/FormContainer';
 import "./Settings.css";
 
 const Settings = () => {
-    return <>
-        <MetaData title={"Admin Reviews Listing"} />
-        <div className="dashboard">
-            <Sidebar />
+    return <><FormContainer pagetitle={'Admin Configuration Settings'}>
             <div className="settingsContainer">
-                <h1 className="productReviewsFormHeading">Settings</h1>
                 <Catalog title="Catalog" />
-            </div>
-        </div>
+            </div>        
+        </FormContainer>
     </>;
 }
 

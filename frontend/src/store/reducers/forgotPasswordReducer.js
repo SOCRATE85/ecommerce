@@ -1,48 +1,38 @@
-import { 
-    CLEAR_ERRORS, 
-    FORGET_PASSWORD_REQUEST,
-    FORGET_PASSWORD_SUCCESS,
-    FORGET_PASSWORD_FAIL,
-    RESET_PASSWORD_REQUEST,
-    RESET_PASSWORD_SUCCESS,
-    RESET_PASSWORD_FAIL
-} from "../contants/userContant";
+import { createSlice } from "@reduxjs/toolkit";
+import { clearErrors } from "../actions/clearformAction";
+import { forgotPassword, resetPassword } from '../actions/userAction';
 
-const forgotPasswordInitialState = {};
-export const forgotPasswordReducer = (state = forgotPasswordInitialState, action ) => {
-    switch (action.type) {
-        case FORGET_PASSWORD_REQUEST:
-        case RESET_PASSWORD_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                error: null
-            };
-        case FORGET_PASSWORD_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                message: action.payload
-            };
-        case RESET_PASSWORD_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                message: action.payload
-            };
-        case FORGET_PASSWORD_FAIL:
-        case RESET_PASSWORD_FAIL:
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const forgetPasswordSlice = createSlice({
+    name: "password",
+    initialState: {},
+    reducers: {},
+    extraReducers: (builder) => {
+        // forget passord
+        builder.addCase(forgotPassword.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(forgotPassword.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+        });
+        builder.addCase(forgotPassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        // reset password
+        builder.addCase(resetPassword.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(resetPassword.fulfilled, (state, action) => {
+            state.loading = false;
+            state.message = action.payload;
+        });
+        builder.addCase(resetPassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});

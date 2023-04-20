@@ -1,138 +1,148 @@
-import { 
-    LOGIN_REQUEST, 
-    LOGIN_SUCCESS, 
-    LOGIN_FAIL, 
-    CLEAR_ERRORS, 
-    REGISTER_REQUEST, 
-    REGISTER_SUCCESS, 
-    REGISTER_FAIL,
-    LOAD_USER_REQUEST,
-    LOAD_USER_SUCCESS,
-    LOAD_USER_FAIL,
-    LOGOUT_SUCCESS,
-    LOGOUT_FAIL,
-    ALL_USERS_REQUEST,
-    ALL_USERS_SUCCESS,
-    ALL_USERS_FAIL,
-    USER_DETAILS_REQUEST,
-    USER_DETAILS_SUCCESS,
-    USER_DETAILS_FAIL
-} from "../contants/userContant";
+import { createSlice } from "@reduxjs/toolkit";
+import { clearErrors } from "../actions/clearformAction";
+import { login, register, loadUser, logoutuser, getAllUsers, getUserDetails, addUser } from '../actions/userAction';
 
-const userInitialState = {};
-export const userReducer = (state = userInitialState, action ) => {
-    switch (action.type) {
-        case LOGIN_REQUEST:
-        case REGISTER_REQUEST:
-        case LOAD_USER_REQUEST:
-            return {
-                loading: true,
-                isAuthenticated: false
-            };
-        case LOGIN_SUCCESS:
-        case REGISTER_SUCCESS:
-        case LOAD_USER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isAuthenticated: true,
-                user: action.payload
-            };
-        case LOGOUT_SUCCESS:
-            return {
-                loading: false,
-                user: null,
-                isAuthenticated: false
-            };
-        case LOGOUT_FAIL: 
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case LOGIN_FAIL:
-        case REGISTER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                isAuthenticated: false,
-                user: null,
-                error: action.payload
-            };
-        case LOAD_USER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                isAuthenticated: false,
-                user: null,
-                error: action.payload  
-            }
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const addUserSlice = createSlice({
+    name: "user",
+    initialState: {user:{}},
+    reducers: {
+        addUserReset: (state) => {
+            state.loading = false;
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(addUser.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload.user;
+            state.success = action.payload.success;
+        });
+        builder.addCase(addUser.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-const allUsersInitialState = { users: []};
-export const allUsersReducer = (state = allUsersInitialState, action ) => {
-    switch (action.type) {
-        case ALL_USERS_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case ALL_USERS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                users: action.payload
-            };
-        case ALL_USERS_FAIL:
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const userSlice = createSlice({
+    name: "user",
+    initialState: {},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, (state) => {
+            state.loading = true;
+            state.isAuthenticated = false;
+        });
+        builder.addCase(login.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload;
+            state.isAuthenticated = true;
+        });
+        builder.addCase(login.rejected,(state, action) => {
+            state.loading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = action.payload;
+        });
+        //register
+        builder.addCase(register.pending, (state) => {
+            state.loading = true;
+            state.isAuthenticated = false;
+        });
+        builder.addCase(register.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload;
+            state.isAuthenticated = true;
+        });
+        builder.addCase(register.rejected,(state, action) => {
+            state.loading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = action.payload;
+        });
+        //loading user
+        builder.addCase(loadUser.pending, (state) => {
+            state.loading = true;
+            state.isAuthenticated = false;
+        });
+        builder.addCase(loadUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload;
+            state.isAuthenticated = true;
+        });
+        builder.addCase(loadUser.rejected,(state, action) => {
+            state.loading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = action.payload;
+        });
+        //logout user
+        builder.addCase(logoutuser.fulfilled, (state, _) => {
+            state.loading = false;
+            state.user = null;
+            state.isAuthenticated = false;
+        });
+        builder.addCase(logoutuser.rejected,(state, action) => {
+            state.loading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+            state.error = action.payload;
+        });
+        //clear error
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-const userDetailInitialState = { user: {}};
-export const userDetailsReducer = (state = userDetailInitialState, action ) => {
-    switch (action.type) {
-        case USER_DETAILS_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case USER_DETAILS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                user: action.payload
-            };
-        case USER_DETAILS_FAIL:
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const allUsersSlice = createSlice({
+    name: "user",
+    initialState:  {users: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllUsers.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllUsers.fulfilled, (state, action) => {
+            state.loading = false;
+            state.users = action.payload.users;
+            state.success = action.payload.success;
+        });
+        builder.addCase(getAllUsers.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
+
+export const userDetailsSlice = createSlice({
+    name: "user",
+    initialState: {user: {}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getUserDetails.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getUserDetails.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = action.payload;
+        });
+        builder.addCase(getUserDetails.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});

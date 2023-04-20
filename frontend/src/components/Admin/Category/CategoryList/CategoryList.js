@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getAllCategories, clearErrors, deleteCategory } from '../../../../store/actions/categoryAction';
+import { getAllCategories, clearErrors, deleteCategory, deleteCategoryReset } from '../../../../store';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../../layout/Loader/Loader';
 import { Edit, Delete } from '@mui/icons-material';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import "./CategoryList.css";
 import { Button } from '@mui/material';
-import { DELETE_CATEGORY_RESET } from '../../../../store/contants/categoryConstant';
 
 const CategoryList = () => {
     const dispatch = useDispatch();
@@ -30,8 +29,8 @@ const CategoryList = () => {
             sortable: false,
             renderCell: (params) => {
                 return (<>
-                    <Link to = {`/admin/category/${params.getValue(params.id, "id")}`}><Edit /></Link>
-                    <Button onClick={() => deleteProductHandler(params.getValue(params.id, "id"))}><Delete /></Button>
+                    <Link to = {`/admin/category/${params.row.id}`}><Edit /></Link>
+                    <Button onClick={() => deleteProductHandler(params.row.id)}><Delete /></Button>
                 </>);
             }
         }
@@ -53,7 +52,7 @@ const CategoryList = () => {
             alert.success("Selected category deleted successfully.");
             navigate("/admin/categories");
             dispatch(getAllCategories());
-            dispatch({ type: DELETE_CATEGORY_RESET });
+            dispatch(deleteCategoryReset());
         }
     },[alert, isDeleted, dispatch, navigate]);
 
@@ -63,28 +62,20 @@ const CategoryList = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, error, dispatch]);
 
     useEffect(() => {
         if(deleteError) {
-            alert.error(deleteError);
+            alert.error(deleteError.error);
             dispatch(clearErrors());
         }
     },[alert, deleteError, dispatch]);
 
     return <FormContainer pagetitle={"Category Listing"}>
-        {loading? <Loader /> : <DataGrid 
-            columns={columns}
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick 
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        />}
+        {loading? <Loader /> : <DataListing columns={columns} rows={rows} />}
     </FormContainer>
 }
 

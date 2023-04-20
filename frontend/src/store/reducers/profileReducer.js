@@ -1,76 +1,76 @@
-import { 
-    CLEAR_ERRORS, 
-    UPDATE_PROFILE_REQUEST,
-    UPDATE_PROFILE_SUCCESS,
-    UPDATE_PROFILE_RESET,
-    UPDATE_PROFILE_FAIL,
-    UPDATE_PASSWORD_REQUEST,
-    UPDATE_PASSWORD_SUCCESS,
-    UPDATE_PASSWORD_RESET,
-    UPDATE_PASSWORD_FAIL,
-    UPDATE_USER_REQUEST,
-    UPDATE_USER_SUCCESS,
-    UPDATE_USER_RESET,
-    UPDATE_USER_FAIL,
-    DELETE_USER_REQUEST,
-    DELETE_USER_SUCCESS,
-    DELETE_USER_RESET,
-    DELETE_USER_FAIL,
-} from "../contants/userContant";
+import { createSlice } from "@reduxjs/toolkit";
+import { clearErrors } from "../actions/clearformAction";
+import { updatePassword, updateProfile, updateUser, deleteUser } from '../actions/userAction';
 
-const profileInitialState = {};
-export const profileReducer = (state = profileInitialState, action) => {
-    switch (action.type) {
-        case UPDATE_PROFILE_REQUEST:
-        case UPDATE_PASSWORD_REQUEST:
-        case UPDATE_USER_REQUEST:
-        case DELETE_USER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-            };
-        case UPDATE_PROFILE_SUCCESS:
-        case UPDATE_PASSWORD_SUCCESS:
-        case UPDATE_USER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case DELETE_USER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload.success,
-                message: action.payload.message
-            };
-        case UPDATE_PROFILE_FAIL:
-        case UPDATE_PASSWORD_FAIL:
-        case UPDATE_USER_FAIL:
-        case DELETE_USER_FAIL: 
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_PROFILE_RESET:
-        case UPDATE_PASSWORD_RESET:
-        case UPDATE_USER_RESET:
-            return {
-                ...state,
-                isUpdated: false
-            };
-        case DELETE_USER_RESET:
-            return {
-                ...state,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const profileSlice = createSlice({
+    name: "user",
+    initialState: {},
+    reducers: {
+        updatePasswordReset: (state) => {
+            state.isUpdated = false;
+        },
+        updateProfileReset: (state) => {
+            state.isUpdated = false;
+        },
+        updateUserReset: (state) => {
+            state.isUpdated = false;
+        },
+        deleteUserReset: (state) => {
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        //update password
+        builder.addCase(updatePassword.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updatePassword.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updatePassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        //update profile
+        builder.addCase(updateProfile.pending, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(updateProfile.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        // update user
+        builder.addCase(updateUser.pending, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(updateUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateUser.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        // delete user
+        builder.addCase(deleteUser.pending, (state) => {
+            state.loading = false;
+        });
+        builder.addCase(deleteUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload.success;
+            state.message = action.payload.message;
+        });
+        builder.addCase(deleteUser.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});

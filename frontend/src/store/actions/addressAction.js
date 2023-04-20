@@ -1,86 +1,58 @@
 import axios from "axios";
-import { 
-    ADD_ADDRESS_REQUEST,
-    ADD_ADDRESS_SUCCESS,
-    ADD_ADDRESS_FAIL,
-    UPDATE_ADDRESS_REQUEST,
-    UPDATE_ADDRESS_SUCCESS,
-    UPDATE_ADDRESS_FAIL,
-    DELETE_ADDRESS_REQUEST,
-    DELETE_ADDRESS_SUCCESS,
-    DELETE_ADDRESS_FAIL,
-    ALL_ADDRESS_REQUEST,
-    ALL_ADDRESS_SUCCESS,
-    ALL_ADDRESS_FAIL,
-    GET_ADDRESS_REQUEST,
-    GET_ADDRESS_SUCCESS,
-    GET_ADDRESS_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/addressContant';
+import { thunkError } from './clearformAction';
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addNewAddress = (address) => async dispatch => {
+export const addNewAddress = createAsyncThunk("address/addNewAddress", async (address, thunkAPI) => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        dispatch({ type: ADD_ADDRESS_REQUEST});
         const { data } = await axios.post("/api/v1/address/new", address, config);
-        dispatch({ type: ADD_ADDRESS_SUCCESS, payload: data });
+        return data;
     } catch (error) {
-        dispatch({ type: ADD_ADDRESS_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const updateAddress = (addressId, address) => async dispatch => {
+export const updateAddress = createAsyncThunk("address/updateAddress", async ({addressId, address}, thunkAPI) => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        dispatch({ type: UPDATE_ADDRESS_REQUEST});
         const { data } = await axios.put(`/api/v1/address/${addressId}`, address, config);
-        dispatch({ type: UPDATE_ADDRESS_SUCCESS, payload: data.success });
+        return data;
     } catch (error) {
-        dispatch({ type: UPDATE_ADDRESS_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const deleteAddress = (addressId) => async dispatch => {
+export const deleteAddress = createAsyncThunk("address/deleteAddress", async (addressId, thunkAPI) => {
     try {
-        dispatch({ type: DELETE_ADDRESS_REQUEST});
         const { data } = await axios.delete(`/api/v1/address/${addressId}`);
-        dispatch({ type: DELETE_ADDRESS_SUCCESS, payload: data.success });
+        return data.success
     } catch (error) {
-        dispatch({ type: DELETE_ADDRESS_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getAllAddress = () => async dispatch => {
+export const getAllAddress = createAsyncThunk("addresses/getAllAddress", async (_, thunkAPI) => {
     try {
-        dispatch({ type: ALL_ADDRESS_REQUEST});
         const { data } = await axios.get(`/api/v1/addresses`);
-        dispatch({ type: ALL_ADDRESS_SUCCESS, payload: data.addresses });
+        return data.addresses;
     } catch (error) {
-        dispatch({ type: ALL_ADDRESS_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getAddress = (addressId) => async dispatch => {
+export const getAddress = createAsyncThunk("address/getAddress", async (addressId, thunkAPI) => {
     try {
-        dispatch({ type: GET_ADDRESS_REQUEST});
         const { data } = await axios.get(`/api/v1/address/${addressId}`);
-        dispatch({ type: GET_ADDRESS_SUCCESS, payload: data.address });
+        return data.address;
     } catch (error) {
-        dispatch({ type: GET_ADDRESS_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
-
-//clear all errors
-export const clearErrors = () => async (dispatch) => { 
-    dispatch({
-        type: CLEAR_ERRORS
-    });
-};
+});

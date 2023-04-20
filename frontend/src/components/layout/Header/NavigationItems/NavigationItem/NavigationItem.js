@@ -9,12 +9,12 @@ const NavigationItem = (props) => {
     
     const onMouseHover = () => {
         if(childRef) {
-           if(parseInt(window.innerWidth) < parseInt(childRef.current.getBoundingClientRect().right)) {
+           if(parseInt(window.innerWidth) < parseInt(childRef.current?.getBoundingClientRect().right)) {
                 const _classes = [...classes];
                 _classes.push("reverse");
                 setClasses(_classes);
             }            
-        }   
+        }
     }
 
     return (<li className={props.className}>

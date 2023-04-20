@@ -4,7 +4,7 @@ import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LockOutlined from '@mui/icons-material/LockOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
-import { clearErrors, resetPassword } from '../../store/actions/userAction';
+import { clearErrors, resetPassword } from '../../store';
 import { useAlert} from 'react-alert';
 import MetaData from '../layout/MetaData';
 import "./ResetPassword.css";
@@ -21,7 +21,7 @@ const ResetPassword = () => {
 
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(success){

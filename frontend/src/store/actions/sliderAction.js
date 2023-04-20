@@ -1,86 +1,58 @@
 import axios from "axios";
-import { 
-    ADD_SLIDER_REQUEST,
-    ADD_SLIDER_SUCCESS,
-    ADD_SLIDER_FAIL,
-    UPDATE_SLIDER_REQUEST,
-    UPDATE_SLIDER_SUCCESS,
-    UPDATE_SLIDER_FAIL,
-    DELETE_SLIDER_REQUEST,
-    DELETE_SLIDER_SUCCESS,
-    DELETE_SLIDER_FAIL,
-    ALL_SLIDER_REQUEST,
-    ALL_SLIDER_SUCCESS,
-    ALL_SLIDER_FAIL,
-    GET_SLIDER_REQUEST,
-    GET_SLIDER_SUCCESS,
-    GET_SLIDER_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/sliderContant';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { thunkError } from "./clearformAction";
 
-export const addNewSlider = (slider) => async dispatch => {
+export const addNewSlider = createAsyncThunk("slider/addNewSlider", async (slider, thunkAPI) => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        dispatch({ type: ADD_SLIDER_REQUEST});
         const { data } = await axios.post("/api/v1/slider/new", slider, config);
-        dispatch({ type: ADD_SLIDER_SUCCESS, payload: data });
+        return data;
     } catch (error) {
-        dispatch({ type: ADD_SLIDER_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const updateSlider = (sliderId, slider) => async dispatch => {
+export const updateSlider = createAsyncThunk("slider/updateSlider", async ({sliderId, slider}, thunkAPI) => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        dispatch({ type: UPDATE_SLIDER_REQUEST});
         const { data } = await axios.put(`/api/v1/slider/${sliderId}`, slider, config);
-        dispatch({ type: UPDATE_SLIDER_SUCCESS, payload: data.success });
+        return data.success;
     } catch (error) {
-        dispatch({ type: UPDATE_SLIDER_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const deleteSlider = (sliderId) => async dispatch => {
+export const deleteSlider = createAsyncThunk("slider/deleteSlider", async (sliderId, thunkAPI) => {
     try {
-        dispatch({ type: DELETE_SLIDER_REQUEST});
         const { data } = await axios.delete(`/api/v1/slider/${sliderId}`);
-        dispatch({ type: DELETE_SLIDER_SUCCESS, payload: data.success });
+        return data.success;
     } catch (error) {
-        dispatch({ type: DELETE_SLIDER_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getAllSlider = () => async dispatch => {
+export const getAllSlider = createAsyncThunk("sliders/getAllSlider", async (_, thunkAPI) => {
     try {
-        dispatch({ type: ALL_SLIDER_REQUEST});
         const { data } = await axios.get(`/api/v1/sliders`);
-        dispatch({ type: ALL_SLIDER_SUCCESS, payload: data.sliders });
+        return data.sliders;
     } catch (error) {
-        dispatch({ type: ALL_SLIDER_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getSlider = (sliderId) => async dispatch => {
+export const getSlider = createAsyncThunk("slider/getSlider", async (sliderId, thunkAPI) => {
     try {
-        dispatch({ type: GET_SLIDER_REQUEST});
         const { data } = await axios.get(`/api/v1/slider/${sliderId}`);
-        dispatch({ type: GET_SLIDER_SUCCESS, payload: data.slider });
+        return data.slider;
     } catch (error) {
-        dispatch({ type: GET_SLIDER_FAIL, payload: error.response.data.message});
+        return thunkError(error, thunkAPI);
     }
-}
-
-//clear all errors
-export const clearErrors = () => async (dispatch) => { 
-    dispatch({
-        type: CLEAR_ERRORS
-    });
-};
+});

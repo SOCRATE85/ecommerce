@@ -5,10 +5,9 @@ import LockOutlined from '@mui/icons-material/LockOutlined';
 import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
-import { clearErrors, updatePassword } from '../../store/actions/userAction';
+import { clearErrors, updatePassword, updatePasswordReset } from '../../store';
 import { useAlert} from 'react-alert';
 import MetaData from '../layout/MetaData';
-import { UPDATE_PASSWORD_RESET } from '../../store/contants/userContant';
 import "./UpdatePassword.css";
 
 const UpdatePassword = () => {
@@ -22,13 +21,13 @@ const UpdatePassword = () => {
     
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(isUpdated){
             alert.success("Password Updated Successfully");
             navigate("/account");
-            dispatch({ type: UPDATE_PASSWORD_RESET });
+            dispatch(updatePasswordReset());
         }
     }, [dispatch, error, alert, isUpdated, navigate]);
 

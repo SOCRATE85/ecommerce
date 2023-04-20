@@ -5,18 +5,12 @@ import {
     deleteProduct,
     getAdminProducts,
     productDetails,
-    createProduct
+    createProduct,
+    newReview,
+    getAllReviews,
+    deleteReview
 } from '../actions/productAction';
-import {
-    ALL_REVIEW_REQUEST,
-    ALL_REVIEW_SUCCESS,
-    ALL_REVIEW_FAIL,
-    DELETE_REVIEW_REQUEST,
-    DELETE_REVIEW_SUCCESS,
-    DELETE_REVIEW_RESET,
-    DELETE_REVIEW_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/productConstant';
+import { clearErrors } from '../actions/clearformAction';
 
 const productInitialState = {
     products: []
@@ -26,7 +20,7 @@ const productDetailsInitialState = {
     product: {}
 };
 
-const productSlice = createSlice({
+export const productSlice = createSlice({
     name: "products",
     initialState: productInitialState,
     reducers: {},
@@ -58,14 +52,15 @@ const productSlice = createSlice({
         });
         builder.addCase(getAdminProducts.rejected,(state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const productReducer = productSlice.reducer;
-
-const adminProductSlice = createSlice({
+export const adminProductSlice = createSlice({
     name: "products",
     initialState: productInitialState,
     reducers: {},
@@ -82,17 +77,22 @@ const adminProductSlice = createSlice({
         });
         builder.addCase(getAdminProducts.rejected,(state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const adminProductReducer = adminProductSlice.reducer;
-
-const deleteProductSlice = createSlice({
+export const deleteProductSlice = createSlice({
     name: "product",
     initialState: {},
-    reducers: {},
+    reducers: {
+        deleteProductReset: (state) => {
+            state.isDeleted = false;
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(deleteProduct.pending, (state) => {
             state.loading = true;
@@ -105,17 +105,22 @@ const deleteProductSlice = createSlice({
         builder.addCase(
             deleteProduct.rejected,(state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const deleteProductReducer = deleteProductSlice.reducer;
-
-const updateProductSlice = createSlice({
+export const updateProductSlice = createSlice({
     name: "product",
     initialState: {},
-    reducers: {},
+    reducers: {
+        updateProductReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(updateProduct.pending, (state) => {
             state.loading = true;
@@ -126,17 +131,22 @@ const updateProductSlice = createSlice({
         });
         builder.addCase(updateProduct.rejected,(state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const updateProductReducer = updateProductSlice.reducer;
-
-const newProductSlice = createSlice({
+export const newProductSlice = createSlice({
     name: "product",
     initialState: { product:{} },
-    reducers: {},
+    reducers: {
+        reserAddNewProduct: (state) => {
+            state.success = false;
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(createProduct.pending, (state) => {
             state.loading = true;
@@ -148,14 +158,15 @@ const newProductSlice = createSlice({
         });
         builder.addCase(createProduct.rejected,(state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const newProductReducer = newProductSlice.reducer;
-
-const productDetailSlice = createSlice({
+export const productDetailSlice = createSlice({
     name: "product",
     initialState: productDetailsInitialState,
     reducers: {},
@@ -169,72 +180,105 @@ const productDetailSlice = createSlice({
         });
         builder.addCase(productDetails.rejected,(state, action) => {
                 state.loading = false;
-                state.error = action.error.message;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
         });
     }
 });
 
-export const productDetailsReducer = productDetailSlice.reducer;
+export const productReviewSlice = createSlice({
+    name: "product",
+    initialState: { reviews: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllReviews.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllReviews.fulfilled, (state, action) => {
+                state.loading = false;
+                state.reviews = action.payload;
+        });
+        builder.addCase(getAllReviews.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const productReviewsReducer = (state = { reviews: []}, action ) => {
-    switch(action.type){
-        case ALL_REVIEW_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case ALL_REVIEW_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                reviews: action.payload
-            };
-        case ALL_REVIEW_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const reviewSlice = createSlice({
+    name: "product",
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllReviews.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllReviews.fulfilled, (state, action) => {
+                state.loading = false;
+                state.product = action.payload;
+        });
+        builder.addCase(getAllReviews.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const reviewReducer = (state = {}, action ) => {
-    switch(action.type){
-        case DELETE_REVIEW_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_REVIEW_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_REVIEW_RESET: 
-            return {
-                ...state,
-                isDeleted: false
-            };
-        case DELETE_REVIEW_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const newReviewSlice = createSlice({
+    name: "product",
+    initialState: {},
+    reducers: {
+        newReviewReset: (state) => {
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(newReview.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(newReview.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = action.payload;
+        });
+        builder.addCase(newReview.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
+
+export const deleteReviewSlice = createSlice({
+    name: "product",
+    initialState: {},
+    reducers: {
+        deleteReviewReset: (state) => {
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+         builder.addCase(deleteReview.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteReview.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteReview.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});

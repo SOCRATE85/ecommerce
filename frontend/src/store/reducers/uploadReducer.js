@@ -1,68 +1,54 @@
-import {
-    UPLOAD_FILE_REQUEST,
-    UPLOAD_FILE_SUCCESS,
-    UPLOAD_FILE_FAIL,
-    DELETE_FILE_REQUEST,
-    DELETE_FILE_SUCCESS,
-    DELETE_FILE_FAIL,
-    CLEAR_ERRORS,
-} from "../contants/uploadContant";
+import { createSlice } from "@reduxjs/toolkit";
+import { uploadFiles, deleteFiles } from '../actions/uploadAction';
+import { clearErrors } from "../actions/clearformAction";
 
-export const deleteReducer = (state = {}, action ) => {
-    switch (action.type) {
-        case DELETE_FILE_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case DELETE_FILE_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_FILE_FAIL:
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const uploadFileSlice = createSlice({
+    name: "upload",
+    initialState: {},
+    reducers: {images: []},
+    extraReducers: (builder) => {
+        builder.addCase(uploadFiles.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(uploadFiles.fulfilled, (state, action) => {
+            state.loading = false;
+            state.images = action.payload;
+        });
+        builder.addCase(uploadFiles.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-
-export const uploadReducer = (state = { images: []}, action ) => {
-    switch (action.type) {
-        case UPLOAD_FILE_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case UPLOAD_FILE_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                images: action.payload
-            };
-        case UPLOAD_FILE_FAIL:
-            return {
-                ...state, 
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
+export const deleteFileSlice = createSlice({
+    name: "upload",
+    initialState: {},
+    reducers: {
+        deleteFilesReset: (state) => {
+            state.loading = false;
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteFiles.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteFiles.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteFiles.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});

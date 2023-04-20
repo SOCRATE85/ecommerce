@@ -4,10 +4,9 @@ import FaceOutlinedIcon from '@mui/icons-material/FaceOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
-import { clearErrors, loadUser, updateProfile } from '../../store/actions/userAction';
+import { clearErrors, loadUser, updateProfile, updateProfileReset } from '../../store';
 import { useAlert} from 'react-alert';
 import MetaData from '../layout/MetaData';
-import { UPDATE_PROFILE_RESET } from '../../store/contants/userContant';
 import "./EditProfile.css";
 
 const EditProfile = () => {
@@ -28,14 +27,14 @@ const EditProfile = () => {
             setAvatarPreview(userData.avatar.url);
         }
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(isUpdated){
             alert.success("Profile Updated Successfully");
             dispatch(loadUser());
             navigate("/account");
-            dispatch({ type: UPDATE_PROFILE_RESET });
+            dispatch(updateProfileReset());
         }
     }, [dispatch, error, alert, isUpdated, navigate, userData]);
 

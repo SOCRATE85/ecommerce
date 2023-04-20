@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { addItemsToCart, removeItemFromcart } from '../../store/actions/cartAction';
+import { addItemsToCart, removeItemFromcart } from '../../store';
 import RemoveShoppingCartOutlined from '@mui/icons-material/RemoveShoppingCartOutlined';
 import { getValue } from "../../common/attribute";
 import CartItemCard from './CartItemCard';
@@ -18,7 +18,7 @@ const Cart = () => {
         if(stock <= quantity) {
             return;
         }
-        dispatch(addItemsToCart(id, newQty));
+        dispatch(addItemsToCart({id, quantity: newQty}));
     }
 
     const decreaseQuantity = (id, quantity) => {
@@ -26,7 +26,7 @@ const Cart = () => {
         if(1 >= quantity) {
             return;
         }
-        dispatch(addItemsToCart(id, newQty));
+        dispatch(addItemsToCart({id, quantity: newQty}));
     }
     
     const checkoutHandler = () => {

@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useAlert } from "react-alert";
 import ProductCard from './ProductCard';
 import MetaData from "../layout/MetaData";
-import { clearErrors, fetchProducts } from "../../store/actions/productAction";
+import { fetchProducts, clearErrors } from "../../store";
 import Loader from "../layout/Loader/Loader";
+import JCarousel from '../../common/components/Carousel/JCarousel'
 import './home.css';
 
 const Home  = () => {
@@ -15,7 +16,7 @@ const Home  = () => {
 
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }        
     }, [dispatch, error, alert]);
@@ -47,6 +48,7 @@ const Home  = () => {
                 })
             }
         </div>
+        <JCarousel />
     </>
 }
 

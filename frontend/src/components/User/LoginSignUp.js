@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
-import { login, clearErrors, register } from '../../store/actions/userAction';
+import { login, clearErrors, register } from '../../store';
 import { useAlert} from 'react-alert';
 import './LoginSignUp.css';
 
@@ -31,7 +31,7 @@ const LoginSignUp = () => {
 
     useEffect(() => {
         if(error){
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(isAuthenticated){
@@ -60,11 +60,15 @@ const LoginSignUp = () => {
     }
     const loginSubmit = (e) => {
         e.preventDefault();
-        dispatch(login(loginEmail, loginPassword));
+        dispatch(login({
+            email: loginEmail, 
+            password: loginPassword
+        }));
         if(isAuthenticated){
             navigate("/account");
         }
     }
+
     const registerSubmit = (e) => {
         e.preventDefault();
         const myForm = new FormData();
@@ -77,6 +81,7 @@ const LoginSignUp = () => {
             navigate("/account");
         }
     }
+
     const registerDataChange = (e) => {
         if(e.target.name === 'avatar'){
             const reader = new FileReader();
@@ -104,7 +109,7 @@ const LoginSignUp = () => {
                         <p onClick={(e) => switchTabs(e, 'login')}>Login</p>
                         <p onClick={(e) => switchTabs(e, 'register')}>Register</p>
                     </div>
-                    <button ref={switcherTab}></button>                    
+                    <button ref={switcherTab}></button>
                 </div>
                 <form className='loginForm' ref={loginTab} onSubmit={loginSubmit}>
                     <div className='loginEmail'>

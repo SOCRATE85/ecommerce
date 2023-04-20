@@ -1,122 +1,138 @@
-import { 
-    CREATE_ORDER_REQUEST, 
-    CREATE_ORDER_SUCCESS, 
-    CREATE_ORDER_FAIL,
-    ALL_ORDERS_REQUEST,
-    ALL_ORDERS_SUCCESS,
-    ALL_ORDERS_FAIL,
-    UPDATE_ORDER_REQUEST,
-    UPDATE_ORDER_SUCCESS,
-    UPDATE_ORDER_RESET,
-    UPDATE_ORDER_FAIL,
-    DELETE_ORDER_REQUEST,
-    DELETE_ORDER_FAIL,
-    DELETE_ORDER_SUCCESS,
-    DELETE_ORDER_RESET,
-    CLEAR_ERRORS 
-} from "../contants/orderConstant";
+import { createSlice } from "@reduxjs/toolkit";
+import { clearErrors } from "../actions/clearformAction";
+import { createOrder, myOrders, getOrderDetails, getAllOrders, updateOrder, deleteOrder } from '../actions/orderAction';
 
-export const orderReducer = (state = {}, action) => {
-    switch (action.type) {
-        case CREATE_ORDER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-            };
-        case CREATE_ORDER_SUCCESS:
-            return {
-                loading: false,
-                order: action.payload
-            };
-        case CREATE_ORDER_FAIL: 
-            return {
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            };
-        default:
-            return state;
+export const createOrderSlice = createSlice({
+    name: "order",
+    initialState: {},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(createOrder.pending, (state) => {
+            state.loading = true
+        });
+        builder.addCase(createOrder.fulfilled, (state, action) => {
+            state.loading = false;
+            state.order = action.payload;
+        });
+        builder.addCase(createOrder.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const allOrdersReducer = (state = { orders: []}, action) => {
-    switch (action.type) {
-        case ALL_ORDERS_REQUEST:
-            return {
-                ...state,
-                loading: true,
-            };
-        case ALL_ORDERS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                orders: action.payload
-            };
-        case ALL_ORDERS_FAIL: 
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            };
-        default:
-            return state;
+export const myOrdersSlice = createSlice({
+    name: "orders",
+    initialState: {orders: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(myOrders.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(myOrders.fulfilled, (state, action) => {
+            state.loading  = false;
+            state.orders = action.payload;
+        });
+        builder.addCase(myOrders.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const updateOrderReducer = (state = {}, action) => {
-    switch (action.type) {
-        case UPDATE_ORDER_REQUEST:
-        case DELETE_ORDER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-            };
-        case UPDATE_ORDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case DELETE_ORDER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case UPDATE_ORDER_FAIL:
-        case DELETE_ORDER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_ORDER_RESET: {
-            return {
-                ...state,
-                isUpdated: false
-            }
+export const orderDetailsSlice = createSlice({
+    name: "order",
+    initialState: {order: {}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getOrderDetails.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getOrderDetails.fulfilled, (state, action) => {
+            state.loading = false;
+            state.order = action.payload;
+        });
+        builder.addCase(getOrderDetails.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
+    }
+});
+
+export const allOrdersSlice = createSlice({
+    name: "orders",
+    initialState: {orders: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllOrders.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllOrders.fulfilled, (state, action) => {
+            state.loading = false;
+            state.orders = action.payload;
+        });
+        builder.addCase(getAllOrders.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
+    }
+});
+
+export const updateOrderSlice = createSlice({
+    name: "order",
+    initialState: {},
+    reducers: {
+        updateOrderReset: (state) => {
+            state.loading = false;
+            state.isUpdated = false;
+        },
+        deleteOrderReset: (state) => {
+            state.loading = false;
+            state.isDeleted = false;
         }
-        case DELETE_ORDER_RESET: {
-            return {
-                ...state,
-                isDeleted: false
-            }
-        }
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            };
-        default:
-            return state;
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateOrder.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateOrder.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        })
+        builder.addCase(updateOrder.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        builder.addCase(deleteOrder.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteOrder.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        })
+        builder.addCase(deleteOrder.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        })
     }
-}
+});

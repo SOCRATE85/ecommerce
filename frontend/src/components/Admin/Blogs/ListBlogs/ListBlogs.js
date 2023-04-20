@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import { clearErrors, getAllBlog } from "../../../../store/actions/blogAction";
+import { clearErrors, getAllBlog, deleteBlog } from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
 import Loader from "../../../layout/Loader/Loader";
 import "./ListBlogs.css";
@@ -51,13 +51,13 @@ const ListBlogs = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors);
         }
     },[alert, dispatch, error]);
 
     const deleteBlogHandler = (id) => {
-        console.log(id);
+       dispatch(deleteBlog(id));
     }
 
     if(loading) {return <Loader />}

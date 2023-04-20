@@ -1,268 +1,229 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { clearErrors } from '../actions/clearformAction';
 import { 
-    ALL_CATEGORY_REQUEST,
-    ALL_CATEGORY_SUCCESS,
-    ALL_CATEGORY_FAIL,
-    ALL_CATEGORY_FRONTEND_REQUEST,
-    ALL_CATEGORY_FRONTEND_SUCCESS,
-    ALL_CATEGORY_FRONTEND_FAIL,
-    NEW_CATEGORY_REQUEST,
-    NEW_CATEGORY_SUCCESS,
-    NEW_CATEGORY_FAIL,
-    NEW_CATEGORY_RESET,
-    DELETE_CATEGORY_REQUEST,
-    DELETE_CATEGORY_SUCCESS,
-    DELETE_CATEGORY_RESET,
-    DELETE_CATEGORY_FAIL,
-    CATEGORY_FILTER_REQUEST,
-    CATEGORY_FILTER_SUCCESS,
-    CATEGORY_FILTER_FAIL,
-    CATEGORY_DETAILS_REQUEST,
-    CATEGORY_DETAILS_SUCCESS,
-    CATEGORY_DETAILS_FAIL,
-    CATEGORY_DETAILS_INADMIN_REQUEST,
-    CATEGORY_DETAILS_INADMIN_SUCCESS,
-    CATEGORY_DETAILS_INADMIN_FAIL,
-    UPDATE_CATEGORY_REQUEST,
-    UPDATE_CATEGORY_SUCCESS,
-    UPDATE_CATEGORY_RESET,
-    UPDATE_CATEGORY_FAIL,
-    LOAD_CATEGORY_FRONTEND_REQUEST,
-    LOAD_CATEGORY_FRONTEND_SUCCESS,
-    LOAD_CATEGORY_FRONTEND_FAIL,
-    CLEAR_ERRORS
-} from '../contants/categoryConstant';
+    createCategory,
+    updateCategory,
+    getAllCategories,
+    getAllCategoriesForFrontEnd,
+    getCategoryForFrontEnd,
+    deleteCategory,
+    getFilterAndSorting,
+    getCategoryDetails,
+    getCategoryDetailsForFrontEnd,
+    getCategoryFilterDetailsForFrontEnd
+} from '../actions/categoryAction';
 
-export const categoryTreeReducer = (state = { categories: []}, action ) => {
-    switch(action.type){
-        case LOAD_CATEGORY_FRONTEND_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                categories: []
-            };
-        case LOAD_CATEGORY_FRONTEND_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                categories: action.payload.categories,
-            };
-        case LOAD_CATEGORY_FRONTEND_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
-
-export const categoriesReducer = (state = { categories: []}, action ) => {
-    switch(action.type){
-        case ALL_CATEGORY_REQUEST:
-        case ALL_CATEGORY_FRONTEND_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                categories: []
-            };
-        case ALL_CATEGORY_SUCCESS:
-        case ALL_CATEGORY_FRONTEND_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                categories: action.payload.categories,
-            };
-        case ALL_CATEGORY_FAIL:
-        case ALL_CATEGORY_FRONTEND_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
-
-export const filterSortingReducer = (state = { filtersorting:[], settings: []}, action) => {
-    switch (action.type) {
-        case CATEGORY_FILTER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                filtersorting: [],
-                settings: []
-            };
-        case CATEGORY_FILTER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                filtersorting: action.payload.filtersorting,
-                settings: action.payload.settings
-            };
-        case CATEGORY_FILTER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        default:
-            return state;
+export const categoryTreeSlice = createSlice({
+    name: "categories",
+    initialState: {categories: []},
+    extraReducers: (builder) => {
+        builder.addCase(getCategoryForFrontEnd.pending, (state) => {
+            state.loading = true;
+            state.categories = [];
+        });
+        builder.addCase(getCategoryForFrontEnd.fulfilled, (state, action) => {
+            state.loading = false;
+            state.categories = action.payload.categories;
+        });
+        builder.addCase(getCategoryForFrontEnd.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const categoryDetailsReducer = (state = {category: {}, products: []}, action ) => {
-    switch(action.type){
-        case CATEGORY_DETAILS_REQUEST:
-        case CATEGORY_DETAILS_INADMIN_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case CATEGORY_DETAILS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                category: action.payload.category,
-                products: action.payload.products,
-                productCount: action.payload.productCount,
-                resultPerPage: action.payload.resultPerPage,
-                from: action.payload.from,
-                to: action.payload.to
-            };
-        case CATEGORY_DETAILS_INADMIN_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                category: action.payload
-            };
-        case CATEGORY_DETAILS_FAIL:
-        case CATEGORY_DETAILS_INADMIN_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const categoriesSlice = createSlice({
+    name: 'categories',
+    initialState: {categories: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllCategories.pending, (state) => {
+            state.loading = true;
+            state.categories = [];
+        });
+        builder.addCase(getAllCategories.fulfilled, (state, action) => {
+            state.loading = false;
+            state.categories = action.payload.categories;
+        });
+        builder.addCase(getAllCategories.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(getAllCategoriesForFrontEnd.pending, (state) => {
+            state.loading = true;
+            state.categories = [];
+        });
+        builder.addCase(getAllCategoriesForFrontEnd.fulfilled, (state, action) => {
+            state.loading = false;
+            state.categories = action.payload.categories;
+        });
+        builder.addCase(getAllCategoriesForFrontEnd.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const createCategoryReducer = ( state = { category: {}}, action ) => {    
-    switch(action.type){
-        case NEW_CATEGORY_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case NEW_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                category: action.payload.category,
-                success: action.payload.success
-            };
-        case NEW_CATEGORY_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case NEW_CATEGORY_RESET:
-            return {
-                ...state,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const filterSortingSlice = createSlice({
+    name: "categories",
+    initialState: {filtersorting:[], settings: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getFilterAndSorting.pending, (state) => {
+            state.loading = true;
+            state.filtersorting = [];
+            state.settings = [];
+        });
+        builder.addCase(getFilterAndSorting.fulfilled, (state, action) => {
+            state.loading = false;
+            state.filtersorting = action.payload.filtersorting;
+            state.settings = action.payload.settings;
+        });
+        builder.addCase(getFilterAndSorting.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const deleteCategoryReducer = (state = {}, action ) => {
-    switch(action.type){
-        case DELETE_CATEGORY_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_CATEGORY_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case DELETE_CATEGORY_RESET:
-            return {
-                ...state,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const categoryDetailsSlice = createSlice({
+    name: "category",
+    initialState: {category: {}, products: []},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getCategoryDetailsForFrontEnd.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getCategoryDetailsForFrontEnd.fulfilled, (state, action) => {
+            state.loading = false;
+            state.category = action.payload.category;
+            state.products = action.payload.products;
+            state.productCount = action.payload.productCount;
+            state.resultPerPage = action.payload.resultPerPage;
+            state.from = action.payload.from;
+            state.to = action.payload.to;
+        });
+        builder.addCase(getCategoryDetailsForFrontEnd.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(getCategoryFilterDetailsForFrontEnd.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getCategoryFilterDetailsForFrontEnd.fulfilled, (state, action) => {
+            state.loading = false;
+            state.category = action.payload.category;
+            state.products = action.payload.products;
+            state.productCount = action.payload.productCount;
+            state.resultPerPage = action.payload.resultPerPage;
+            state.from = action.payload.from;
+            state.to = action.payload.to;
+        });
+        builder.addCase(getCategoryFilterDetailsForFrontEnd.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(getCategoryDetails.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getCategoryDetails.fulfilled, (state, action) => {
+            state.loading = false;
+            state.category = action.payload;
+        });
+        builder.addCase(getCategoryDetails.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
 
-export const updateCategoryReducer = (state = {}, action ) => {
-    switch(action.type){
-        case UPDATE_CATEGORY_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_CATEGORY_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_CATEGORY_RESET:
-            return {
-                ...state,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                error: null
-            }
-        default:
-            return state;
-    } 
-}
+export const createCategorySlice = createSlice({
+    name: 'category',
+    initialState: {category: {}},
+    reducers: {
+        newCategoryReset: (state) => {
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(createCategory.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(createCategory.fulfilled, (state, action) => {
+            state.loading = false;
+            state.category = action.payload.category;
+            state.success = action.payload.success;
+        });
+        builder.addCase(createCategory.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
+
+export const deleteCategorySlice = createSlice({
+    name: "category",
+    initialState: {},
+    reducers: {
+        deleteCategoryReset: (state) =>{
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteCategory.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteCategory.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteCategory.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});
+
+export const updateCategorySlice = createSlice({
+    name: "category",
+    initialState: {},
+    reducers: {
+        updateCategoryReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateCategory.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateCategory.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateCategory.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
+    }
+});

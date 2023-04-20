@@ -1,46 +1,48 @@
 import React, { useEffect } from "react";
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useAlert } from "react-alert";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { getAllBlogCategories, clearErrors, deleteBlogCategory } from "../../../../store/actions/blogCategoryAction";
-import { DELETE_BLOG_CATEGORY_RESET } from "../../../../store/contants/blogCategoryContent";
+import { getAllBlogCategories, clearErrors, deleteBlogCategory, deleteBlogCategoryReset } from "../../../../store";
 import Loader from "../../../layout/Loader/Loader";
+import { useThunk } from "../../../../common/hooks/use-thunk";
 import "./ListBlogCategory.css";
 
 const ListBlogCategory = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const alert = useAlert();
-    const { blogcategories, loading, error } = useSelector(state => state.blogCategories);
-    const { isDeleted, loading: loadingDelete, error: errorDelete} = useSelector(state => state.deleteBlogCategory);
-    
+    const [doGetAllBlogCategory, isLoadingBlogCategory, blogCategoryError] = useThunk(getAllBlogCategories);
+    const [doDeleteBlogCategory, isLoadingDelete, errorDelete] = useThunk(deleteBlogCategory);
+    const { blogcategories } = useSelector(state => state.blogCategories);
+    const { isDeleted } = useSelector(state => state.deleteBlogCategory);
+
     useEffect(() => {
         if(isDeleted) {
             alert.success("Category deleted successfully.");
             navigate("/admin/blog/category");
-            dispatch(getAllBlogCategories());
-            dispatch({ type: DELETE_BLOG_CATEGORY_RESET });
+            doGetAllBlogCategory();
+            dispatch(deleteBlogCategoryReset());
         }
-    },[alert, isDeleted, dispatch, navigate]);
+    },[alert, isDeleted, dispatch, navigate, doGetAllBlogCategory]);
 
     useEffect(() => {
-        if(error) {
-            alert.error(error);
+        if(blogCategoryError) {
+            alert.error(blogCategoryError.error);
             dispatch(clearErrors());
         }
         if(errorDelete) {
-            alert.error(errorDelete);
+            alert.error(errorDelete.error);
             dispatch(clearErrors());
         }
-    }, [dispatch, alert, error, errorDelete]);
+    }, [dispatch, alert, blogCategoryError, errorDelete]);
 
     useEffect(() => {
-        dispatch(getAllBlogCategories());
-    },[dispatch]);
+        doGetAllBlogCategory();
+    },[doGetAllBlogCategory]);
 
     const columns = [        
         { field: "id", headerName: "Category Id", flex: 1 },
@@ -63,7 +65,7 @@ const ListBlogCategory = () => {
     ];
     
     const deleteCategoryHandler = (id) => {
-        dispatch(deleteBlogCategory(id));
+        doDeleteBlogCategory(id)
     }
 
     const rows = [];
@@ -76,17 +78,9 @@ const ListBlogCategory = () => {
     });
 
     return (<FormContainer pagetitle={"Manage Blog Category"}>
-        {loading || loadingDelete ? <Loader /> : <>
+        {isLoadingBlogCategory || isLoadingDelete ? <Loader /> : <>
             <div className="add-category"><Button onClick={() => navigate("/admin/blog/category/new")}>Add Category</Button></div>
-            <DataGrid 
-                columns={columns} 
-                rows={rows} 
-                pageSize={10} 
-                disableSelectionOnClick 
-                className='productListTable'
-                autoHeight
-                rowsPerPageOptions={[5, 10, 15, 20, 25]}
-            />
+            <DataListing columns={columns} rows={rows} />
         </>}
     </FormContainer>)
 }

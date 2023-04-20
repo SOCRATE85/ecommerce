@@ -26,7 +26,7 @@ import {AddBlogCategory, ListBlogCategory, UpdateBlogCategory } from './componen
 import {NewCategory, CategoryList, UpdateCategory} from './components/Admin/Category';
 import {NewProduct, ProductList, UpdateProduct} from './components/Admin/Product';
 import {OrderList, ProcessOrder} from './components/Admin/Order';
-import {Users, UpdateUser} from './components/Admin/User';
+import {Users, UpdateUser, AddUserInAdmin} from './components/Admin/User';
 
 import Reviews from './components/Admin/Reviews';
 import Settings from './components/Admin/Settings';
@@ -36,17 +36,17 @@ import {ListBanners, AddBanner, UpdateBanner} from './components/Admin/Banners';
 
 import About from './components/About/About';
 import NotFound from './components/NotFound/NotFound';
-import store from './store/store';
+import store from './store';
 import { loadUser } from './store/actions/userAction';
 import { getCategoryForFrontEnd, getAllCategoriesForFrontEnd } from './store/actions/categoryAction';
 import { fetchProducts } from './store/actions/productAction';
 import ProtectedRoute from './components/Route/ProtectedRoute';
-import './App.css';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Contact from './components/Contact/Contact';
 import Category from './components/Category/Category';
+import './App.css';
 
 import { FrontLayout, AdminLayout, Loader } from './components/layout';
 
@@ -73,8 +73,8 @@ function App() {
           await store.dispatch(getCategoryForFrontEnd());
           await store.dispatch(getAllCategoriesForFrontEnd());
           await store.dispatch(fetchProducts());
-          setCategory(await store.getState().categories.categories);
-          setProducts(await store.getState().products.products);
+          setCategory(store.getState().categories.categories);
+          setProducts(store.getState().products.products);
           getStripeApiKey();
       } catch (error) {}          
     }
@@ -154,6 +154,7 @@ function App() {
         <Route path='/admin/attributesets' element={<ProtectedRoute isAdmin={true}><AttributeSet /></ProtectedRoute>} />
         <Route path='/admin/orders' element={<ProtectedRoute isAdmin={true}><OrderList /></ProtectedRoute>} />
         <Route path='/admin/order/:id' element={<ProtectedRoute isAdmin={true}><ProcessOrder /></ProtectedRoute>} />
+        <Route path='/admin/user/new' element={<ProtectedRoute isAdmin={true}><AddUserInAdmin /></ProtectedRoute>} />
         <Route path='/admin/users' element={<ProtectedRoute isAdmin={true}><Users /></ProtectedRoute>} />
         <Route path='/admin/user/:id' element={<ProtectedRoute isAdmin={true}><UpdateUser /></ProtectedRoute>} />
         <Route path='/admin/reviews' element={<ProtectedRoute isAdmin={true}><Reviews /></ProtectedRoute>} />

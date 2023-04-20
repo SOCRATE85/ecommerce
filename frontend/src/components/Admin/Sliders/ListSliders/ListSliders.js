@@ -1,12 +1,11 @@
 import React, {useEffect} from "react";
 import { useAlert } from "react-alert";
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import { getAllSlider, clearErrors, deleteSlider } from '../../../../store/actions/sliderAction';
-import { DELETE_SLIDER_RESET } from "../../../../store/contants/sliderContant";
+import { getAllSlider, clearErrors, deleteSlider, deleteSliderReset } from '../../../../store';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import Loader from "../../../layout/Loader/Loader";
 import './ListSliders.css';
@@ -23,7 +22,7 @@ const ListSliders = () => {
             alert.success("Slider deleted successfully");
             navigate("/admin/sliders");
             dispatch(getAllSlider());
-            dispatch({ type: DELETE_SLIDER_RESET });
+            dispatch(deleteSliderReset());
         }
     }, [isDeleted, alert, dispatch, sliders, navigate]);
 
@@ -67,7 +66,7 @@ const ListSliders = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors);
         }
     },[alert, dispatch, error]);
@@ -78,15 +77,7 @@ const ListSliders = () => {
          <div className="text-left flex justify-end">
             <Button onClick={() => navigate("/admin/slider/new")}>Add Slider</Button>
         </div>
-        <DataGrid
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick
-            className='productListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        /></>}
+        <DataListing columns={columns} rows={rows} /></>}
     </FormContainer>
 }
 

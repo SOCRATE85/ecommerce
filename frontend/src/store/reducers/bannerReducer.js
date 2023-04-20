@@ -1,191 +1,133 @@
-import { 
-    ADD_BANNER_REQUEST,
-    ADD_BANNER_SUCCESS,
-    ADD_BANNER_FAIL,
-    ADD_BANNER_RESET,
-    UPDATE_BANNER_REQUEST,
-    UPDATE_BANNER_SUCCESS,
-    UPDATE_BANNER_FAIL,
-    UPDATE_BANNER_RESET,
-    DELETE_BANNER_REQUEST,
-    DELETE_BANNER_SUCCESS,
-    DELETE_BANNER_FAIL,
-    DELETE_BANNER_RESET,
-    ALL_BANNER_REQUEST,
-    ALL_BANNER_SUCCESS,
-    ALL_BANNER_FAIL,
-    GET_BANNER_REQUEST,
-    GET_BANNER_SUCCESS,
-    GET_BANNER_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/bannerContant';
+import { createSlice } from '@reduxjs/toolkit';
+import { clearErrors } from '../actions/clearformAction';
+import { addNewBanner, updateBanner, deleteBanner, getAllBanner, getBanner } from '../actions/bannerAction';
 
-export const addBannerReducer = (state = {banner:{}}, action) => {
-    switch (action.type) {
-        case ADD_BANNER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case ADD_BANNER_SUCCESS:
-            return {
-                loading: false,
-                banner: action.payload.banner,
-                success: action.payload.success
-            };
-        case ADD_BANNER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case ADD_BANNER_RESET:
-            return {
-                ...state,
-                loading: false,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const addBannerSlice = createSlice({
+    name: "banner",
+    initialState: {},
+    reducers: {
+        addBannerReset: (state) => {
+            state.loading = false;
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(addNewBanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addNewBanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.banner = action.payload.banner;
+            state.success = action.payload.success;
+        });
+        builder.addCase(addNewBanner.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const updateBannerReducer = (state={}, action) => {
-    switch(action.type){
-        case UPDATE_BANNER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_BANNER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_BANNER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_BANNER_RESET:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const updateBannerSlice = createSlice({
+    name: "banner",
+    initialState: {},
+    reducers: {
+        updateBannerReset: (state) => {
+            state.loading = false;
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateBanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateBanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateBanner.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const bannerReducer = (state={banner:{}}, action) => {
-    switch (action.type) {
-        case GET_BANNER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                banner: {}
-            }
-        case GET_BANNER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                banner: action.payload
-            }
-        case GET_BANNER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const bannerSlice = createSlice({
+    name: "banner",
+    initialState: {banner:{}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getBanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getBanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.banner = action.payload;
+        });
+        builder.addCase(getBanner.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const bannersReducer = (state={banners:[]}, action) => {
-    switch (action.type) {
-        case ALL_BANNER_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                banners: []
-            }
-        case ALL_BANNER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                banners: action.payload
-            }
-        case ALL_BANNER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const bannersSlice = createSlice({
+    name: "banners",
+    initialState: {banners:[]},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllBanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllBanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.banners = action.payload;
+        });
+        builder.addCase(getAllBanner.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});
 
-export const deleteBannerReducer = (state={}, action) => {
-    switch (action.type) {
-        case DELETE_BANNER_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_BANNER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_BANNER_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case DELETE_BANNER_RESET:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const deleteBannerSlice = createSlice({
+    name: "banner",
+    initialState: {},
+    reducers: {
+        deleteBannerReset: (state) => {
+            state.loading = false;
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteBanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteBanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteBanner.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.loading = false;
+            state.error = null;
+        });
     }
-}
+});

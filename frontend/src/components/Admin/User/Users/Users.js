@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,17 +7,18 @@ import Loader from '../../../layout/Loader/Loader';
 import { Edit, Delete } from '@mui/icons-material';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import { Button } from '@mui/material';
-import { deleteUser, getAllUsers, clearErrors } from '../../../../store/actions/userAction';
-import { DELETE_USER_RESET } from '../../../../store/contants/userContant';
-
+import { deleteUser, getAllUsers, clearErrors, deleteUserReset } from '../../../../store';
 import "./Users.css";
+import { useThunk } from '../../../../common/hooks/use-thunk';
 
 const Users = () => {
     const dispatch = useDispatch();
     const alert = useAlert();
     const navigate = useNavigate();
-    const { users, error, loading } = useSelector( state => state.allUsers);
-    const { error: deleteError, isDeleted, message } = useSelector( state => state.profile );
+    const [doGetAllUsers, isLoading, isError] = useThunk(getAllUsers);
+    const [doDeleteUser, isDeleteLoading, isDeleteError] = useThunk(deleteUser)
+    const { users } = useSelector( state => state.allUsers);
+    const { isDeleted, message } = useSelector( state => state.profile );
 
     const columns = [
         { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
@@ -30,7 +31,7 @@ const Users = () => {
             minWidth: 270, 
             flex: 0.5,
             cellClassName: (params) => {
-                return params.getValue(params.id, "role") === "admin" ? "greenColor" : "redColor";
+                return params.row.role === "admin" ? "greenColor" : "redColor";
             }
         },
         { 
@@ -42,8 +43,8 @@ const Users = () => {
             sortable: false,
             renderCell: (params) => {
                 return (<>
-                    <Link to = {`/admin/user/${params.getValue(params.id, "id")}`}><Edit /></Link>
-                    <Button onClick={() => deleteUserHandler(params.getValue(params.id, "id"))}><Delete /></Button>
+                    <Link to = {`/admin/user/${params.row.id}`}><Edit /></Link>
+                    <Button onClick={() => deleteUserHandler(params.row.id)}><Delete /></Button>
                 </>);
             }
         }
@@ -59,50 +60,45 @@ const Users = () => {
     });
 
     const deleteUserHandler = (id) => {
-        dispatch(deleteUser(id));        
+        doDeleteUser(id)       
     }
+    useEffect(() => {
+        doGetAllUsers();
+    }, [doGetAllUsers]);
 
     useEffect(() => {
         if(isDeleted) {
             alert.success(message);
             navigate("/admin/users");
-            dispatch(getAllUsers());
-            dispatch({ type: DELETE_USER_RESET });
+            doGetAllUsers();
+            dispatch(deleteUserReset());
         }
-    },[alert, isDeleted, dispatch, navigate, message]);
+    },[alert, isDeleted, dispatch, navigate, message, doGetAllUsers]);
 
     useEffect(() => {
         dispatch(getAllUsers());
     },[dispatch]);
 
     useEffect(() => {
-        if(error) {
-            alert.error(error);
+        if(isError) {
+            alert.error(isError.error);
             dispatch(clearErrors());
         }
-    },[alert, error, dispatch]);
+    },[alert, isError, dispatch]);
 
     useEffect(() => {
-        if(deleteError) {
-            alert.error(deleteError);
+        if(isDeleteError) {
+            alert.error(isDeleteError.error);
             dispatch(clearErrors());
         }
-    },[alert, deleteError, dispatch]);
+    },[alert, isDeleteError, dispatch]);
 
-    if(loading) {
+    if(isLoading || isDeleteLoading) {
         return <Loader />
     }
     
     return <FormContainer pagetitle={"Admin Users Listing"}>
-        <DataGrid 
-            columns={columns} 
-            rows={rows} 
-            pageSize={10} 
-            disableSelectionOnClick 
-            className='userListTable'
-            autoHeight
-            rowsPerPageOptions={[5, 10, 15, 20, 25]}
-        />
+        <DataListing columns={columns} rows={rows} />
     </FormContainer>
 }
 

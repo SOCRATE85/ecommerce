@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, getUserDetails, updateUser } from "../../../../store/actions/userAction";
+import { clearErrors, getUserDetails, updateUser, updateUserReset } from "../../../../store";
 import { useAlert } from "react-alert";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from '@mui/material';
@@ -10,7 +10,6 @@ import {
     EmailOutlined, 
 } from "@mui/icons-material";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { UPDATE_USER_RESET } from "../../../../store/contants/userContant";
 import Loader from "../../../layout/Loader/Loader";
 import "./UpdateUser.css";
 
@@ -39,18 +38,17 @@ const UpdateUser = () => {
             setEmail(user.email);
             setRole(user.role);
             setImagePreview(user.avatar.url);
-        }
-        
+        }        
     }, [dispatch, params.id, user]);
 
     useEffect(() => {
         if(updateError) {
-            alert.error(updateError);
+            alert.error(updateError.error);
             dispatch(clearErrors());
         }
 
         if(userDetailsError) {
-            alert.error(userDetailsError);
+            alert.error(userDetailsError.error);
             dispatch(clearErrors());
         }
 
@@ -58,7 +56,7 @@ const UpdateUser = () => {
             alert.success("User updated successfully");
             navigate("/admin/users");
             dispatch(getUserDetails(params.id));
-            dispatch({ type: UPDATE_USER_RESET })
+            dispatch(updateUserReset())
         }
     },[alert, dispatch, updateError, userDetailsError, isUpdated, navigate, params.id]);
 
@@ -68,7 +66,7 @@ const UpdateUser = () => {
         myForm.set("name", name);
         myForm.set("email", email);
         myForm.set("role", role);
-        dispatch(updateUser(myForm, params.id));
+        dispatch(updateUser({userData: myForm, userId: params.id}));
     }
 
     return (<FormContainer pagetitle={"Update User"}>

@@ -1,48 +1,26 @@
 import axios from "axios";
-import { 
-    CREATE_SETTING_REQUEST, 
-    CREATE_SETTING_SUCCESS, 
-    CREATE_SETTING_FAIL,
-    GET_SETTING_REQUEST,
-    GET_SETTING_SUCCESS,
-    GET_SETTING_FAIL,
-    CLEAR_ERRORS
-} from '../contants/settingsConstent';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { thunkError } from "./clearformAction";
 
-export const createUpdateSettings = (settingData) => async dispatch => {
+export const createUpdateSettings = createAsyncThunk("settings/createUpdateSettings", async (settingData, thunkAPI) => {
     try {
-        dispatch({ type: CREATE_SETTING_REQUEST });
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
         const {data} = await axios.post("/api/v1/admin/setting/new", settingData, config);
-        dispatch({ type: CREATE_SETTING_SUCCESS, payload: data });
+        return data;
     } catch (error) {
-        dispatch({ 
-            type: CREATE_SETTING_FAIL, 
-            payload: error.response.data.message 
-        });
+        return thunkError(error, thunkAPI);
     }
-}
+});
 
-export const getAllSettings = () => async dispatch => {
+export const getAllSettings = createAsyncThunk("settings/getAllSettings", async (_, thunkAPI) => {
     try {
-        dispatch({ type: GET_SETTING_REQUEST });
         const {data} = await axios.post("/api/v1/admin/settings");
-        dispatch({ type: GET_SETTING_SUCCESS, payload: data.settings });
+        return data.settings;
     } catch (error) {
-        dispatch({ 
-            type: GET_SETTING_FAIL, 
-            payload: error.response.data.message 
-        });
+        return thunkError(error, thunkAPI);
     }
-}
-
-//clear all errors
-export const clearErrors = () => async (dispatch) => { 
-    dispatch({
-        type: CLEAR_ERRORS
-    });
-};
+});

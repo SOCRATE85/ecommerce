@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import MetaData from '../../../layout/MetaData';
 import Loader from '../../../layout/Loader/Loader';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useAlert } from "react-alert";
-import Sidebar from '../../Sidebar';
 import Title from '../Title/Title';
+import { FormContainer } from "../../../../common/components/FormContainer";
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import { Delete, Done, Close, ZoomOutMap, SpellcheckOutlined } from '@mui/icons-material';
-import { getAllAttributes, clearErrors } from "../../../../store/actions/attributeAction";
+import { getAllAttributes, clearErrors, updateAttributeSetReset } from "../../../../store";
 import "./EditAttributeSet.css";
-import { updateAttributeSet, getAttributesetDetails } from "../../../../store/actions/attributesetAction";
-import { UPDATE_ATTRIBUTESET_RESET } from "../../../../store/contants/attributesetContant";
+import { updateAttributeSet, getAttributeSetDetails } from "../../../../store/actions/attributesetAction";
 
 const EditAttributeSet = () => {
     const alert = useAlert();
@@ -38,7 +36,7 @@ const EditAttributeSet = () => {
     useEffect(() => {
         dispatch(getAllAttributes());
         if (attributeset._id !== attributeSetId) {
-            dispatch(getAttributesetDetails(attributeSetId));
+            dispatch(getAttributeSetDetails(attributeSetId));
         } else {
             setAttributeSetName(attributeset.attribute_set_name);
             setAttributeGroup(attributeset.attributeGroup);
@@ -49,7 +47,7 @@ const EditAttributeSet = () => {
         if(isUpdated) {
             alert.success("Attribute Set is updated successfully");
             navigate("/admin/attributesets");
-            dispatch({ type: UPDATE_ATTRIBUTESET_RESET });
+            dispatch(updateAttributeSetReset());
         }
     }, [alert, isUpdated, navigate, dispatch]);
 
@@ -245,7 +243,7 @@ const EditAttributeSet = () => {
         const myForm = new FormData();
         myForm.set("attributeSetName", attributeSetName);
         myForm.set("attributeSetData", JSON.stringify(AttributeGroup));
-        dispatch(updateAttributeSet(myForm, attributeSetId));
+        dispatch(updateAttributeSet({attributesetData: myForm, attribuetsetId: attributeSetId}));
     }
     
     if(loadingDetail || AttributeGroup === undefined) {
@@ -263,12 +261,8 @@ const EditAttributeSet = () => {
             </div>
         </div>);
     }
-    return (<>
-        <MetaData title={"Attributes Listing"} />
-        <div className='dashboard'>
-            <Sidebar />
+    return (<><FormContainer pagetitle={"Edit Attribute Set"}>
             <div className='attributeSetContainer'>
-                <Typography component={"h1"} className="productListHeading">Edit Attribute Set</Typography>
                 <div className="addAttributeset">            
                     <div className="attributesetLeftList">
                         <Button onClick={() => setOpen(true)}>Add Attribute Group</Button>
@@ -333,7 +327,7 @@ const EditAttributeSet = () => {
                     <Button className="saveButton" onClick={updateAttributeSetHandler}>Save Attribute Set</Button>
                 </div>
             </div>
-        </div>
+        </FormContainer>
     </>);
 }
 

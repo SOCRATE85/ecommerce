@@ -1,191 +1,128 @@
-import { 
-    ADD_ADDRESS_REQUEST,
-    ADD_ADDRESS_SUCCESS,
-    ADD_ADDRESS_FAIL,
-    ADD_ADDRESS_RESET,
-    UPDATE_ADDRESS_REQUEST,
-    UPDATE_ADDRESS_SUCCESS,
-    UPDATE_ADDRESS_FAIL,
-    UPDATE_ADDRESS_RESET,
-    DELETE_ADDRESS_REQUEST,
-    DELETE_ADDRESS_SUCCESS,
-    DELETE_ADDRESS_FAIL,
-    DELETE_ADDRESS_RESET,
-    ALL_ADDRESS_REQUEST,
-    ALL_ADDRESS_SUCCESS,
-    ALL_ADDRESS_FAIL,
-    GET_ADDRESS_REQUEST,
-    GET_ADDRESS_SUCCESS,
-    GET_ADDRESS_FAIL,
-    CLEAR_ERRORS 
-} from '../contants/addressContant';
+import { createSlice } from '@reduxjs/toolkit';
+import { getAddress, addNewAddress, updateAddress, deleteAddress, getAllAddress } from '../actions/addressAction';
+import { clearErrors } from '../actions/clearformAction';
 
-export const addAddressReducer = (state = {address:{}}, action) => {
-    switch (action.type) {
-        case ADD_ADDRESS_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case ADD_ADDRESS_SUCCESS:
-            return {
-                loading: false,
-                address: action.payload.address,
-                success: action.payload.success
-            };
-        case ADD_ADDRESS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case ADD_ADDRESS_RESET:
-            return {
-                ...state,
-                loading: false,
-                success: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const addAddressSlice = createSlice({
+    name: "address",
+    initialState: {address:{}},
+    reducers: {
+        addNewAddressReset: (state) => {
+            state.loading = false;
+            state.success = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(addNewAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(addNewAddress.fulfilled, (state, action) => {
+            state.loading = false;
+            state.address = action.payload.address;
+            state.success = action.payload.success;
+        });
+        builder.addCase(addNewAddress.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const updateAddressReducer = (state={}, action) => {
-    switch(action.type){
-        case UPDATE_ADDRESS_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case UPDATE_ADDRESS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: action.payload
-            };
-        case UPDATE_ADDRESS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case UPDATE_ADDRESS_RESET:
-            return {
-                ...state,
-                loading: false,
-                isUpdated: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const updateAddressSlice = createSlice({
+    name: "address",
+    initialState: {},
+    reducers: {
+        updateAddressReset: (state) => {
+            state.isUpdated = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(updateAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateAddress.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isUpdated = action.payload;
+        });
+        builder.addCase(updateAddress.rejected,(state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const addressReducer = (state={address:{}}, action) => {
-    switch (action.type) {
-        case GET_ADDRESS_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                address: {}
-            }
-        case GET_ADDRESS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                address: action.payload
-            }
-        case GET_ADDRESS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const addressSlice = createSlice({
+    name: "address",
+    initialState: {address:{}},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                state.address = action.payload;
+        });
+        builder.addCase(getAddress.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const addressesReducer = (state={addresses:[]}, action) => {
-    switch (action.type) {
-        case ALL_ADDRESS_REQUEST:
-            return {
-                ...state,
-                loading: true,
-                addresses: []
-            }
-        case ALL_ADDRESS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                addresses: action.payload
-            }
-        case ALL_ADDRESS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const addressesSlice = createSlice({
+    name: "addresses",
+    initialState: {addresses:[]},
+    reducers: {},
+    extraReducers: (builder) => {
+        builder.addCase(getAllAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                state.addresses = action.payload;
+        });
+        builder.addCase(getAllAddress.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});
 
-export const deleteAddressReducer = (state={}, action) => {
-    switch (action.type) {
-        case DELETE_ADDRESS_REQUEST:
-            return {
-                loading: true,
-                ...state
-            };
-        case DELETE_ADDRESS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: action.payload
-            };
-        case DELETE_ADDRESS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case DELETE_ADDRESS_RESET:
-            return {
-                ...state,
-                loading: false,
-                isDeleted: false
-            };
-        case CLEAR_ERRORS:
-            return {
-                ...state,
-                loading: false,
-                error: null
-            }
-        default:
-            return state;
+export const deleteAddressSlice = createSlice({
+    name: "address",
+    initialState: {},
+    reducers: {
+        deleteAddressReset: (state) => {
+            state.loading = false;
+            state.isDeleted = false;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteAddress.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isDeleted = action.payload;
+        });
+        builder.addCase(deleteAddress.rejected,(state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+        });
+        builder.addCase(clearErrors, (state) => {
+            state.error = null;
+        });
     }
-}
+});

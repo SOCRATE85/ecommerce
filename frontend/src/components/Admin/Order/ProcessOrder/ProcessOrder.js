@@ -2,13 +2,12 @@ import { Button, Typography } from "@mui/material";
 import React, { useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getOrderDetails, clearErrors, updateOrder } from '../../../../store/actions/orderAction';
+import { getOrderDetails, clearErrors, updateOrder, updateOrderReset } from '../../../../store';
 import Loader from '../../../layout/Loader/Loader';
 import { FormContainer } from "../../../../common/components/FormContainer";
 import { useAlert } from "react-alert";
 import "./ProcessOrder.css";
 import { AccountTreeOutlined } from "@mui/icons-material";
-import { UPDATE_ORDER_RESET } from "../../../../store/contants/orderConstant";
 
 const ProcessOrder = () => {
     const alert = useAlert();
@@ -27,14 +26,14 @@ const ProcessOrder = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     },[alert, error, dispatch]);
 
     useEffect(() => {
         if(updateError) {
-            alert.error(updateError);
+            alert.error(updateError.error);
             dispatch(clearErrors());
         }
     },[alert, updateError, dispatch]);
@@ -42,7 +41,7 @@ const ProcessOrder = () => {
     useEffect(() => {
         if(isUpdated) {
             alert.success("Order updated successfully");
-            dispatch({ type: UPDATE_ORDER_RESET });
+            dispatch(updateOrderReset());
         }
         dispatch(getOrderDetails(params.id));  
     },[alert, dispatch, isUpdated, params.id]);

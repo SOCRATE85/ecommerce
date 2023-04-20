@@ -6,8 +6,7 @@ import { Typography } from "@mui/material";
 import { useAlert } from "react-alert";
 import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import { removeItemFromcartAfterOrderSuccess } from '../../store/actions/cartAction';
-import { clearErrors, createOrder } from '../../store/actions/orderAction';
+import { removeItemFromcartAfterOrderSuccess, clearErrors, createOrder } from '../../store';
 import { CreditCardOutlined, EventOutlined,VpnKeyOutlined } from "@mui/icons-material";
 
 import "./Payment.css";
@@ -38,7 +37,7 @@ const Payment = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [dispatch, error, alert ]);

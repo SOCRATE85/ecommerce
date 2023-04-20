@@ -7,8 +7,7 @@ import Input from '../../../Controls/Input';
 import ActionControl from '../../../../common/ActionControl';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import "./UpdateSlider.css";
-import { updateSlider, clearErrors, getAllSlider, getSlider } from "../../../../store/actions/sliderAction";
-import { UPDATE_SLIDER_RESET } from "../../../../store/contants/sliderContant";
+import { updateSlider, clearErrors, getAllSlider, getSlider, updateSliderReset } from "../../../../store";
 
 const UpdateSlider = () => {
     const params = useParams();
@@ -220,7 +219,7 @@ const UpdateSlider = () => {
 
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [error, alert, dispatch]);
@@ -231,7 +230,7 @@ const UpdateSlider = () => {
             dispatch(getAllSlider());
             dispatch(getSlider(sliderId));
             navigate('/admin/sliders');
-            dispatch({type: UPDATE_SLIDER_RESET });
+            dispatch(updateSliderReset());
         }
     },[dispatch, isUpdated, alert, navigate, sliderId]);
 
@@ -242,7 +241,7 @@ const UpdateSlider = () => {
                 myForm.set(key, state[key].value);
             }
         }
-        dispatch(updateSlider(sliderId, myForm));
+        dispatch(updateSlider({sliderId, slider: myForm}));
     }
     
     let formElementArray = useMemo(() => {

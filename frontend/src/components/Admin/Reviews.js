@@ -2,19 +2,13 @@ import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import {
-  getAllReviews,
-  clearErrors,
-  deleteReview,
-} from "../../store/actions/productAction";
+import { getAllReviews, clearErrors, deleteReview, deleteReviewReset } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { FormContainer } from "../../common/components/FormContainer";
 import Loader from "../layout/Loader/Loader";
 import { Delete, Star } from "@mui/icons-material";
-
-import "./Reviews.css";
 import { Button } from "@mui/material";
-import { DELETE_REVIEW_RESET } from "../../store/contants/productConstant";
+import "./Reviews.css";
 
 const Reviews = () => {
   const dispatch = useDispatch();
@@ -83,20 +77,20 @@ const Reviews = () => {
       alert.success("Review deleted successfully.");
       navigate("/admin/reviews");
       dispatch(getAllReviews(productId));
-      dispatch({ type: DELETE_REVIEW_RESET });
+      dispatch(deleteReviewReset());
     }
   }, [alert, isDeleted, dispatch, navigate, productId]);
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      alert.error(error.error);
       dispatch(clearErrors());
     }
   }, [alert, error, dispatch]);
 
   useEffect(() => {
     if (deleteError) {
-      alert.error(deleteError);
+      alert.error(deleteError.error);
       dispatch(clearErrors());
     }
   }, [alert, deleteError, dispatch]);

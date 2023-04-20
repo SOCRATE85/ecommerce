@@ -6,10 +6,7 @@ import { Button } from "@mui/material";
 import Input from '../../../Controls/Input';
 import { checkValidation, validate, validatedForm } from "../../../../common/validation";
 import Loader from "../../../layout/Loader/Loader";
-import { getAllBlogCategories } from "../../../../store/actions/blogCategoryAction";
-import { createBlog } from "../../../../store/actions/blogAction";
-import { uploadFiles } from "../../../../store/actions/uploadAction";
-import { CREATE_BLOG_RESET } from "../../../../store/contants/blogContent";
+import { getAllBlogCategories, createBlog, uploadFiles, createBlogReset } from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
 import { slugify } from "../../../../common/slugify";
 
@@ -19,7 +16,7 @@ const AddNewBlog = () => {
     const alert = useAlert();
     const {loading: loadingBlog, success} = useSelector( state => state.createBlog );
     const { blogcategories, loading } = useSelector(state => state.blogCategories);
-    const {images: uploadedImage /*, loading: loadImages*/} = useSelector(state=>state.uploadImage);
+    const { images: uploadedImage } = useSelector(state=>state.uploadImage);
     const [ images, setImages ] = useState([]);
     const [ imageIdentifier, setImageIdentifier ] = useState([]);
     const [ imageUpload, setImageUpload ] = useState(false);
@@ -200,7 +197,7 @@ const AddNewBlog = () => {
         if(success) {
             alert.success("Blog created successfully");
             navigate("/admin/blogs");
-            dispatch({ type: CREATE_BLOG_RESET });
+            dispatch(createBlogReset());
         }
     }, [alert, success, navigate, dispatch]);
 

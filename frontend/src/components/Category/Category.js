@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import queryString from "query-string";
 import { useNavigate, useLocation } from "react-router-dom";
-import { clearErrors, getCategoryDetailsForFrontEnd, getFilterAndSorting, getCategoryFilterDetailsForFrontEnd } from '../../store/actions/categoryAction';
+import { clearErrors, getCategoryDetailsForFrontEnd, getFilterAndSorting, getCategoryFilterDetailsForFrontEnd } from '../../store';
 import { useAlert } from "react-alert";
 import { Typography, Button } from "@mui/material";
 import { Close } from '@mui/icons-material';
@@ -48,11 +48,11 @@ const Category = (props) => {
     
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
         if(filterError) {
-            alert.error(filterError);
+            alert.error(filterError.error);
             dispatch(clearErrors());
         }
     },[alert, dispatch, error, filterError]);
@@ -65,7 +65,7 @@ const Category = (props) => {
     
     useEffect(() => {
         if(categoryDetails && categoryDetails._id !== categoryId) {
-            dispatch(getCategoryDetailsForFrontEnd(categoryId, currentPage, filterValues, show));
+            dispatch(getCategoryDetailsForFrontEnd({categoryId, currentPage, filterValues, show}));
         }
     },[dispatch, categoryId, currentPage, filterValues, categoryDetails, show]);
     
@@ -74,15 +74,9 @@ const Category = (props) => {
     }, [dispatch, categoryId]);
 
     useEffect(() => {
-         dispatch(getCategoryFilterDetailsForFrontEnd(categoryId, currentPage, filterValues, show));
+         dispatch(getCategoryFilterDetailsForFrontEnd({categoryId, currentPage, filterValues, show}));
     },[dispatch, categoryId, currentPage, filterValues, show]);
 
-    /*const fetchRecord = () => {
-        setTimeout(() => {
-            dispatch(getCategoryDetailsForFrontEnd(categoryId, currentPage, filterValues, show));
-        },1000);
-    }*/
-    
     const updateHandler = (_event, value, key, order) => {
         const flag = key.split("-");
         let _filterValues = [...filterValues];

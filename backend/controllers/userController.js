@@ -28,6 +28,22 @@ exports.registerUser = catchAsyncError(async (req, res) => {
     sendToken(user, 201, res);
 });
 
+//Register a User
+exports.registerUserbyAdmin = catchAsyncError(async (req, res) => {
+    const {name, email, password, image, status, role} = req.body;
+
+    const user = await User.create({
+        name,
+        email,
+        password,
+        image,
+        role,
+        status
+    });
+
+    sendToken(user, 201, res);
+});
+
 //Login User
 exports.loginUser = catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;

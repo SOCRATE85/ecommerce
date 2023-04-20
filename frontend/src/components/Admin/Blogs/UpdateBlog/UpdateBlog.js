@@ -7,9 +7,7 @@ import Input from '../../../Controls/Input';
 import { checkValidation, validate, validatedForm } from "../../../../common/validation";
 import Loader from "../../../layout/Loader/Loader";
 import { getAllBlogCategories } from "../../../../store/actions/blogCategoryAction";
-import { clearErrors, updateBlog, getBlog } from "../../../../store/actions/blogAction";
-import { uploadFiles } from "../../../../store/actions/uploadAction";
-import { UPDATE_BLOG_RESET } from "../../../../store/contants/blogContent";
+import { clearErrors, updateBlog, getBlog, updateBlogReset, uploadFiles } from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
 import { slugify } from "../../../../common/slugify";
 
@@ -22,7 +20,7 @@ const UpdateBlog = () => {
     const { blog, loading: loadingBlogDetail, error } = useSelector(state => state.blogDetail);
     const { isUpdated } = useSelector( state => state.updateBlog );
     const { blogcategories } = useSelector(state => state.blogCategories);
-    const { images: uploadedImage/*, loading: loadImages*/ } = useSelector(state=>state.uploadImage);
+    const { images: uploadedImage } = useSelector(state=>state.uploadImage);
     const [ images, setImages ] = useState([]);
     const [ imageIdentifier, setImageIdentifier ] = useState([]);
     const [ imageUpload, setImageUpload ] = useState(false);
@@ -288,7 +286,7 @@ const UpdateBlog = () => {
     
     useEffect(() => {
         if(error) {
-            alert.error(error);
+            alert.error(error.error);
             dispatch(clearErrors());
         }
     }, [error, dispatch, alert]);
@@ -298,7 +296,7 @@ const UpdateBlog = () => {
             alert.success("Blog is updated successfully");
             navigate("/admin/blogs");
             dispatch(getBlog(blogId));
-            dispatch({ type: UPDATE_BLOG_RESET });
+            dispatch(updateBlogReset());
         }
     }, [alert, isUpdated, navigate, dispatch, blogId]);
     
@@ -426,7 +424,7 @@ const UpdateBlog = () => {
         myForm.set("meta_tags", formState.meta_tags.value);
         myForm.set("meta_description", formState.meta_description.value);
         myForm.set("status", formState.status.value.value);
-        dispatch(updateBlog(myForm, blogId));
+        dispatch(updateBlog({banner: myForm, bannerId: blogId}));
     }
 
     const formElementArray = useMemo(() => {

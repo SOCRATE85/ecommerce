@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import App from './App';
-import store from './store/store';
+import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

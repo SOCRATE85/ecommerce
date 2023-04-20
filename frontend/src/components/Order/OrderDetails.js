@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MetaData from "../layout/MetaData";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
-import { getOrderDetails, clearErrors } from "../../store/actions/orderAction";
+import { getOrderDetails, clearErrors } from "../../store";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 
@@ -21,7 +21,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      alert.error(error.error);
       dispatch(clearErrors);
     }
   }, [dispatch, error, alert]);
