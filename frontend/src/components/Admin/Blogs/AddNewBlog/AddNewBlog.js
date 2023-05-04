@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Button } from "@mui/material";
-import Input from '../../../Controls/Input';
-import { checkValidation, validate, validatedForm } from "../../../../common/validation";
+import ActionControl from '../../../../common/ActionControl';
 import Loader from "../../../layout/Loader/Loader";
 import { getAllBlogCategories, createBlog, uploadFiles, createBlogReset } from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { slugify } from "../../../../common/slugify";
+import SubmitButton from "../../../../common/components/SubmitActionButton";
+import FormAction from '../../../../common/components/FormAction';
+import FormElement from "../../../../common/components/FormElement/FormElement";
 
 const AddNewBlog = () => {
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const AddNewBlog = () => {
             valid: false,
             touched: false
         },
-        url_path: {
+        url_key: {
             elementType: "input",
             elementConfig: {
                 type: "text",
@@ -127,7 +127,7 @@ const AddNewBlog = () => {
             },
             value: "",
             validation: {
-                required: true
+                required: false
             },
             hideLabel: false,
             valid: false,
@@ -142,7 +142,7 @@ const AddNewBlog = () => {
             },
             value: "",
             validation: {
-                required: true
+                required: false
             },
             hideLabel: false,
             valid: false,
@@ -157,33 +157,19 @@ const AddNewBlog = () => {
             },
             value: "",
             validation: {
-                required: true
+                required: false
             },
             hideLabel: false,
             valid: false,
             touched: false
         },
         status: {
-            elementType: "select",
+            elementType: "boolean",
             elementConfig: {
                 placeholder: "Status",
-                error: "",
-                options: [
-                    {
-                        value: 0,
-                        defaultValue: "Select Status"
-                    },
-                    {
-                        value: 1,
-                        defaultValue: "Enabled"
-                    },
-                    {
-                        value: 2,
-                        defaultValue: "Disabled"
-                    }
-                ]
+                error: ""
             },
-            value: null,
+            value: true,
             validation: {
                 required: true
             },
@@ -193,6 +179,30 @@ const AddNewBlog = () => {
         }
     });
     
+    const actioncontrol = useMemo(() => {
+        return new ActionControl({
+            formState,
+            setFormState,
+            images,
+            setImages,
+            imageIdentifier,
+            setImageIdentifier,
+            uploadedImage,
+            imageUpload,
+            setImageUpload
+        });
+    },[
+        formState,
+        setFormState,
+        images,
+        setImages,
+        imageIdentifier,
+        setImageIdentifier,
+        uploadedImage,
+        imageUpload,
+        setImageUpload
+    ]);
+
     useEffect(() => {
         if(success) {
             alert.success("Blog created successfully");
@@ -222,242 +232,63 @@ const AddNewBlog = () => {
     },[blogcategories]);
     
     useEffect(() => {
-        const loadOption = () => {
-            const _updatedFormElement = {...formState};
-            const updatedFormElement = {..._updatedFormElement[imageIdentifier]};
-            updatedFormElement.touched = true;
-            updatedFormElement.value = [...updatedFormElement.value, ...uploadedImage];
-            const validation = checkValidation(uploadedImage , updatedFormElement.validation);
-            updatedFormElement.valid = validation.isValid;
-            updatedFormElement.elementConfig.error = validation.message;
-            _updatedFormElement[imageIdentifier] = updatedFormElement;
-            setFormState(_updatedFormElement);
-            setImageUpload(false);
+        if(imageUpload && uploadedImage && uploadedImage.length > 0) {
+            actioncontrol.loadOption();
         }
-        if(imageUpload && uploadedImage.length > 0) {
-            loadOption();
-        }
-    }, [imageIdentifier, uploadedImage, formState, imageUpload]);
-
-    const selectOptionChangeHandler = (value, identifier) => {
-        const _updatedFormElement = {...formState};
-        const updatedFormElement = {..._updatedFormElement[identifier]};
-        updatedFormElement.touched = true;
-        updatedFormElement.value = value;
-        const validation = checkValidation(value, updatedFormElement.validation);
-        updatedFormElement.valid = validation.isValid;
-        updatedFormElement.elementConfig.error = validation.message;
-        _updatedFormElement[identifier] = updatedFormElement;
-        setFormState(_updatedFormElement);
-    }
-
-    const createBlogImageChange = (e, identifier) => {
+    }, [uploadedImage, imageUpload, actioncontrol]);
+    
+    const createImageChange = (e, identifier) => {
         const files = Array.from(e.target.files);
         setImageIdentifier(identifier);
         setImageUpload(true);
         dispatch(uploadFiles(files));
     }
-    
-    const checkboxOptionChangeHandler = (event, identifier) => {
-        const _updatedFormElement = {...formState};
-        const updatedFormElement = {..._updatedFormElement[identifier]};
-        updatedFormElement.touched = true;
-        updatedFormElement.value = event.target.value;
-        const validation = checkValidation(event.target.value, updatedFormElement.validation);
-        updatedFormElement.valid = validation.isValid;
-        updatedFormElement.elementConfig.error = validation.message;
-        _updatedFormElement[identifier] = updatedFormElement;
-        setFormState(_updatedFormElement);
-    }
 
-    const inputOptionChangeHandler = (event, identifier) => {
-        const _updatedFormElement = {...formState};
-        const updatedFormElement = {..._updatedFormElement[identifier]};
-        updatedFormElement.touched = true;
-        updatedFormElement.value = event.target.value;
-        const validation = checkValidation(event.target.value, updatedFormElement.validation);
-        updatedFormElement.valid = validation.isValid;
-        updatedFormElement.elementConfig.error = validation.message;
-        _updatedFormElement[identifier] = updatedFormElement;
-
-        if(identifier === 'title') {
-            const __updatedFormElement = {..._updatedFormElement};
-            const updatedFormElement = {...__updatedFormElement["url_path"]};
-            updatedFormElement.touched = true;
-            const url = slugify(event.target.value);
-            updatedFormElement.value = url;
-            const validation = checkValidation(event.target.value, updatedFormElement.validation);
-            updatedFormElement.valid = validation.isValid;
-            updatedFormElement.elementConfig.error = validation.message;
-            __updatedFormElement["url_path"] = updatedFormElement;
-            setFormState(__updatedFormElement);
-        } else {
-            setFormState(_updatedFormElement);
-        }
-    }
-
-    const chkEditorHandler = (data, identifier) => {
-        if(!data || data === '') return;
-        const _updatedFormElement = {...formState};
-        const updatedFormElement = {..._updatedFormElement[identifier]};
-        updatedFormElement.touched = true;
-        updatedFormElement.value = data;
-        const validation = checkValidation(data, updatedFormElement.validation);
-        updatedFormElement.valid = validation.isValid;
-        updatedFormElement.elementConfig.error = validation.message;
-        _updatedFormElement[identifier] = updatedFormElement;
-        setFormState(_updatedFormElement);
-    }
-      
-    const removeImage = (imageIndex, imageIdentifier) => {
-        const updatedFormState = {...formState};
-        const _images = images.filter((_, index) => index !== imageIndex) 
-        const updatedFormElement = {...updatedFormState[imageIdentifier]};        
-        updatedFormElement.value = _images.length !== 0 ? _images : [];
-        updatedFormState[imageIdentifier] = updatedFormElement;
-        setFormState(updatedFormState);
-        setImages(_images.length !== 0 ? _images : []);
-    }
-
-    const createBlogSubmitHandler = (e) => {
-        e.preventDefault();
-        
-        const validatedData = validate(formState);
-        setFormState(validatedData);
-        const validated = validatedForm(formState);
-        if(!validated) {
-            return;
-        }
+    const createSubmitHandler = (state) => {
         const myForm = new FormData();
-        const _categories = formState.categories.value.reduce((result, item) => {return result.concat(item.value)}, []).filter(item => item !=='');
+        const _categories = state.categories.value.reduce((result, item) => {return result.concat(item.value)}, []).filter(item => item !=='');
         myForm.set("categories", _categories);
-        myForm.set("title", formState.title.value);
-        myForm.set("full_content", formState.full_content.value);
-        myForm.set("short_content", formState.short_content.value);
+        myForm.set("title", state.title.value);
+        myForm.set("full_content", state.full_content.value);
+        myForm.set("short_content", state.short_content.value);
         
-        const blogimages = formState.blogimages.value;
+        const blogimages = state.blogimages.value;
         blogimages.map((image) => {
             myForm.append("blogimages", image);
             return true;
         });
-        myForm.set("meta_title", formState.meta_title.value);
-        myForm.set("meta_tags", formState.meta_tags.value);
-        myForm.set("meta_description", formState.meta_description.value);
-        myForm.set("status", formState.status.value.value);
+        myForm.set("meta_title", state.meta_title.value);
+        myForm.set("meta_tags", state.meta_tags.value);
+        myForm.set("meta_description", state.meta_description.value);
+        myForm.set("status", state.status.value);
         dispatch(createBlog(myForm));
     }
 
+    let formElementArray = useMemo(() => {
+        const _formElementArray = [];
+        const tempformElementArray = actioncontrol.getFormState();
+        for(let key in tempformElementArray) {
+            _formElementArray.push({
+                id: key,
+                config: tempformElementArray[key]
+            })
+        }
+        return _formElementArray;
+    }, [actioncontrol]);
+
     if(loading) {return <></>}
 
-    let formElementArray = [];
-    for(let key in formState) {
-        formElementArray.push({
-            id: key,
-            config: formState[key]
-        })
-    }
-   
     return (<FormContainer pagetitle={"Add New Blog"}>
-        {loading || loadingBlog ? <Loader /> : <form
-            className="createCategoryForm" 
-            encType="multipart/form-data"
-            onSubmit={(e) => createBlogSubmitHandler(e)}
-        >
-            {formElementArray.map(element => {
-                switch (element.config.elementType) {
-                    case 'select':
-                    case "multiselect":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            options={element.id === "categories" && categoryOption}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> selectOptionChangeHandler(e, element.id)}
-                        />
-                    case "editor":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(data) => chkEditorHandler(data, element.id)}
-                        />
-                    case "checkbox":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> checkboxOptionChangeHandler(e, element.id)}
-                        />
-                    case 'file': 
-                            return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            removeImage={removeImage}
-                            changed={(e)=> createBlogImageChange(e, element.id)}
-                        />
-                    case "input":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> inputOptionChangeHandler(e, element.id)}
-                        />
-                    case "textarea":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> inputOptionChangeHandler(e, element.id)}
-                        />
-                    default:
-                        return null
-                }
-            })}
-            <Button id="createCategoryBtn" type="submit">Create Post</Button>
-        </form>}
+        {loading || loadingBlog ? <Loader /> : <FormAction submitHandler={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}>
+            <FormElement 
+                formElementArray={formElementArray} 
+                actioncontrol={actioncontrol}
+                options={categoryOption}
+                optionKey={'categories'}
+                createImageChange={createImageChange}
+            />
+            <SubmitButton title={'Create Post'}></SubmitButton>
+        </FormAction>}
     </FormContainer>);
 }
 

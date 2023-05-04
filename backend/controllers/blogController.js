@@ -50,7 +50,6 @@ exports.updateBlog = catchAsyncError(async (req, res, next) => {
     if(!blog) {
         return next(new ErrorHandler("Blog not Found", 404));
     }
-
     req.body.categories = req.body.categories.split(",");
     let images = [];
     
@@ -117,7 +116,7 @@ exports.getBlogListFrontend = catchAsyncError(async (req, res, _next) => {
 });
 
 exports.getBlogDetail = catchAsyncError(async (req, res, next) => {
-    let blog = await BlogPost.findById(req.params.id);
+    let blog = await BlogPost.findById(req.params.id).populate("categories");
     if(!blog) {
         return next(new ErrorHandler("Blog is not exists", 404));
     }

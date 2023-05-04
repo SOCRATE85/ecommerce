@@ -52,7 +52,7 @@ exports.createCategory = catchAsyncError(async (req, res, _next) => {
             url: result.secure_url
         })
     }
-  
+
     req.body.images = imagesLink;
     if(req.body.products !== undefined){
         req.body.products = req.body.products.split(",").map(product =>{
@@ -214,8 +214,7 @@ exports.updateCategory = catchAsyncError(async (req, res, next) => {
         images = req.body.images;
     }
     
-    if(images !== undefined) {
-        // delete image from coudinary
+    /*if(images !== undefined) {
         for (let i = 0; i < category.images.length; i++) {
             await cloudinary.v2.uploader.destroy(category.images[i].public_id);
         }
@@ -233,7 +232,7 @@ exports.updateCategory = catchAsyncError(async (req, res, next) => {
         }
 
         req.body.images = imagesLink;
-    }
+    }*/
 
     if(req.body.products !== '') {
         let products = [];
@@ -269,24 +268,24 @@ const getFilterAttributes = async (products) => {
             const attributes =  attributeGroup[key].attributes;            
             for(let key in attributes) {
                 const attributeId = attributes[key].attributeId;
-                const attribute = await Attribute.findById(attributeId);               
+                const attribute = await Attribute.findById(attributeId);           
                 if(attribute.use_in_filter) {
                     switch (attributes[key].attributType) {
                         case 'number':
-                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] === undefined) {
-                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] = [];
+                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] === undefined) {
+                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] = [];
                             }
-                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`].push({
+                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`].push({
                                 attributType: attributes[key].attributType,
                                 attribute_code: attributes[key].attributeCode,
                                 value: attributes[key].value
                             });    
                         break;
                         case 'price':
-                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] === undefined) {
-                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] = [];
+                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] === undefined) {
+                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] = [];
                             }
-                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`].push({
+                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`].push({
                                 attributType: attributes[key].attributType,
                                 attribute_code: attributes[key].attributeCode,
                                 value: attributes[key].value
@@ -296,10 +295,10 @@ const getFilterAttributes = async (products) => {
                         case 'multiselect':
                         case 'checkbox':
                         case 'radio':
-                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] === undefined) {
-                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] = [];
+                            if(newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] === undefined) {
+                                newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] = [];
                             }
-                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}`] = {
+                            newUseInFilter[`${attributes[key].attributeCode}-${attributes[key].attributType}-${attribute.frontend_label.replace(" ", "@")}`] = {
                                attributType: attributes[key].attributType,
                                attribute_code: attributes[key].attributeCode,
                                value: attribute.attribute_options
@@ -333,7 +332,6 @@ exports.getFilterSortingRecord = catchAsyncError(async(req, res, next) => {
     }
     const products = await getproductDetailsWithAttributes(await Product.find({ categories : req.params.id }));
     const filterAttributes = await getFilterAttributes(products);
-    
     let filterData = [];
     filterData.push({'ratings-number': [0,5]});
     for(let key in filterAttributes.use_in_filter) {
@@ -402,7 +400,7 @@ const removeDuplicate = (productIds, product) => {
 }
 
 exports.getCategoryDetailsForAdmin = catchAsyncError(async (req, res, next) => {
-    const category = await Category.findById(req.params.id).populate("products");
+    const category = await Category.findById(req.params.id).populate("products").populate("parent");
     if(!category) {
         return next(new ErrorHandler("Category not Found", 404));
     }
@@ -422,7 +420,7 @@ exports.getCategory = catchAsyncError( async (req, res, next) => {
     const productCount = await Product.countDocuments();
     let products = [];
     const productIds = [];
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.id).populate("parent");
     if(!category) {
         return next(new ErrorHandler("Category not Found", 404));
     }

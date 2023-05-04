@@ -10,7 +10,9 @@ const addressSchema = new mongoose.Schema({
     country: {type: String, required: [true, "Country is required!"]},
     pinCode: {type: String, required: [true, "Zip code is required!"]},
     phoneNo: {type: String, required: [true, "Phone number is required!"]},
-    isDefault: {type: Boolean, required: false}
+    isDefault: {type: Boolean, required: false, default: false},
+    isBillingAddress: {type: Boolean,required: false, default: false},
+    isShippingAddress: {type: Boolean,required: false, default: false}
 });
 
 module.exports = mongoose.model("Address", addressSchema);

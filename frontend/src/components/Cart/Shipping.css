@@ -9,7 +9,6 @@
 
 .shippingBox {
     width: 50%;
-    height: 90vh;
     box-sizing: border-box;
     overflow: hidden;
     background-color: white;
@@ -29,36 +28,14 @@
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
-    align-items: center;
     margin: auto;
     padding: 20px;
-    height: 80%;
     transition: all 0.5s;
 }
 
 .shippingForm > div {
     display: flex;
     width: 100%;
-    align-items: center;
-}
-
-.shippingForm > div > input,
-.shippingForm > div > select {
-    padding: 10px 30px;
-    padding-right: 0;
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.267);
-    border-radius: 4px;
-    font: 300 14px "Roboto", sans-serif;
-    outline: none;
-}
-
-.shippingForm > div > svg {
-    position: absolute;
-    transform: translateX(1vmax);
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.623);
 }
 
 @media screen and (max-width: 600px){

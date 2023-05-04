@@ -1,14 +1,19 @@
 import React, { useEffect } from "react";
-import DataListing from "../../../../common/DataListing";
 import { Button } from "@mui/material";
+import { Edit, Delete } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from "react-alert";
-import { Edit, Delete } from '@mui/icons-material';
 import { FormContainer } from "../../../../common/components/FormContainer";
 import Loader from '../../../layout/Loader/Loader';
-import { getAttributeSets, deleteAttributeSet, clearErrors, deleteAttributeSetReset } from '../../../../store';
-import "./AttributeSet.css";
+import DataListing from "../../../../common/components/DataListing";
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
+import {
+    getAttributeSets,
+    deleteAttributeSet,
+    clearErrors,
+    deleteAttributeSetReset
+} from '../../../../store';
 
 const AttributeSet = () => {
     const alert = useAlert();
@@ -93,9 +98,7 @@ const AttributeSet = () => {
 
     return (<FormContainer pagetitle={"Manage Attribute sets"}>
         {loading || deleteLoading ? <Loader/> : <>
-            <div className="add-blog">
-                <Button variant="primary" onClick={() => navigate("/admin/attributeset/new")}>Add Attribute Set</Button>
-            </div>
+            <AddNewItemAction actionUrl="/admin/attributeset/new" title={"Add Attribute Set"} />
             <DataListing columns={columns} rows={rows} />
         </>}
     </FormContainer>);

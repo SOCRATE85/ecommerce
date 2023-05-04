@@ -16,18 +16,11 @@ const App = () => {
   };
 
   useEffect(() => {
+    const abc  = async () => {
+      await startService();
+    }
     if (run) {
-      startService()
-        .then(() => {
-          setRun(false);
-        })
-        .catch((err) => {
-          setRun(false);
-          console.log("err: ", err);
-        })
-        .finally(() => {
-          setRun(false);
-        });
+      abc();
     }
     return () => setRun(false);
   }, [run]);
@@ -36,11 +29,12 @@ const App = () => {
     if (!ref.current) {
       return;
     }
-
+    console.log(ref.current, input)
     const result = await ref.current.transform(input, {
       loader: "jsx",
       target: "es2015",
     });
+    console.log('result: ', result);
     setCode(result.code);
 
     /**

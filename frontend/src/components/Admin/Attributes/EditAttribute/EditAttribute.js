@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    AccountTreeOutlined,
-    SpellcheckOutlined,
-    Delete     
-} from "@mui/icons-material"
-import { Typography, Button } from "@mui/material";
+import { Delete } from "@mui/icons-material"
+import { Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import Input from "../../../Controls/Input";
 import { useAlert } from "react-alert";
+import Input from '../../../../common/components/Controls/Input';
 import Loader from '../../../layout/Loader/Loader';
 import { clearErrors, getAttribute, updateAttribute, updateAttributeReset } from '../../../../store';
-import Boolean from "../../../Controls/Boolean";
-import './EditAttribute.css';
+import Boolean from '../../../../common/components/Controls/Boolean';
 import { FormContainer } from "../../../../common/components/FormContainer";
+import FormAction from "../../../../common/components/FormAction/FormAction";
+import ControlContainer from '../../../../common/components/ControlContainer';
+import SubmitActionButton from '../../../../common/components/SubmitActionButton';
 
 const EditAttribute = () => {
     const params = useParams();
@@ -321,10 +319,8 @@ const EditAttribute = () => {
     }
    
     return (<><FormContainer pagetitle={"Edit Attributes"}>
-        {loadingAttributeDetails || updateLoading ? <Loader /> : <form className="createAttributeForm" encType="multipart/form-data" onSubmit={updateAttributeSubmitHandler}>
-            <Typography component={"h1"}>Edit Attribute</Typography>
-                <div>
-                    <SpellcheckOutlined />
+        {loadingAttributeDetails || updateLoading ? <Loader /> : <FormAction submitHandler={updateAttributeSubmitHandler}>
+                <ControlContainer label="Attribute Name">
                     <input 
                         type={"text"} 
                         placeholder="Attribute Name" 
@@ -332,9 +328,8 @@ const EditAttribute = () => {
                         value={frontendLabel}
                         onChange={(e) => frontendLabelHandler(e.target.value)} 
                     />
-                </div>
-                <div>
-                    <SpellcheckOutlined />
+                </ControlContainer>
+                <ControlContainer label="Attribute Code">
                     <input 
                         type={"text"} 
                         placeholder="Attribute Code" 
@@ -343,9 +338,8 @@ const EditAttribute = () => {
                         value={attributeCode}
                         onChange={(e) => setAttributeCode(e.target.value)} 
                     />
-                </div>
-                <div>
-                    <AccountTreeOutlined />
+                </ControlContainer>
+                <ControlContainer label="Input">
                     <select disabled onChange={(e) => chooseAttributeTypeHandler(e.target.value)} value={frontendInput}>
                         <option value={"text"}>Text Field</option>
                         <option value={"price"}>Price</option>
@@ -357,15 +351,13 @@ const EditAttribute = () => {
                         <option value={"file"}>File</option>
                         <option value={"date"}>Date</option>
                     </select>
-                </div>
-                <div>
-                    <label className="title">Use in Filter</label>
+                </ControlContainer>
+                <ControlContainer label="Use in Filter">
                     <Boolean id="useInFilter" value={useInFilter} onChange={()=>setUseInFilter(prev => !prev)}/>
-                </div>
-                <div>
-                    <label className="title">Use in Sorting</label>
+                </ControlContainer>
+                <ControlContainer label="Use in Sorting">
                     <Boolean id="useInSorting" value={useInSorting} onChange={()=>setUseInSorting(prev => !prev)}/>
-                </div>
+                </ControlContainer>
                 {(
                     frontendInput !== "select" &&
                     frontendInput !== "multiselect" &&
@@ -373,28 +365,25 @@ const EditAttribute = () => {
                     frontendInput !== "radio") ? (
                     <>
                     {frontendInput === 'boolean' ? <>
-                        <div>
-                            <label className="title">Default Value</label>
+                        <ControlContainer label="Default Value">
                             <Boolean id="defaultValue" value={defaultValue} onChange={()=>setDefaultValue(prev => !prev)}/>
-                        </div> 
-                    </> : <div>
-                        <SpellcheckOutlined />
+                        </ControlContainer> 
+                    </> : <ControlContainer label="Default Value">
                         <input 
                             type={"text"} 
                             placeholder="Default Value"
                             value={defaultValue}
                             onChange={(e) => setDefaultValue(e.target.value)} 
                         />
-                    </div>}
+                    </ControlContainer>}
                     </>
                 ): <></>}
-                <div>
-                    <AccountTreeOutlined />
+                <ControlContainer label="Required">
                     <select onChange={(e) => setIsRequired(e.target.value)} value={isRequired}>
                         <option value={1}>Options</option>
                         <option value={2}>Required</option>
                     </select>
-                </div>
+                </ControlContainer>
                 { (frontendInput === "select" || frontendInput === "multiselect" || frontendInput === "checkbox" || frontendInput === "radio") && (
                     <>
                         <div>
@@ -434,8 +423,8 @@ const EditAttribute = () => {
                         </div>
                     </>
                 )}
-                <Button id="createProductBtn" type="submit">Update</Button>
-            </form>}
+                <SubmitActionButton title={'Update Attribute'} />
+            </FormAction>}
         </FormContainer>
     </>);
 }

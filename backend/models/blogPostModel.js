@@ -70,8 +70,8 @@ const blogPostSchema = new mongoose.Schema({
         }
     ],
     status: {
-        type: Number,
-        default: 1,
+        type: Boolean,
+        default: true,
         required: true
     },
     created_at: {

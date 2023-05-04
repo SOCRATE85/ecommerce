@@ -74,7 +74,7 @@ exports.myOrders = catchAsyncError(async (req, res, _next) => {
 
 //Get All Orders -- Admin
 exports.getAllOrders = catchAsyncError(async (_req, res, _next) => {
-    const orders = await Order.find();
+    const orders = await Order.find().populate("user");
 
     let totalAmount = 0;
     orders.forEach(order => {

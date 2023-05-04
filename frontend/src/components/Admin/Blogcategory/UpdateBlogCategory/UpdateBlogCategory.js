@@ -1,48 +1,22 @@
-import React, { useState, useEffect } from "react"
-import DataListing from "../../../../common/DataListing";
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Box, Tabs, Tab } from "@mui/material";
-import {
-    DescriptionOutlined,
-    SpellcheckOutlined 
-} from "@mui/icons-material";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react"
 import { useAlert } from 'react-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from "react-router-dom";
+import DataListing from "../../../../common/components/DataListing";
 import { FormContainer } from '../../../../common/components/FormContainer'
 import Loader from "../../../layout/Loader/Loader";
-import { clearErrors, getBlogCategoryDetail, updateBlogCategory, updateBlogCategoryReset, getAllBlog } from "../../../../store";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>{children}</Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `category-tab-${index}`,
-    'aria-controls': `category-tabpanel-${index}`,
-  };
-}
+import SubmitActionButton from "../../../../common/components/SubmitActionButton";
+import FormAction from '../../../../common/components/FormAction';
+import TabPanelContainer from "../../../../common/components/TabPanelContainer";
+import ActionControl from '../../../../common/ActionControl';
+import {
+    clearErrors,
+    getBlogCategoryDetail,
+    updateBlogCategory,
+    updateBlogCategoryReset,
+    getAllBlog
+} from "../../../../store";
+import FormElement from "../../../../common/components/FormElement/FormElement";
 
 const UpdateBlogCategory = () => {
     const navigate = useNavigate();
@@ -52,27 +26,113 @@ const UpdateBlogCategory = () => {
     const {blogcategory, loading, error} = useSelector(state => state.blogCategory);
     const {isUpdated, loading: loadingUpdate} = useSelector(state => state.updateBlogCategory);
     const {blogs} = useSelector(state => state.blogs);
-    const [name, setName] = useState("");
-    const [metaTitle, setMetaTitle] = useState("");
-    const [metaTags, setMetaTags] = useState("");
-    const [metaDescription, setMetaDescription] = useState("");
-    const [status, setStatus] = useState("");    
-    const [value, setValue] = useState(0);
+    const [status, setStatus] = useState("");
     const [ selectedBlogs, setSelectedBlogs ] = useState([]);
     const categoryId = params.id;
+    const [formState, setFormState] = useState({
+        name: {
+            elementType: "input",
+            elementConfig: {
+                type: "text",
+                placeholder: "Category Name",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        meta_title: {
+            elementType: "input",
+            elementConfig: {
+                type: "text",
+                placeholder: "Meta Title",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: false
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        meta_tags: {
+            elementType: "textarea",
+            elementConfig: {
+                type: "text",
+                placeholder: "Meta Tags",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: false
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        meta_description: {
+            elementType: "textarea",
+            elementConfig: {
+                type: "text",
+                placeholder: "Meta Description",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: false
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        status: {
+            elementType: "boolean",
+            elementConfig: {
+                placeholder: "Status",
+                error: ""
+            },
+            value: true,
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        }
+    });
+
+    const actioncontrol = useMemo(() => {
+        return new ActionControl({
+            formState,
+            setFormState
+        });
+    },[
+        formState,
+        setFormState
+    ]);
     
     useEffect(() => {
+        if(loading) {
+            return;
+        }
         if(blogcategory && blogcategory._id !== categoryId) {
             dispatch(getBlogCategoryDetail(categoryId));
-        } else {
-            setName(blogcategory.name);
-            setSelectedBlogs(blogcategory.posts);
-            setMetaTitle(blogcategory.meta_title);
-            setMetaTags(blogcategory.meta_tags);
-            setMetaDescription(blogcategory.meta_description);
-            setStatus(blogcategory.status); 
+        }else {
+            !status && actioncontrol.setFormDataValues(blogcategory, setStatus);
+            setSelectedBlogs(() => {
+                let blogs = [];
+                blogcategory.blogs && blogcategory.blogs.forEach(blog => {
+                    blogs.push(blog._id);
+                });
+                return blogs.join(",");
+            });
         }
-    },[blogcategory, dispatch, categoryId]);
+    },[dispatch, blogcategory, categoryId, actioncontrol, status, loading]);
 
     useEffect(() => {
         if(isUpdated) {
@@ -94,30 +154,23 @@ const UpdateBlogCategory = () => {
         dispatch(getAllBlog());
     },[dispatch]);
 
-    const updateCategorySubmitHandler = async (e) => {
-        e.preventDefault();
+    const updateSubmitHandler = (state) => {
         const myForm = new FormData();
-        myForm.set("name", name);
-        myForm.set("meta_title", metaTitle);
-        myForm.set("meta_tags", metaTags);
-        myForm.set("meta_description", metaDescription);
-        myForm.set("status", status);
+        myForm.set("name", state.name.value);
+        myForm.set("meta_title", state.meta_title.value);
+        myForm.set("meta_tags", state.meta_tags.value);
+        myForm.set("meta_description", state.meta_description.value);
+        myForm.set("status", state.status.value);
         if(selectedBlogs.length > 0){
             myForm.set("posts", selectedBlogs);
         }
         dispatch(updateBlogCategory({categoryData: myForm, categoryId}));
     }
 
-    const handleChange = (_event, newValue) => {
-      setValue(newValue);
-    };
-
     const onSelectionModelChange = (_blogs) => {
         setSelectedBlogs(_blogs);
     }
 
-    if(loading || loadingUpdate) {return <Loader/>}
-    
     const columns = [
         { field: "__check__", sortable: false, minWidth: 40},
         { field: "id", headerName: "ID", minWidth: 200},
@@ -126,92 +179,60 @@ const UpdateBlogCategory = () => {
         { field: "created_at", headerName: "Created At", type: "number", minWidth: 200},
         { field: "updated_at", headerName: "Updated At", type: "number", minWidth: 200}
     ];
-    const rows = [];
-    blogs && blogs.forEach(blog => {
-        rows.push({
-            id: blog._id,
-            title: blog.title,
-            status: blog.status,
-            created_at: blog.created_at,
-            updated_at: blog.updated_at
+    const rows = useMemo(() => {
+        let _rows = [];
+        blogs && blogs.forEach(blog => {
+            _rows.push({
+                id: blog._id,
+                title: blog.title,
+                status: blog.status,
+                created_at: blog.created_at,
+                updated_at: blog.updated_at
+            });
         });
-    });
+        return _rows;
+    },[blogs]);
+    
+    let formElementArray = useMemo(() => {
+        const _formElementArray = [];
+        const tempformElementArray = actioncontrol.getFormState();
+        for(let key in tempformElementArray) {
+            _formElementArray.push({
+                id: key,
+                config: tempformElementArray[key]
+            })
+        }
+        return _formElementArray;
+    }, [actioncontrol]);
 
-    return (<FormContainer pageTitle={"Update Category"}>
-        {loading || loadingUpdate ? <loader /> : <form className="createCategoryForm" encType="multipart/form-data" onSubmit={(e) => updateCategorySubmitHandler(e)}>
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs category">
-                        <Tab label="General" {...a11yProps(0)} />
-                        <Tab label="Posts" {...a11yProps(1)} />
-                    </Tabs>
-                </Box>
-                <TabPanel value={value} index={0}>
-                    <div className="updateCategoryForm">
-                        <div>
-                            <SpellcheckOutlined />
-                            <input 
-                                type={"text"} 
-                                placeholder="Category Name" 
-                                required 
-                                value={name}
-                                onChange={(e) => setName(e.target.value)} 
-                            />
-                        </div>
-                        <div>
-                            <SpellcheckOutlined />
-                            <input 
-                                type={"text"} 
-                                placeholder="Meta Title" 
-                                required 
-                                value={metaTitle}
-                                onChange={(e) => setMetaTitle(e.target.value)} 
-                            />
-                        </div>
-                        <div>
-                            <SpellcheckOutlined />
-                            <input 
-                                type={"text"} 
-                                placeholder="Meta Tag" 
-                                required 
-                                value={metaTags}
-                                onChange={(e) => setMetaTags(e.target.value)} 
-                            />
-                        </div>
-                        <div>
-                            <DescriptionOutlined />
-                            <textarea 
-                                placeholder="Meta Description" 
-                                value={metaDescription} 
-                                onChange={(e) => setMetaDescription(e.target.value)} 
-                                cols={30} 
-                                rows={5}
-                            ></textarea>
-                        </div>
-                        <div>
-                            <DescriptionOutlined />
-                            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                                <option value="">Select Status</option>
-                                <option value="1">Enable</option>
-                                <option value="0">Disable</option>
-                            </select>
-                        </div>
-                    </div>                        
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <DataListing 
-                        columns={columns} 
-                        rows={rows}
-                        checkboxSelection
-                        onSelectionModelChange={onSelectionModelChange}
-                        selectedProducts = {selectedBlogs}
-                    />
-                </TabPanel>
-            </Box>
-            <div className="py-3 px-0 ">
-                <Button id="createCategoryBtn" type="submit">Update</Button>
-            </div>
-        </form>}
+    if(loading || loadingUpdate) {return <Loader/>}
+
+    const firstTabContents = (
+        <FormAction submitHandler={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}>
+            <FormElement 
+                formElementArray={formElementArray} 
+                actioncontrol={actioncontrol}
+            />
+            <SubmitActionButton title={'Update Category'} />
+        </FormAction>
+    );
+    const secondTabContents = (
+        <DataListing 
+            columns={columns} 
+            rows={rows}
+            checkboxSelection
+            onSelectionModelChange={onSelectionModelChange}
+            selectedProducts = {selectedBlogs}
+        />
+    );
+
+    return (<FormContainer pageTitle={"Update Blog Category"}>
+        {loading || loadingUpdate ? <loader /> : 
+            <TabPanelContainer 
+                firstTabContents={firstTabContents} 
+                secondTabContents={secondTabContents}
+            />
+        }
     </FormContainer>);
 }
 

@@ -1,0 +1,18 @@
+.productListTable {
+    background-color: white;
+    border: none !important;
+    margin: 0 10px;
+}
+
+.productListTable .odd {
+    background-color: lightgrey;
+    border-bottom: 1px solid gray;
+}
+.productListTable .even {
+    background-color: antiquewhite;
+    border-bottom: 1px solid gray;
+}
+.productListTable .even:hover,
+.productListTable .odd:hover {
+    background-color: lightblue;
+}

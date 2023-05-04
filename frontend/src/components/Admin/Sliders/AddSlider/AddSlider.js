@@ -2,12 +2,12 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Button } from "@mui/material";
-import Input from '../../../Controls/Input';
+import FormElement from '../../../../common/components/FormElement';
 import ActionControl from '../../../../common/ActionControl';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import { addNewSlider, clearErrors, getAllSlider, addNewSliderReset } from "../../../../store";
-import "./AddSlider.css";
+import SubmitActionButton from "../../../../common/components/SubmitActionButton";
+import FormAction from '../../../../common/components/FormAction';
 
 const AddSlider = () => {
     const dispatch = useDispatch();
@@ -239,119 +239,10 @@ const AddSlider = () => {
     }, [actioncontrol]);
     
     return (<FormContainer pagetitle={"Add New Slider"}>
-        <form
-            className="createCategoryForm md:w-full mx-auto" 
-            encType="multipart/form-data"
-            onSubmit={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}
-        >
-            {formElementArray.map(element => {
-                switch (element.config.elementType) {
-                    case 'select':
-                    case "multiselect":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.selectOptionChangeHandler(e, element.id)}
-                        />
-                    case "editor":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(data) => actioncontrol.chkEditorHandler(data, element.id)}
-                        />
-                    case "checkbox":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.checkboxOptionChangeHandler(e, element.id)}
-                        />
-                    case 'file': 
-                            return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            removeImage={actioncontrol.removeImage}
-                            changed={(e)=> actioncontrol.createBlogImageChange(e, element.id)}
-                        />
-                    case "input":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    case "textarea":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    case "boolean":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    default:
-                        return null
-                }
-            })}
-            <Button id="createCategoryBtn" type="submit">Create Slider</Button>
-        </form>
+        <FormAction onSubmit={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}>
+            <FormElement formElementArray={formElementArray} actioncontrol={actioncontrol} />
+            <SubmitActionButton title={'Create Slider'} />
+        </FormAction>
     </FormContainer>)
 }
 

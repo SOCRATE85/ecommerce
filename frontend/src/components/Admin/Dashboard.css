@@ -1,5 +1,5 @@
 .dashboard {
-    grid-template-columns: 1.5fr 4.5fr;
+    grid-template-columns: 1fr 5fr;
 }
 
 .dashboardContainer {

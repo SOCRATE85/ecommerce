@@ -36,16 +36,12 @@ const categorySchema = new mongoose.Schema({
             required: false
         }
     ],
+    status: Boolean,
     images: [
         {
-            public_id: {
-                type: String,
-                required: true
-            },
-            url: {
-                type: String,
-                required: true
-            }
+            type: String,
+            required: [true, "Please select the images"],
+            trim: true
         }
     ],
     createdAt: {

@@ -2,13 +2,14 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { Button } from "@mui/material";
-import Input from '../../../Controls/Input';
 import { uploadFiles, addUser, addUserReset, getAllUsers, clearErrors } from '../../../../store';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import ActionControl from '../../../../common/ActionControl';
 import { useThunk } from '../../../../common/hooks/use-thunk';
 import { Loader } from "../../../layout";
+import FormElement from '../../../../common/components/FormElement';
+import FormAction from "../../../../common/components/FormAction/FormAction";
+import SubmitActionButton from '../../../../common/components/SubmitActionButton';
 
 const AddUserInAdmin = () => {
     const dispatch = useDispatch();
@@ -177,7 +178,6 @@ const AddUserInAdmin = () => {
     let formElementArray = useMemo(() => {
         const _formElementArray = [];
         const tempformElementArray = actioncontrol.getFormState();
-        console.log('tempformElementArray: ', tempformElementArray);
         for(let key in tempformElementArray) {
             _formElementArray.push({
                 id: key,
@@ -192,119 +192,15 @@ const AddUserInAdmin = () => {
     }
 
     return <FormContainer pagetitle={'Add New User'}>
-        <form
-            className="createCategoryForm md:w-full mx-auto" 
-            encType="multipart/form-data"
-            onSubmit={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}
+        <FormAction submitHandler={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}
         >
-            {formElementArray.map(element => {
-                switch (element.config.elementType) {
-                    case 'select':
-                    case "multiselect":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.selectOptionChangeHandler(e, element.id)}
-                        />
-                    case "editor":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(data) => actioncontrol.chkEditorHandler(data, element.id)}
-                        />
-                    case "checkbox":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.checkboxOptionChangeHandler(e, element.id)}
-                        />
-                    case 'file': 
-                            return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            removeImage={actioncontrol.removeImage}
-                            changed={(e)=> actioncontrol.createImageChange(e, element.id, createImageChange)}
-                        />
-                    case "input":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    case "textarea":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    case "boolean":
-                        return <Input 
-                            id={element.id}
-                            key={element.id}
-                            hideLabel={element.config.hideLabel}
-                            elementType={element.config.elementType}
-                            label={element.config.elementConfig.placeholder}
-                            elementConfig={element.config.elementConfig}
-                            value={element.config.value}
-                            isValid={!element.config.valid}
-                            shouldValidate={element.config.validation.required}
-                            touched={element.config.touched}
-                            changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
-                        />
-                    default:
-                        return null
-                }
-            })}
-            <Button id="createCategoryBtn" type="submit">Add User</Button>
-        </form>
+            <FormElement 
+                formElementArray={formElementArray}
+                actioncontrol={actioncontrol}
+                createImageChange={createImageChange}
+            />
+            <SubmitActionButton title={'Add User'} />
+        </FormAction>
     </FormContainer>
 }
 

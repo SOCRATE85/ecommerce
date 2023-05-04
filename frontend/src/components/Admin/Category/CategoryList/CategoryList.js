@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getAllCategories, clearErrors, deleteCategory, deleteCategoryReset } from '../../../../store';
 import { Link, useNavigate } from 'react-router-dom';
-import Loader from '../../../layout/Loader/Loader';
-import { Edit, Delete } from '@mui/icons-material';
-import { FormContainer } from '../../../../common/components/FormContainer';
-import "./CategoryList.css";
 import { Button } from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import DataListing from "../../../../common/components/DataListing";
+import {
+    getAllCategories,
+    clearErrors,
+    deleteCategory,
+    deleteCategoryReset
+} from '../../../../store';
+import Loader from '../../../layout/Loader/Loader';
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
+import { FormContainer } from '../../../../common/components/FormContainer';
 
 const CategoryList = () => {
     const dispatch = useDispatch();
@@ -75,7 +80,10 @@ const CategoryList = () => {
     },[alert, deleteError, dispatch]);
 
     return <FormContainer pagetitle={"Category Listing"}>
-        {loading? <Loader /> : <DataListing columns={columns} rows={rows} />}
+        {loading? <Loader /> : <>
+            <AddNewItemAction actionUrl="/admin/category/new" title={"Add Category"} />
+            <DataListing columns={columns} rows={rows} />
+        </>}
     </FormContainer>
 }
 

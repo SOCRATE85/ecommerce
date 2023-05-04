@@ -1,120 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, getUserDetails, updateUser, updateUserReset } from "../../../../store";
+import React, { useEffect } from "react";
 import { useAlert } from "react-alert";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from '@mui/material';
-import { 
-    VerifiedUserOutlined, 
-    PersonOutlined,
-    EmailOutlined, 
-} from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import Loader from "../../../layout/Loader/Loader";
-import "./UpdateUser.css";
-
-const roles = [
-    "user",
-    "admin"
-];
+import VerticalTabs from '../../../../common/components/VerticalTabs';
+import UserView from '../UserView';
+import UserComponent from '../UserComponent';
+import Addresses from '../Addresses'
+import { clearErrors, getUserDetails } from "../../../../store";
 
 const UpdateUser = () => {
     const dispatch = useDispatch();
     const params = useParams();
-    const navigate = useNavigate();
-    const alert = useAlert();    
-    const { loading: updateLoading, error: updateError, isUpdated } = useSelector( state => state.profile );
-    const { loading: userDetailsLoading, error: userDetailsError, user } = useSelector( state => state.userDetails );
-    const [ name, setName ] = useState("");
-    const [ email, setEmail ] = useState("");
-    const [ role, setRole ] = useState("");
-    const [ imagePreview, setImagePreview ] = useState();
+    const alert = useAlert(); 
+    const { loading: userDetailsLoading, error: userDetailsError, user, addresses } = useSelector( state => state.userDetails );
 
     useEffect(() => {
         if(user && user._id !== params.id) {
             dispatch(getUserDetails(params.id));
-        }else{
-            setName(user.name);
-            setEmail(user.email);
-            setRole(user.role);
-            setImagePreview(user.avatar.url);
         }        
     }, [dispatch, params.id, user]);
 
     useEffect(() => {
-        if(updateError) {
-            alert.error(updateError.error);
-            dispatch(clearErrors());
-        }
-
         if(userDetailsError) {
             alert.error(userDetailsError.error);
             dispatch(clearErrors());
         }
-
-        if(isUpdated) {
-            alert.success("User updated successfully");
-            navigate("/admin/users");
-            dispatch(getUserDetails(params.id));
-            dispatch(updateUserReset())
-        }
-    },[alert, dispatch, updateError, userDetailsError, isUpdated, navigate, params.id]);
-
-    const updateUserSubmitHandler = (e) => {
-        e.preventDefault();
-        const myForm = new FormData();
-        myForm.set("name", name);
-        myForm.set("email", email);
-        myForm.set("role", role);
-        dispatch(updateUser({userData: myForm, userId: params.id}));
-    }
+    },[alert, dispatch, userDetailsError, params.id]);
 
     return (<FormContainer pagetitle={"Update User"}>
-        {updateLoading || userDetailsLoading || user.length === 0 ? <Loader /> : <form className="createProductForm" encType="multipart/form-data" onSubmit={updateUserSubmitHandler}>
-            <div>
-                <PersonOutlined />
-                <input 
-                    type={"text"} 
-                    placeholder="Name" 
-                    required 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                />
-            </div>
-            <div>
-                <EmailOutlined />
-                <input 
-                    type={"text"}
-                    placeholder="Email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </div>                    
-            <div>
-                <VerifiedUserOutlined />
-                <select onChange={(e) => setRole(e.target.value)} value={role}>
-                    <option value={""}>Choose Role</option>
-                    {
-                        roles.map(role => {
-                            return <option key={role} value={role}>{role}</option>
-                        })
-                    }
-                </select>
-            </div>
-            <div id="createProductFormImage">
-                {
-                    imagePreview && <img src={imagePreview} alt="Avatar Preview" />
-                }
-            </div>
-            <Button 
-                id="createProductBtn" 
-                type="submit" 
-                disabled={ updateLoading || userDetailsLoading ? true : false}
-            >
-                Update
-            </Button>
-        </form>}
+            {userDetailsLoading ? <></> : <VerticalTabs tabsItems={[
+            {
+                id: 0,
+                title: "Customer View",
+                contents: <UserView user={user}  addresses={addresses} />
+            },
+            {
+                id: 1,
+                title: "Account Information",
+                contents: <UserComponent user={user} />
+            },
+            {
+                id: 2,
+                title: "Addresses",
+                contents: <Addresses addresses={addresses}/>
+            },
+            {
+                id: 3,
+                title: "Orders",
+                contents: <>All ORders</>
+            },
+            {
+                id: 4,
+                title: "Product Review",
+                contents: <>Product Review</>
+            }
+        ]}/>}
     </FormContainer>)
 }
 

@@ -356,13 +356,13 @@ const Category = (props) => {
                                         if(flag.length > 1) {
                                             return (
                                                 <li key={key} className="item">
-                                                    <span className="filter-title">{flag[0]}</span>: {removeFilter(params[flag[0]], item, key, index)}
+                                                    <span className="filter-title">{flag[2].replace("@", " ")}</span>: {removeFilter(params[flag[0]], item, key, index)}
                                                 </li>
                                             );
                                         } else {
                                             return (
                                                 <li key={key} className="item">
-                                                    <span className="filter-title">{flag[0]}</span>: {removeFilter(params[flag[0]], item, key, index)}
+                                                    <span className="filter-title">{flag[2].replace("@", " ")}</span>: {removeFilter(params[flag[0]], item, key, index)}
                                                 </li>
                                             );
                                         }
@@ -375,7 +375,7 @@ const Category = (props) => {
                                             itemvalue.map((value, i) => {
                                                 return (
                                                     <li key={i} className="item">
-                                                        <span className="filter-title">{flag[0]}</span>: {removeFilter(value, item[key], key, index)}
+                                                        <span className="filter-title">{flag[2].replace("@", " ")}</span>: {removeFilter(value, item[key], key, index)}
                                                     </li>
                                                 )
                                             })
@@ -489,10 +489,11 @@ const Category = (props) => {
                             switch (flag[1]) {
                                 case 'price':
                                 case 'number':
+                                    console.log("flag[2]: ", flag[2]);
                                     if(filters[key1].length > 1 && filters[key1][0] < filters[key1][1]) {
                                         return <DoubleHandleSlider
                                             key={key1}
-                                            title={flag[0]}
+                                            title={flag[2]}
                                             value={getOptionValue(index, key1, filters)}
                                             onChange={(e, value) => updateHandler(e, value, key1, index)}
                                             min={filters[key1][0]}
@@ -502,7 +503,7 @@ const Category = (props) => {
                                     } else {
                                         return <DoubleHandleSlider
                                             key={key1}
-                                            title={flag[0]}
+                                            title={flag[2]}
                                             value={getOptionValue(index, key1, filters)}
                                             onChange={(e, value) => updateHandler(e, value, key1, index)}
                                             min={0}
@@ -515,7 +516,7 @@ const Category = (props) => {
                                 case 'checkbox':
                                 case 'radio':
                                     return (<li key={key1} className="filter-item">
-                                        <Typography className="title">{flag[0]}</Typography>
+                                        <Typography className="title">{flag[2].replace("@", " ")}</Typography>
                                         <div className="filter-container-others">
                                             {filters[key1].length>0 && <ul className="list">{filters[key1].map(item => {
                                                 return <li key={item._id} className="item">

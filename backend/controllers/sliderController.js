@@ -1,4 +1,5 @@
 const Slider = require("../models/sliderModel");
+const Banner = require("../models/bannerModel");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../utils/errorHandler");
 
@@ -25,9 +26,11 @@ exports.getSlider = catchAsyncError(async(req, res, next) => {
         return next(new ErrorHandler("Requested slider is not available.", 404));
     }
 
+    const banners = await Banner.find({ slider_id: req.params.id });
+    
     res.status(201).json({
         success: true,
-        slider
+        slider: {...slider._doc, banners: banners ? banners : []}
     });
 });
 

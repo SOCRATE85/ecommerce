@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getAllOrders, clearErrors, deleteOrder, deleteOrderReset } from '../../../../store';
-import { Link, useNavigate } from 'react-router-dom';
-import { FormContainer } from '../../../../common/components/FormContainer';
-import Loader from '../../../layout/Loader/Loader';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
-import "./OrderList.css";
+import { Link, useNavigate } from 'react-router-dom';
+import { getAllOrders, clearErrors, deleteOrder, deleteOrderReset } from '../../../../store';
+import DataListing from "../../../../common/components/DataListing";
+import { FormContainer } from '../../../../common/components/FormContainer';
+import Loader from '../../../layout/Loader/Loader';
 
 const OrderList = () => {
     const dispatch = useDispatch();
@@ -19,11 +18,17 @@ const OrderList = () => {
 
     const columns = [        
         { field: "id", headerName: "Order Id", minWidth: 230, flex: 1 },
+        { field: "name", headerName: "Customer Name", type: "number", minWidth: 100, flex: 0.5, renderCell: (params) => {
+            return <Link to={`/admin/user/${params.row.userid}`}>{params.row.name}</Link>
+        }},
+        { field: "email", headerName: "Customer Email", type: "number", minWidth: 100, flex: 0.5, renderCell: (params) => {
+            return <Link to={`/admin/user/${params.row.userid}`}>{params.row.email}</Link>
+        } },
         { field: "status", headerName: "Status", minWidth: 150, flex: 0.5, cellClassName: (params) => {
             return params.getValue(params.id, "status") === "Delivered" ? "grrenColor" : "redColor";
         }},
-        { field: "itemsQty", headerName: "Items Qty", type: "number", minWidth: 100, flex: 0.5 },
-        { field: "amount", headerName: "Amount", type: "number", minWidth: 100, flex: 0.5 },
+        { field: "itemsQty", headerName: "Qty", type: "number", minWidth: 50 },
+        { field: "amount", headerName: "Amount", type: "number", minWidth: 50 },
         { 
             field: "actions", 
             headerName: "Actions", 
@@ -44,6 +49,9 @@ const OrderList = () => {
     orders && orders.forEach(item => {
         rows.push({
             id: item._id,
+            userid: item.user._id,
+            name: item.user.name,
+            email: item.user.email,
             status: item.orderStatus,
             itemsQty: item.orderItems.length,
             amount: item.totalPrice
@@ -80,7 +88,7 @@ const OrderList = () => {
             dispatch(clearErrors());
         }
     },[alert, deleteError, dispatch]);
-
+    console.log('orders: ', orders);
     return <FormContainer pagetitle={"Admin Order Listing"}>
         {loading ? <Loader /> : <DataListing columns={columns} rows={rows} />}
     </FormContainer>

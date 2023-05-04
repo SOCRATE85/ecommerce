@@ -2,7 +2,7 @@ import React from "react";
 import Logo from "../layout/Header/Logo/Logo";
 import {
     PostAddOutlined,
-    AddOutlined,
+    AddCircleOutline,
     ListAltOutlined,
     PeopleAltOutlined,
     SettingsOutlined
@@ -18,37 +18,42 @@ const siderbarItems = [
     {
         url: `/admin/categories`, 
         font: <PostAddOutlined />,
-        title: "Categories"
+        title: "Manage Category"
     },
     {
         url: "/admin/category/new",
-        font: <AddOutlined />,
+        font: <AddCircleOutline />,
         title: "Add Category"
     },
     {
         url: "/admin/products",
         font: <PostAddOutlined />,
-        title: "Products"
+        title: "Manage Products"
     },
     {
         url: "/admin/product/new",
-        font: <AddOutlined />,
+        font: <AddCircleOutline />,
         title: "New Product"
     },
     {
         url: "/admin/attributes",
         font: <PostAddOutlined />,
-        title: "Attributes"
+        title: "Manage Attributes"
     },
     {
         url: "/admin/attribute/new",
-        font: <AddOutlined />,
+        font: <AddCircleOutline />,
         title: "Add Attribute"
     },
     {
         url: "/admin/attributesets",
         font: <PostAddOutlined />,
-        title: "Attribute Set"
+        title: "Manage Attribute Set"
+    },
+    {
+        url: "/admin/attributeset/new",
+        font: <AddCircleOutline />,
+        title: "Add Attribute Set"
     },
     {
         url: "/admin/orders",
@@ -58,7 +63,12 @@ const siderbarItems = [
     {
         url: "/admin/users",
         font: <PeopleAltOutlined />,
-        title: "Users"
+        title: "Manage Users"
+    },
+    {
+        url: "/admin/user/new",
+        font: <AddCircleOutline />,
+        title: "New User"
     },
     {
         url: "/admin/reviews",
@@ -71,9 +81,19 @@ const siderbarItems = [
         title: "Blog Categories"
     },
     {
+        url: "/admin/blog/category/new",
+        font: <AddCircleOutline />,
+        title: "Add Blog Category"
+    },
+    {
         url: "/admin/blogs",
         font: <PeopleAltOutlined />,
         title: "Manage Blog"
+    },
+    {
+        url: "/admin/blog/new",
+        font: <AddCircleOutline />,
+        title: "Add Blog"
     },
     {
         url: "/admin/sliders",
@@ -81,9 +101,19 @@ const siderbarItems = [
         title: "Manage Sliders"
     },
     {
+        url: "/admin/slider/new",
+        font: <AddCircleOutline />,
+        title: "Add slider"
+    },
+    {
         url: "/admin/banners",
         font: <PeopleAltOutlined />,
         title: "Manage Banners"
+    },
+     {
+        url: "/admin/banner/new",
+        font: <AddCircleOutline />,
+        title: "Add Banner"
     },
     {
         url: "/admin/settings",
@@ -93,18 +123,20 @@ const siderbarItems = [
 ]
 
 const Sidebar = () => {
-    return <div className="flex flex-col bg-white border-r border-gray-300 w-full">
+    return <div className="flex flex-col bg-white border-r border-gray-300 w-[250px]">
         <Logo />
-        {
-           siderbarItems.map((item, index) => {
-            return <SiderbarLinkContainer
-                key={index}
-                url={item.url} 
-                font={item.font} 
-                title={item.title}
-            />
-           }) 
-        }
+        <ul>
+            {
+                siderbarItems.map((item, index) => {
+                    return <SiderbarLinkContainer
+                        key={index}
+                        url={item.url} 
+                        font={item.font} 
+                        title={item.title}
+                    />
+                }) 
+            }
+        </ul>
     </div>
 }
 

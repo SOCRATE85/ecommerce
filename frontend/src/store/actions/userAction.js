@@ -24,7 +24,7 @@ export const register = createAsyncThunk("user/register", async (userData, thunk
     }
 });
 
-//create new user
+//create new user in admin
 export const addUser = createAsyncThunk("user/addUser", async (userData, thunkAPI) => {
     try {
         const config = { headers: { "Content-Type": "application/json" }};
@@ -113,7 +113,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async (_, thunkA
 export const getUserDetails = createAsyncThunk("user/getUserDetails", async (userId, thunkAPI) => {
     try {
         const { data } = await axios.get(`/api/v1/admin/user/${userId}`);
-        return data.user;
+        return data;
     } catch (error) {
         return thunkError(error, thunkAPI);
     }

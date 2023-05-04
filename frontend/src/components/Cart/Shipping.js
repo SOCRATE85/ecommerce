@@ -2,20 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from "react-alert";
-import { 
-    FaceOutlined, 
-    PinDropOutlined, 
-    HomeOutlined, 
-    LocationCityOutlined, 
-    PublicOutlined, 
-    TransferWithinAStationOutlined, 
-    PhoneOutlined
-} from "@mui/icons-material";
-import { saveShippingInfo } from "../../store/actions/cartAction";
-import { getAllAddress } from "../../store/actions/addressAction";
+import { saveShippingInfo, loadShippingAndBillingAddress, getAllAddress } from "../../store";
 import CheckoutSteps from './CheckoutSteps';
-import { Country, State } from 'country-state-city';
 import MetaData from "../layout/MetaData";
+import AddressCard from '../../common/components/AddressCard';
+import SubmitActionButton from "../../common/components/SubmitActionButton";
+import ControlContainer from "../../common/components/ControlContainer";
 import "./Shipping.css";
 
 const Shipping = () => {
@@ -23,74 +15,171 @@ const Shipping = () => {
     const navigate = useNavigate();
     const alert = useAlert();
     const { user: userData } = useSelector(state => state.user);
-    const { shippingInfo } = useSelector(state => state.cart);
+    const { shippingInfo, billingInfo, shippingSameAsBilling: _shippingSameAsBilling, loading: loadingCart } = useSelector(state => state.cart);
     const { addresses, loading } = useSelector(state => state.addresses);
-    const [ seletedAddress, setSeletedAddress ] = useState("");
-    const [ firstname, setFirstname ] = useState(shippingInfo.firstname);
-    const [ lastname, setLastname ] = useState(shippingInfo.lastname);
-    const [ address, setAddress ] = useState(shippingInfo.address);
-    const [ city, setCity ] = useState(shippingInfo.city);
-    const [ state, setState ] = useState(shippingInfo.state);
-    const [ country, setCountry ] = useState(shippingInfo.country);
-    const [ pinCode, setPinCode ] = useState(shippingInfo.pinCode);
-    const [ phoneNo, setPhoneNo ] = useState(shippingInfo.phoneNo);
+    const [ selectedShippingAddress, setSelectedShippingAddress ] = useState("");
+    const [ selectedBillingAddress, setSelectedBillingAddress ] = useState("");
+    const [ shippingSameAsBilling, setShippingSameAsBilling ] = useState(_shippingSameAsBilling ? _shippingSameAsBilling : true);
+    const [ shippingAddress, setShippingAddress ] = useState({});
+    const [ billingAddress, setBillingAddress ] = useState({});
 
     useEffect(() => {
-        if(seletedAddress === 'newaddress') {
+        if(billingInfo) {
+            setSelectedBillingAddress(billingInfo.addressId);
+            setBillingAddress({
+                selectedBillingAddress: billingInfo.addressId,
+                firstname: billingInfo.firstname,
+                lastname: billingInfo.lastname,
+                address: billingInfo.address,
+                city: billingInfo.city,
+                state: billingInfo.state,
+                country: billingInfo.country,
+                pinCode: billingInfo.pinCode,
+                phoneNo: billingInfo.phoneNo 
+            });
+        }
+        if(shippingInfo) {
+            setSelectedShippingAddress(shippingInfo.addressId);
+            setShippingAddress({
+                selectedShippingAddress: shippingInfo.addressId,
+                firstname: shippingInfo.firstname,
+                lastname: shippingInfo.lastname,
+                address: shippingInfo.address,
+                city: shippingInfo.city,
+                state: shippingInfo.state,
+                country: shippingInfo.country,
+                pinCode: shippingInfo.pinCode,
+                phoneNo: shippingInfo.phoneNo 
+            });
+        }
+        if(_shippingSameAsBilling) {
+             setShippingSameAsBilling(_shippingSameAsBilling ? _shippingSameAsBilling : true);
+        }
+    }, [billingInfo, shippingInfo, _shippingSameAsBilling]);
+
+    useEffect(() => {
+        if(selectedShippingAddress === 'newaddress') {
             const name = userData.name.split(" ");
-            setSeletedAddress('newaddress');
-            setFirstname(name[0]);
-            setLastname(name[1] ? name[1] : "");
-            setAddress("");
-            setCity("");
-            setState("");
-            setCountry("");
-            setPinCode("");
-            setPhoneNo("");
+            setSelectedShippingAddress('newaddress');
+            setShippingAddress({
+                    selectedShippingAddress,
+                    firstname: name[0],
+                    lastname: name[1] ? name[1] : "",
+                    address: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    pinCode: "",
+                    phoneNo: "" 
+                });
         } else {
             if(addresses) {
-                const isMatched = addresses.find(item => item._id === seletedAddress);                
+                const isMatched = addresses.find(item => item._id === selectedShippingAddress);                
                 if(isMatched) {
-                    setFirstname(isMatched.firstname);
-                    setLastname(isMatched.lastname);
-                    setAddress(isMatched.address);
-                    setCity(isMatched.city);
-                    setState(isMatched.state);
-                    setCountry(isMatched.country);
-                    setPinCode(isMatched.pinCode);
-                    setPhoneNo(isMatched.phoneNo);
+                    setShippingAddress({
+                        selectedShippingAddress,
+                        firstname: isMatched.firstname,
+                        lastname: isMatched.lastname,
+                        address: isMatched.address,
+                        city: isMatched.city,
+                        state: isMatched.state,
+                        country: isMatched.country,
+                        pinCode: isMatched.pinCode,
+                        phoneNo: isMatched.phoneNo 
+                    });
                 }
             }
         }
-    }, [addresses, seletedAddress, userData]);
+    }, [addresses, selectedShippingAddress, userData]);
 
     useEffect(() => {
+        if(selectedBillingAddress === 'newaddress') {
+            const name = userData.name.split(" ");
+            setSelectedBillingAddress('newaddress');
+            setBillingAddress({
+                    selectedBillingAddress: "",
+                    firstname: name[0],
+                    lastname: name[1] ? name[1] : "",
+                    address: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    pinCode: "",
+                    phoneNo: "" 
+                });
+        } else {
+            if(addresses) {
+                const isMatched = addresses.find(item => item._id === selectedBillingAddress);                
+                if(isMatched) {
+                    setBillingAddress({
+                        selectedBillingAddress: "",
+                        firstname: isMatched.firstname,
+                        lastname: isMatched.lastname,
+                        address: isMatched.address,
+                        city: isMatched.city,
+                        state: isMatched.state,
+                        country: isMatched.country,
+                        pinCode: isMatched.pinCode,
+                        phoneNo: isMatched.phoneNo 
+                    });
+                }
+            }
+        }
+    }, [addresses, selectedBillingAddress, userData]);
+    
+    useEffect(() => {
         dispatch(getAllAddress());
+        dispatch(loadShippingAndBillingAddress());
     }, [dispatch]);
 
     const shippingSubmit = (e) => {
         e.preventDefault();
-        if(phoneNo.length < 10 || phoneNo.length > 10) {
-            alert.error("Phone number should be 10 digit long");
+        if(shippingAddress.phoneNo.length < 10 || shippingAddress.phoneNo.length > 10) {
+            alert.error("Shipping Phone number should be 10 digit long");
             return;
         }
         
-        dispatch(saveShippingInfo({
-            addressId: seletedAddress,
-            firstname, 
-            lastname,
-            address,
-            city,
-            state,
-            country,
-            pinCode,
-            phoneNo
-        }));
+        if(billingAddress.phoneNo.length < 10 || billingAddress.phoneNo.length > 10) {
+            alert.error("Billing Phone number should be 10 digit long");
+            return;
+        }
+
+        const _billingAddress ={
+                addressId: selectedBillingAddress,
+                firstname: billingAddress.firstname, 
+                lastname: billingAddress.lastname,
+                address: billingAddress.address,
+                city: billingAddress.city,
+                state: billingAddress.state,
+                country: billingAddress.country,
+                pinCode: billingAddress.pinCode,
+                phoneNo: billingAddress.phoneNo
+            };
+
+        const _shippingAddress = {
+                addressId: selectedShippingAddress,
+                firstname: shippingAddress.firstname, 
+                lastname: shippingAddress.lastname,
+                address: shippingAddress.address,
+                city: shippingAddress.city,
+                state: shippingAddress.state,
+                country: shippingAddress.country,
+                pinCode: shippingAddress.pinCode,
+                phoneNo: shippingAddress.phoneNo
+            };
+
+        dispatch(saveShippingInfo(
+            {
+                billingAddress: !shippingSameAsBilling ? _billingAddress : _shippingAddress,
+                shippingSameAsBilling: shippingSameAsBilling,
+                shippingAddress: _shippingAddress
+            }
+        ));
         navigate("/order/confirm");       
     }
 
-    if(loading) {return (<></>)}
-    
+    if(loading || loadingCart) {return (<></>)}
+    console.log( "shippingInfo: ", shippingInfo, "billingInfo: ", billingInfo);
     return <>
         <MetaData title="Shipping Details" />
         <CheckoutSteps activeStep={0} />
@@ -98,113 +187,55 @@ const Shipping = () => {
             <div className="shippingBox">
                 <div className="shippingHeading">Shipping Details</div>
                 <form className="shippingForm" encType="multipart/form-data" onSubmit={shippingSubmit}>
-                    <div>
-                        <PublicOutlined />
-                        <select onChange={(e) => setSeletedAddress(e.target.value)}>
-                            <option value={""}>select Address</option>
+                    <ControlContainer label={"Shipping Addresses"}>
+                        <select value={selectedShippingAddress} onChange={(e) => setSelectedShippingAddress(e.target.value)}>
+                            <option value={""}>Select Shipping Address</option>
                             <option value={"newaddress"}>Add New Address</option>
                             {
                                 addresses.length > 0 && addresses.map(address => {
-                                    return <option key={address._id} value={address._id}>{`${address.firstname} ${address.lastname}, ${address.address},${address.city},${address.state},${address.country} ${address.pinCode}`}</option>
+                                    return (
+                                        <option key={address._id} value={address._id}>
+                                            {`${address.firstname} ${address.lastname}, ${address.address},${address.city},${address.state},${address.country} ${address.pinCode}`}
+                                        </option>
+                                    );
                                 })
                             }
                         </select>
-                    </div>
+                    </ControlContainer>
                     {
-                        seletedAddress !=='' && <>
-                            <div>
-                                <FaceOutlined />
-                                <input 
-                                    type={"text"} 
-                                    placeholder="First Name" 
-                                    required 
-                                    name='firstname' 
-                                    value={firstname} 
-                                    onChange={(e) => setFirstname(e.target.value)} 
-                                />
-                            </div>
-                            <div>
-                                <FaceOutlined />
-                                <input 
-                                    type={'text'} 
-                                    placeholder={"Last Name"} 
-                                    required 
-                                    name="lastname"
-                                    value={lastname} 
-                                    onChange={(e) => setLastname(e.target.value)} 
-                                />
-                            </div>
-                            <div>
-                                <HomeOutlined />
-                                <input 
-                                    type={"text"} 
-                                    placeholder="Address" 
-                                    required 
-                                    value={address} 
-                                    onChange={(e)=>setAddress(e.target.value)}
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <div>
-                                <LocationCityOutlined />
-                                <input 
-                                    type={"text"} 
-                                    placeholder="City" 
-                                    required 
-                                    value={city} 
-                                    onChange={(e)=>setCity(e.target.value)} 
-                                />
-                            </div>
-                            <div>
-                                <PinDropOutlined />
-                                <input 
-                                    type={"number"} 
-                                    placeholder="Pin Code" 
-                                    required 
-                                    value={pinCode} 
-                                    onChange={(e)=>setPinCode(e.target.value)} 
-                                />
-                            </div>
-                            <div>
-                                <PhoneOutlined />
-                                <input 
-                                    type={"number"} 
-                                    placeholder="Phone No" 
-                                    required 
-                                    value={phoneNo} 
-                                    onChange={(e)=>setPhoneNo(e.target.value)}
-                                    size={"10"}
-                                />
-                            </div>
-                            <div>
-                                <PublicOutlined />
-                                <select required value={country} onChange={(e)=> setCountry(e.target.value)}>
-                                    <option>Country</option>
+                        selectedShippingAddress !=='' && <AddressCard 
+                            formData={shippingAddress}
+                            setFormData={setShippingAddress} 
+                        />
+                    }
+                    <ControlContainer label={"Billing Address same as Shipping Addresses"}>
+                        <input type="checkbox" defaultChecked={shippingSameAsBilling} onClick={(e) => setShippingSameAsBilling(e.target.checked)}/>
+                    </ControlContainer>
+                    {!shippingSameAsBilling && <>
+                            <ControlContainer label={"Billing Addresses"}>
+                                <select value={selectedBillingAddress} onChange={(e) => setSelectedBillingAddress(e.target.value)}>
+                                    <option value={""}>Select Billing Address</option>
+                                    <option value={"newaddress"}>Add New Address</option>
                                     {
-                                        Country && Country.getAllCountries().map((item)=>{
-                                            return <option key={item.isoCode} value={item.isoCode}>{item.name}</option>
+                                        addresses.length > 0 && addresses.map(address => {
+                                            return (
+                                                <option key={address._id} value={address._id}>
+                                                    {`${address.firstname} ${address.lastname}, ${address.address},${address.city},${address.state},${address.country} ${address.pinCode}`}
+                                                </option>
+                                            );
                                         })
                                     }
                                 </select>
-                            </div>
+                            </ControlContainer>{}
                             {
-                                country && (<div>
-                                    <TransferWithinAStationOutlined />
-                                    <select required value={state} onChange={(e)=>setState(e.target.value)}>
-                                        {State && State.getStatesOfCountry(country).map((item) => {
-                                            return <option key={item.isoCode} value={item.isoCode}>{item.name}</option>
-                                        })}
-                                    </select>
-                                </div>)
+                                selectedBillingAddress !=='' && <AddressCard 
+                                    formData={billingAddress}
+                                    setFormData={setBillingAddress} 
+                                />
                             }
                         </>
                     }
-                    <input 
-                        type={"submit"} 
-                        value="Continue" 
-                        className="button" 
-                        disabled={state ? false : true }
-                    />
+                    <SubmitActionButton disabled={shippingAddress.state ? false : true } title={"Continue"} />
                 </form>
             </div>
         </div>

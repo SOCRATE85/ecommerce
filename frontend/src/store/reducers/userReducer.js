@@ -127,7 +127,7 @@ export const allUsersSlice = createSlice({
 
 export const userDetailsSlice = createSlice({
     name: "user",
-    initialState: {user: {}},
+    initialState: {user: {}, addresses:[]},
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getUserDetails.pending, (state) => {
@@ -135,7 +135,8 @@ export const userDetailsSlice = createSlice({
         });
         builder.addCase(getUserDetails.fulfilled, (state, action) => {
             state.loading = false;
-            state.user = action.payload;
+            state.user = action.payload.user;
+            state.addresses = action.payload.addresses;
         });
         builder.addCase(getUserDetails.rejected,(state, action) => {
             state.loading = false;

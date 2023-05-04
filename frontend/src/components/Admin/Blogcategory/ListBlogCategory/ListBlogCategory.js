@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useAlert } from "react-alert";
-import { FormContainer } from "../../../../common/components/FormContainer";
-import { getAllBlogCategories, clearErrors, deleteBlogCategory, deleteBlogCategoryReset } from "../../../../store";
+import DataListing from "../../../../common/components/DataListing";
+import {FormContainer} from "../../../../common/components/FormContainer";
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
+import {
+    getAllBlogCategories,
+    clearErrors,
+    deleteBlogCategory,
+    deleteBlogCategoryReset
+} from "../../../../store";
 import Loader from "../../../layout/Loader/Loader";
 import { useThunk } from "../../../../common/hooks/use-thunk";
-import "./ListBlogCategory.css";
 
 const ListBlogCategory = () => {
     const dispatch = useDispatch();
@@ -79,7 +84,7 @@ const ListBlogCategory = () => {
 
     return (<FormContainer pagetitle={"Manage Blog Category"}>
         {isLoadingBlogCategory || isLoadingDelete ? <Loader /> : <>
-            <div className="add-category"><Button onClick={() => navigate("/admin/blog/category/new")}>Add Category</Button></div>
+            <AddNewItemAction actionUrl="/admin/blog/category/new" title={"Add Category"} />
             <DataListing columns={columns} rows={rows} />
         </>}
     </FormContainer>)

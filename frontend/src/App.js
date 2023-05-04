@@ -36,10 +36,7 @@ import {ListBanners, AddBanner, UpdateBanner} from './components/Admin/Banners';
 
 import About from './components/About/About';
 import NotFound from './components/NotFound/NotFound';
-import store from './store';
-import { loadUser } from './store/actions/userAction';
-import { getCategoryForFrontEnd, getAllCategoriesForFrontEnd } from './store/actions/categoryAction';
-import { fetchProducts } from './store/actions/productAction';
+import store, { loadUser, getCategoryForFrontEnd, getAllCategoriesForFrontEnd, fetchProducts } from './store';
 import ProtectedRoute from './components/Route/ProtectedRoute';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';

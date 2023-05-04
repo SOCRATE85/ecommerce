@@ -34,7 +34,7 @@ const UserOption = ({ user }) => {
         dispatch(logoutuser());
         alert.success("Logout successfully");
     }
-
+    
     const options = [
         { icon: <ListAltOutlined />, name: "Order", func: orders },
         { icon: <PersonOutline />, name: "Profile", func: account },
@@ -42,7 +42,7 @@ const UserOption = ({ user }) => {
         { icon: <ExitToAppOutlined/>, name: "Logout", func: logoutUser }
     ];
 
-    if(user.role === 'admin'){
+    if(user && user.role === 'admin'){
         options.unshift({ icon: <DashboardOutlined />, name: "Dashboard", func: dashboard });
     }
     
@@ -55,7 +55,7 @@ const UserOption = ({ user }) => {
             className="speedDial"
             direction="down"
             open={open}
-            icon={<img src={user.avatar.url ? user.avatar.url : "/Profile.png"} className="speedDialIcon" alt="Profile" />}
+            icon={<img src={ user && user.avatar.url ? user.avatar.url : "/Profile.png"} className="speedDialIcon" alt="Profile" />}
         >
            {
                 options.map((option, index) => {

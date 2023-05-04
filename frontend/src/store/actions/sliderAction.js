@@ -9,7 +9,7 @@ export const addNewSlider = createAsyncThunk("slider/addNewSlider", async (slide
                 "Content-Type": "application/json"
             }
         };
-        const { data } = await axios.post("/api/v1/slider/new", slider, config);
+        const { data } = await axios.post("/api/v1/admin/slider/new", slider, config);
         return data;
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -23,7 +23,7 @@ export const updateSlider = createAsyncThunk("slider/updateSlider", async ({slid
                 "Content-Type": "application/json"
             }
         };
-        const { data } = await axios.put(`/api/v1/slider/${sliderId}`, slider, config);
+        const { data } = await axios.put(`/api/v1/admin/slider/${sliderId}`, slider, config);
         return data.success;
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -32,7 +32,7 @@ export const updateSlider = createAsyncThunk("slider/updateSlider", async ({slid
 
 export const deleteSlider = createAsyncThunk("slider/deleteSlider", async (sliderId, thunkAPI) => {
     try {
-        const { data } = await axios.delete(`/api/v1/slider/${sliderId}`);
+        const { data } = await axios.delete(`/api/v1/admin/slider/${sliderId}`);
         return data.success;
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -41,7 +41,7 @@ export const deleteSlider = createAsyncThunk("slider/deleteSlider", async (slide
 
 export const getAllSlider = createAsyncThunk("sliders/getAllSlider", async (_, thunkAPI) => {
     try {
-        const { data } = await axios.get(`/api/v1/sliders`);
+        const { data } = await axios.get(`/api/v1/admin/sliders`);
         return data.sliders;
     } catch (error) {
         return thunkError(error, thunkAPI);

@@ -1,14 +1,19 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import DataListing from "../../../../common/DataListing";
-import Loader from '../../../layout/Loader/Loader';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useAlert } from "react-alert";
+import Loader from '../../../layout/Loader/Loader';
 import { FormContainer } from "../../../../common/components/FormContainer";
-import { getAllAttributes, deleteAttribute, clearErrors, deleteAttributeReset } from "../../../../store";
-import "./Attributes.css";
+import DataListing from "../../../../common/components/DataListing";
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
+import {
+    getAllAttributes,
+    deleteAttribute,
+    clearErrors,
+    deleteAttributeReset
+} from "../../../../store";
 
 const Attributes = () => {
     const alert = useAlert();
@@ -103,7 +108,10 @@ const Attributes = () => {
     }
 
     return (<FormContainer pagetitle={"Attributes Listing"}>
-        {loading || loadingIsDelete ? <Loader /> : <DataListing columns={columns} rows={rows} />}
+        {loading || loadingIsDelete ? <Loader /> : <>
+            <AddNewItemAction actionUrl="/admin/attribute/new" title={"Add Attribute"} />
+            <DataListing columns={columns} rows={rows} />
+        </>}
     </FormContainer>);
 }
 

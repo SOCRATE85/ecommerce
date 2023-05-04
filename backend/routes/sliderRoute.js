@@ -9,10 +9,11 @@ const {
 } = require("../controllers/sliderController");
 const router = express.Router();
 
-router.route("/slider/new").post(isAuthenticatedUser, authorizeRole("admin"), createSlider);
-router.route("/slider/:id").put(isAuthenticatedUser, authorizeRole("admin"), updateSlider)
+router.route("/admin/slider/new").post(isAuthenticatedUser, authorizeRole("admin"), createSlider);
+router.route("/slider/:id").get(getSlider);
+router.route("/admin/slider/:id").put(isAuthenticatedUser, authorizeRole("admin"), updateSlider)
                             .delete(isAuthenticatedUser, authorizeRole("admin"), deleteSlider)
                             .get(isAuthenticatedUser, authorizeRole("admin"), getSlider);
-router.route("/sliders").get(isAuthenticatedUser, authorizeRole("admin"), listSliders);
+router.route("/admin/sliders").get(isAuthenticatedUser, authorizeRole("admin"), listSliders);
 
 module.exports = router;

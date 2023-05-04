@@ -1,0 +1,3 @@
+.MuiTabs-flexContainerVertical .MuiButtonBase-root {
+    align-items: self-start !important;
+}

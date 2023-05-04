@@ -1,12 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { clearErrors } from "../actions/clearformAction";
-import { validateAddress, addItemsToCart, removeItemFromcart, removeItemFromcartAfterOrderSuccess, saveShippingInfo } from '../actions/cartAction';
+import {
+    validateAddress,
+    addItemsToCart,
+    removeItemFromcart,
+    removeItemFromcartAfterOrderSuccess,
+    saveShippingInfo,
+    loadShippingAndBillingAddress
+} from '../actions/cartAction';
 
 export const cartSlice = createSlice({
     name: "cart",
-    initialState: {cartItems: [], shippingInfo: {}},
+    initialState: {cartItems: [], shippingInfo: {}, billingInfo: {}, shippingSameAsBilling: false},
     reducers: {},
     extraReducers: (builder) => {
+        builder.addCase(loadShippingAndBillingAddress.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(loadShippingAndBillingAddress.fulfilled, (state, action) => {
+            state.loading = false;
+            state.shippingInfo = action.payload.shippingAddress;
+            state.billingInfo = action.payload.billingAddress;
+            state.shippingSameAsBilling = action.payload.shippingSameAsBilling;
+        });
+         builder.addCase(loadShippingAndBillingAddress.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload
+        });
         builder.addCase(validateAddress.pending, (state) => {
             state.loading = true;
         });
@@ -65,7 +85,9 @@ export const cartSlice = createSlice({
         });
         builder.addCase(saveShippingInfo.fulfilled, (state, action) => {
             state.loading = false;
-            state.shippingInfo = action.payload;
+            state.shippingInfo = action.payload.shippingAddress;
+            state.billingInfo = action.payload.billingAddress;
+            state.shippingSameAsBilling = action.payload.shippingSameAsBilling;
         });
         builder.addCase(saveShippingInfo.rejected, (state, action) => {
             state.loading = false;

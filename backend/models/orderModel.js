@@ -12,6 +12,22 @@ const orderSchema = new mongoose.Schema({
         pinCode: {type: String, required: true},
         phoneNo: {type: String, required: true}
     },
+    shippingSameAsBilling: {
+        type: Boolean,
+        required: false,
+        default: true
+    },
+    billingInfo: {
+        addressId: {type: mongoose.Schema.ObjectId, ref: "Address", required: false},
+        firstname: {type: String, required: true},
+        lastname: {type: String, required: true},
+        address: {type: String, required: true},
+        city: {type: String, required: true},
+        state: {type: String, required: true},
+        country: {type: String, required: true},
+        pinCode: {type: String, required: true},
+        phoneNo: {type: String, required: true}
+    },
     orderItems :[
         {
             name: { type: String, required: true },

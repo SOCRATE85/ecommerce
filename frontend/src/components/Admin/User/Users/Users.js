@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
+import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import Loader from '../../../layout/Loader/Loader';
 import { Edit, Delete } from '@mui/icons-material';
 import { FormContainer } from '../../../../common/components/FormContainer';
-import { Button } from '@mui/material';
+import Loader from '../../../layout/Loader/Loader';
+import DataListing from "../../../../common/components/DataListing";
 import { deleteUser, getAllUsers, clearErrors, deleteUserReset } from '../../../../store';
-import "./Users.css";
 import { useThunk } from '../../../../common/hooks/use-thunk';
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
 
 const Users = () => {
     const dispatch = useDispatch();
@@ -98,6 +98,7 @@ const Users = () => {
     }
     
     return <FormContainer pagetitle={"Admin Users Listing"}>
+        <AddNewItemAction actionUrl="/admin/user/new" title={"Add User"} />
         <DataListing columns={columns} rows={rows} />
     </FormContainer>
 }

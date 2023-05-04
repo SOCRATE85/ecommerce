@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { useAlert } from "react-alert";
-import DataListing from "../../../../common/DataListing";
+import DataListing from "../../../../common/components/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -8,7 +8,7 @@ import { Edit, Delete } from '@mui/icons-material';
 import { getAllSlider, clearErrors, deleteSlider, deleteSliderReset } from '../../../../store';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import Loader from "../../../layout/Loader/Loader";
-import './ListSliders.css';
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
 
 const ListSliders = () => {
     const dispatch = useDispatch();
@@ -73,10 +73,8 @@ const ListSliders = () => {
     if(loading) {return <Loader />}
     
     return <FormContainer pagetitle={"Mansge Slider"}>
-         {loading ? <Loader /> : <>
-         <div className="text-left flex justify-end">
-            <Button onClick={() => navigate("/admin/slider/new")}>Add Slider</Button>
-        </div>
+        {loading ? <Loader /> : <>
+        <AddNewItemAction actionUrl="/admin/slider/new" title={"Add Slider"} />
         <DataListing columns={columns} rows={rows} /></>}
     </FormContainer>
 }

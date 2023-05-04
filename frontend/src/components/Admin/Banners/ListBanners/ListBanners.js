@@ -1,14 +1,14 @@
 import React, {useEffect} from "react";
 import { useAlert } from "react-alert";
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
+import DataListing from "../../../../common/components/DataListing";
 import { getAllBanner, clearErrors, deleteBanner, deleteBannerReset } from '../../../../store';
+import AddNewItemAction from '../../../../common/components/AddNewItemAction';
 import { FormContainer } from '../../../../common/components/FormContainer';
 import Loader from "../../../layout/Loader/Loader";
-import './ListBanners.css';
 
 const ListBanners = () => {
     const dispatch = useDispatch();
@@ -74,10 +74,8 @@ const ListBanners = () => {
     if(loading) {return <Loader />}
     
     return <FormContainer pagetitle={"Manage Banner"}>
-         {loading ? <Loader /> : <>
-         <div className="text-left flex justify-end">
-            <Button onClick={() => navigate("/admin/banner/new")}>Add Banner</Button>
-        </div>
+        {loading ? <Loader /> : <>
+        <AddNewItemAction actionUrl="/admin/banner/new" title={"Add Banner"} />
         <DataListing columns={columns} rows={rows} /></>}
     </FormContainer>
 }

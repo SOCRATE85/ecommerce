@@ -4,7 +4,7 @@ import { addNewSlider, updateSlider, deleteSlider, getAllSlider, getSlider } fro
 
 export const addSliderSlice = createSlice({
     name: "slider",
-    initialState: {slider:{}},
+    initialState: {slider: {}},
     reducers: {
         addNewSliderReset: (state) => {
             state.loading = false;
@@ -61,7 +61,7 @@ export const updateSliderSlice = createSlice({
 
 export const sliderSlice = createSlice({
     name: "slider",
-    initialState: {slider:{}},
+    initialState: {slider: {}},
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getSlider.pending, (state) => {

@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
-import DataListing from "../../../../common/DataListing";
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
-import { getAdminProducts, deleteProduct, clearErrors, deleteProductReset } from '../../../../store';
 import { Link, useNavigate } from 'react-router-dom';
-import Loader from '../../../layout/Loader/Loader';
+import { Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
+import Loader from '../../../layout/Loader/Loader';
+import { getAdminProducts, deleteProduct, clearErrors, deleteProductReset } from '../../../../store';
+import DataListing from "../../../../common/components/DataListing";
 import { FormContainer } from '../../../../common/components/FormContainer';
 import { getValue } from '../../../../common/attribute';
-import { Button } from '@mui/material';
 import Hoc from '../../../layout/Hoc';
-import "./ProductList.css";
 
 const ProductList = () => {
     const dispatch = useDispatch();

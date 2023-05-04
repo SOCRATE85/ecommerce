@@ -139,7 +139,9 @@ const reducer = combineReducers({
 const initialStore = {
     cart: {
         cartItems: localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [],
-        shippingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")) : {},
+        shippingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).shippingAddress : {},
+        billingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).billingAddress : {},
+        shippingSameAsBilling: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).shippingSameAsBilling : {},
     }
 };
 

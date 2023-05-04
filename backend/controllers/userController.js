@@ -4,6 +4,7 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const cloudinary = require("cloudinary");
+const Address = require("../models/addressSchema");
 
 //Register a User
 exports.registerUser = catchAsyncError(async (req, res) => {
@@ -248,12 +249,15 @@ exports.getAllUser = catchAsyncError(async (_req, res, _next) => {
 //Get User Details -- Admin
 exports.getSingleUser = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.params.id);
+    const addresses = await Address.find({user: req.params.id});
     if(!user){
         return next(new ErrorHandler(`User not Found with Id ${req.params.id}`, 400));
     }
+
     res.status(200).json({
         success: true,
-        user
+        user,
+        addresses
     })
 });
 

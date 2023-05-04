@@ -36,7 +36,7 @@ class ActionControl {
             this.setFormState(_updatedFormElement);
             this.setImageUpload(false);
     }
-    setFormDataValues = (sliderData, setStatus) => {
+    setFormDataValues = (data, setStatus) => {
         const _updatedFormElement = {...this.formState};
         for(let identifier in _updatedFormElement) {
             const updatedFormElement = {..._updatedFormElement[identifier]};
@@ -44,34 +44,34 @@ class ActionControl {
             
             switch (updatedFormElement.elementType) {
                 case "select":
-                    updatedFormElement.value = sliderData[identifier] ? {
-                        value: sliderData[identifier]._id, 
-                        label: sliderData[identifier].title
+                    updatedFormElement.value = data[identifier] ? {
+                        value: data[identifier]._id, 
+                        label: data[identifier].title ? data[identifier].title : data[identifier].name
                     } : "";
                 break;
                 case "multiselect":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier].map(item => ({ value: item._id, label: item.title })) : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier].map(item => ({ value: item._id, label: item.title ? item.title : item.name })) : "";
                 break;
                 case "editor":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "checkbox":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "file":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "input":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "textarea":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "boolean":
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : false;
                 break;
                 default:
-                    updatedFormElement.value = sliderData[identifier] ? sliderData[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
             }
             
@@ -188,8 +188,8 @@ class ActionControl {
 
         if(identifier === 'title') {
             const __updatedFormElement = {..._updatedFormElement};
-            if(__updatedFormElement["url_path"]) {
-               const updatedFormElement = {...__updatedFormElement["url_path"]};
+            if(__updatedFormElement["url_key"]) {
+               const updatedFormElement = {...__updatedFormElement["url_key"]};
                 updatedFormElement.touched = true;
                 const url = this.slugify(event.target.value);
                 updatedFormElement.value = url;
@@ -200,7 +200,7 @@ class ActionControl {
                 );
                 updatedFormElement.valid = validation.isValid;
                 updatedFormElement.elementConfig.error = validation.message;
-                __updatedFormElement["url_path"] = updatedFormElement;
+                __updatedFormElement["url_key"] = updatedFormElement;
             }
             this.setFormState(__updatedFormElement); 
         } else {
@@ -293,7 +293,7 @@ class ActionControl {
     }
     createSubmitHandler = (event, callback) => {
         event.preventDefault();
-        const validatedData = this.validate(); console.log('validatedData: ', validatedData);
+        const validatedData = this.validate();
         this.setFormState(validatedData);
         const validated = this.validatedForm();
         if(!validated) {

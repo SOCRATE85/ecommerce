@@ -1,78 +1,165 @@
 import React, { useState, useEffect, useMemo } from "react";
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Box, Tabs, Tab } from "@mui/material";
-import {
-    AccountTreeOutlined, 
-    DescriptionOutlined,
-    SpellcheckOutlined
-} from "@mui/icons-material";
+import { useAlert } from 'react-alert';
 import {
     updateCategory,
     getAllCategories,
     getCategoryDetails,
     clearErrors,
     updateCategoryReset,
-    getAdminProducts
+    getAdminProducts,
+    uploadFiles
 } from '../../../../store';
+import ActionControl from '../../../../common/ActionControl';
+import FormElement from '../../../../common/components/FormElement';
 import { FormContainer } from "../../../../common/components/FormContainer";
 import Loader from "../../../layout/Loader/Loader";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAlert } from 'react-alert';
 import { getValue } from "../../../../common/attribute";
-import DataListing from "../../../../common/DataListing";
-import "./UpdateCategory.css";
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>{children}</Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `category-tab-${index}`,
-    'aria-controls': `category-tabpanel-${index}`,
-  };
-}
+import DataListing from "../../../../common/components/DataListing";
+import SubmitActionButton from "../../../../common/components/SubmitActionButton";
+import FormAction from '../../../../common/components/FormAction';
+import TabPanelContainer from "../../../../common/components/TabPanelContainer";
 
 const UpdateCategory = () => {
     const navigate = useNavigate();
     const params = useParams();
     const dispatch = useDispatch();
     const alert = useAlert();
-    const { category, loading, error: categoryError } = useSelector( state => state.categoryDetails );
-    const { isUpdated, loading: updateLoading, error: updateCategoryError } = useSelector( state => state.updateCategory );
-    const { products, error: productError } = useSelector( state => state.products );
-    const { categories, error: categoriesError } = useSelector( state => state.categories );
-    const [ name, setName ] = useState("");
-    const [ parent, setParent] = useState("");
-    const [ description, setDescription ] = useState("");
-    const [ oldImages, setOldImages ] = useState([]);
-    const [ imagePreview, setImagePreview ] = useState([]);
-    const [ images, setImages ] = useState([]);
-    const [value, setValue] = useState(0);
+    const {category, loading, error: categoryError} = useSelector( state => state.categoryDetails );
+    const {images: uploadedImage} = useSelector(state => state.uploadImage);
+    const {isUpdated, loading: updateLoading, error: updateCategoryError} = useSelector( state => state.updateCategory );
+    const {products, error: productError} = useSelector( state => state.products );
+    const {categories, error: categoriesError} = useSelector( state => state.categories );
+    const [status, setStatus] = useState(false);
+    const [images, setImages] = useState([]);
+    const [imageIdentifier, setImageIdentifier] = useState([]);
+    const [imageUpload, setImageUpload] = useState(false);
     const [ selectedProducts, setSelectedProducts ] = useState([]);
     const categoryId = params.id;
+    const [formState, setFormState] = useState({
+        name: {
+            elementType: "input",
+            elementConfig: {
+                type: "text",
+                placeholder: "Name",
+                error: ""
+            },
+            value: "",
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        description: {
+            elementType: "editor",
+            elementConfig: {
+                type: "editor",
+                error: "",
+                placeholder: "Description"
+            },
+            value: "",
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        parent: {
+            elementType: "select",
+            elementConfig: {
+                placeholder: "Parent Category",
+                error: "",
+                options: [
+                    {
+                        value: 0,
+                        defaultValue: "Select category"
+                    }
+                ]
+            },
+            value: null,
+            validation: {
+                required: false
+            },
+            hideLabel: false,
+            valid: false,
+            isMulti: true,
+            touched: false
+        },
+        images: {
+            elementType: "file",
+            elementConfig: {
+                type: "file",
+                error: "",
+                placeholder: "Images"
+            },
+            value: [],
+            validation: {
+                required: true,
+                isImage: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        },
+        status: {
+            elementType: "boolean",
+            elementConfig: {
+                placeholder: "Status",
+                error: ""
+            },
+            value: null,
+            validation: {
+                required: true
+            },
+            hideLabel: false,
+            valid: false,
+            touched: false
+        }
+    });
 
+    const categoriesOption = useMemo(() => {
+        let _categories = [
+            {
+                value: 0,
+                label: "Select Category"
+            }
+        ];
+        for(let key in categories) {
+            _categories.push({
+                value: categories[key]._id,
+                label: categories[key].name
+            });
+        }
+        return _categories;
+    },[categories]);
+
+    const actioncontrol = useMemo(() => {
+        return new ActionControl({
+            formState,
+            setFormState,
+            images,
+            setImages,
+            imageIdentifier,
+            setImageIdentifier,
+            uploadedImage,
+            imageUpload,
+            setImageUpload
+        });
+    },[
+        formState,
+        setFormState,
+        images,
+        setImages,
+        imageIdentifier,
+        setImageIdentifier,
+        uploadedImage,
+        imageUpload,
+        setImageUpload
+    ]);
     useEffect(() => {
         if(isUpdated) {
             alert.success("Category is updated successfully");
@@ -82,20 +169,29 @@ const UpdateCategory = () => {
     }, [alert, isUpdated, navigate, dispatch]);
 
     useEffect(() => {
+        if(loading) {
+            return;
+        }
         if(category && category._id !== categoryId) {
             dispatch(getCategoryDetails(categoryId));
-        } else {
-            let _productid = [];
-            category && category.products && category.products.forEach((product) => {
-                _productid.push(product.product);
+        }else {
+            !status && actioncontrol.setFormDataValues(category, setStatus);
+            setSelectedProducts(() => {
+                let product = [];
+                category.products.forEach(_product => {
+                    product.push(_product._id);
+                });
+                return product.join(",");
             });
-            setName(category.name);
-            setDescription(category.description);
-            setSelectedProducts(_productid);
-            setParent(category.parent ? category.parent : "");
-            setOldImages(category.images);           
-        }       
-    },[dispatch, category, categoryId]);
+        }
+        dispatch(getAllCategories());
+    },[dispatch, category, categoryId, actioncontrol, status, loading]);
+
+    useEffect(() => {
+        if(imageUpload && uploadedImage && uploadedImage.length > 0) {
+            actioncontrol.loadOption();
+        }
+    }, [uploadedImage, imageUpload, actioncontrol]);
 
     useEffect(() => {
         if(categoryError) {
@@ -143,137 +239,83 @@ const UpdateCategory = () => {
         return _rows;
     }, [products])
 
-    const handleChange = (_event, newValue) => {
-      setValue(newValue);
-    };
-
     const onSelectionModelChange = (_products) => {
         setSelectedProducts(_products);
     }
     
-    const updateCategorySubmitHandler = async (e) => {
-        e.preventDefault();
+    const updateSubmitHandler = async (state) => {
         const myForm = new FormData();
-        myForm.set("name", name);
-        if(parent !== null){
-            myForm.set("parent", parent);
+        myForm.set("name", state.name.value);
+        if(state.parent.value !== null){
+            myForm.set("parent", state.parent.value);
         } else {
             myForm.set("parent", null);
         }
-        myForm.set("description", description);
-        if(products !== null){
+        myForm.set("description", state.description.value);
+        if(selectedProducts !== null){
             myForm.set("products", selectedProducts);
         }
-        images.map((image) => {
+        state.images.value.map((image) => {
             myForm.append("images", image);
             return true;
         });
-
+        myForm.set("status", state.status.value);
         dispatch(updateCategory({categoryData: myForm, categoryId}));
         dispatch(getCategoryDetails(categoryId));
     }
 
-    const updateCategoryImageChange = (e) => {
+    const createImageChange = (e, identifier) => {
         const files = Array.from(e.target.files);
-        setImages([]);
-        setImagePreview([]);
-        setOldImages([]);
-
-        files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if(reader.readyState === 2) {
-                    setImagePreview((old) => [...old, reader.result]);
-                    setImages((old) => [...old, reader.result]);
-                }
-            }
-            reader.readAsDataURL(file);
-        });
+        setImageIdentifier(identifier);
+        setImageUpload(true);
+        dispatch(uploadFiles(files));
     }
 
+    let formElementArray = useMemo(() => {
+        const _formElementArray = [];
+        const tempformElementArray = actioncontrol.getFormState();
+        for(let key in tempformElementArray) {
+            _formElementArray.push({
+                id: key,
+                config: tempformElementArray[key]
+            })
+        }
+        return _formElementArray;
+    }, [actioncontrol]);
+    
     if(loading || updateLoading) {
         return <Loader />;
     }
     
-    return (<FormContainer pagetitle={"Update Category"}>
-        {loading? <Loader /> : <form encType="multipart/form-data" onSubmit={(e) => updateCategorySubmitHandler(e)}>
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs category">
-                        <Tab label="General" {...a11yProps(0)} />
-                        <Tab label="Products" {...a11yProps(1)} />
-                    </Tabs>
-                </Box>
-                <TabPanel value={value} index={0}>
-                    <div className="updateCategoryForm">
-                        <div>
-                            <SpellcheckOutlined />
-                            <input 
-                                type={"text"} 
-                                placeholder="Category Name" 
-                                required 
-                                value={name}
-                                onChange={(e) => setName(e.target.value)} 
-                            />
-                        </div>
-                        <div>
-                            <AccountTreeOutlined />
-                            <select onChange={(e) => setParent(e.target.value)} value={parent}>
-                                <option value={""}>Choose Parent Category</option>
-                                {
-                                    categories && categories.map(cat => {
-                                        return <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                    })
-                                }
-                            </select>
-                        </div>
-                        <div>
-                            <DescriptionOutlined />
-                            <textarea 
-                                placeholder="Category Description" 
-                                value={description} 
-                                onChange={(e) => setDescription(e.target.value)} 
-                                cols={30} 
-                                rows={6}
-                            ></textarea>
-                        </div>
-                        <div id="updateCategoryFormFile">
-                            <input 
-                                type={"file"} 
-                                name="avatar" 
-                                accept="image/*" 
-                                multiple 
-                                onChange={(e) => updateCategoryImageChange(e)} 
-                            />
-                        </div>
-                        {oldImages && <div id="updateCategoryFormImage">
-                            {
-                                oldImages.map((image, index) => {
-                                    return <img key={index} src={image.url} alt="Old Product Preview" />
-                                })
-                            }
-                        </div>}
+    const firstTabContents = (
+        <FormAction submitHandler={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}>
+            <FormElement 
+                formElementArray={formElementArray} 
+                actioncontrol={actioncontrol}
+                options={categoriesOption}
+                optionKey={'parent'}
+                createImageChange={createImageChange}
+            />
+            <SubmitActionButton title={'Update Category'} />
+        </FormAction>
+    );
 
-                        {imagePreview.length !== 0 && <div id="updateCategoryFormImage">
-                            {
-                                imagePreview.map((image, index) => {
-                                    return <img key={index} src={image} alt="Product Preview" />
-                                })
-                            }
-                        </div>}
-                    </div>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <DataListing 
-                        columns={columns} 
-                        rows={rows} 
-                        onSelectionModelChange={onSelectionModelChange} 
-                        selectedProducts={selectedProducts} 
-                    />
-                </TabPanel>
-            </Box>  
-            <Button id="updateCategoryBtn" type="submit">Update</Button>
-        </form>}        
+    const secondTabContents = (
+        <DataListing 
+            columns={columns}
+            rows={rows}
+            checkboxSelection={true}
+            onSelectionModelChange={onSelectionModelChange} 
+            selectedProducts={selectedProducts ? selectedProducts : []} 
+        />
+    );
+
+    return (<FormContainer pagetitle={"Update Category"}>
+        {loading? <Loader /> : 
+             <TabPanelContainer 
+                firstTabContents={firstTabContents} 
+                secondTabContents={secondTabContents}
+            />}        
     </FormContainer>);
 }
  

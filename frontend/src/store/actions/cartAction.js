@@ -47,8 +47,18 @@ export const removeItemFromcartAfterOrderSuccess = createAsyncThunk("cart/remove
     }
 });
 
+//load shipping and billing address
+export const loadShippingAndBillingAddress = createAsyncThunk("cartd/loadShippingAndBillingAddress", (_, thunkAPI) => {
+     try {
+        const data = localStorage.getItem("shippingInfo");
+        return JSON.parse(data);
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
 //save shipping information
-export const saveShippingInfo = createAsyncThunk("cart/saveShippingInfo", async (data, thunkAPI) => {
+export const saveShippingInfo = createAsyncThunk("cart/saveShippingInfo", (data, thunkAPI) => {
     try {
         localStorage.setItem("shippingInfo", JSON.stringify(data));
         return data;

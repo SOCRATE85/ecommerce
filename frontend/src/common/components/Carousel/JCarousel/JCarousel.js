@@ -1,20 +1,11 @@
-import React, { lazy, Suspense } from 'react';
-//import Carousel from "react-multi-carousel";
-//import Carousel from "react-material-ui-carousel";
+import React from 'react';
+import Carousel from "react-multi-carousel";
 
-const Banner = lazy(() => import('../Banner'));
-
-const bannerCmp = '<Banner>dsfgddgfgdsgdsg</Banner>';
-
-const Abc = ({bannerCmp})=>{
-    return <div dangerouslySetInnerHTML={{__html: bannerCmp.replace(/"/g, '&quot;')}}></div>
-}
-
-const JCarousel = (props) => {
+const JCarousel = ({ children }) => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <Abc bannerCmp={bannerCmp} />
-        </Suspense>
+        <Carousel>
+           {children}
+        </Carousel>
     );
 }
 

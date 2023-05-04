@@ -1,18 +1,25 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, productDetails, updateProduct, updateProductReset } from "../../../../store";
+import moment from 'moment';
 import { useAlert } from "react-alert";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from '@mui/material';
-import { getAttributeSets, getAllCategories } from '../../../../store';
 import Select from 'react-select';
 import Loader from "../../../layout/Loader/Loader";
-import Input from '../../../Controls/Input';
+import Input from '../../../../common/components/Controls/Input';
 import { checkValidation, validateProductData, validatedProductForm} from "../../../../common/validation";
 import { getValue } from '../../../../common/attribute';
-import moment from 'moment';
+import {
+    clearErrors,
+    productDetails,
+    updateProduct,
+    updateProductReset,
+    getAttributeSets,
+    getAllCategories
+} from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import "./UpdateProduct.css";
+import FieldSet from '../../../../common/components/FieldSet';
+import FormAction from '../../../../common/components/FormAction';
+import SubmitActionButton from '../../../../common/components/SubmitActionButton';
 
 const UpdateProduct = () => {
     const dispatch = useDispatch();
@@ -636,20 +643,18 @@ const UpdateProduct = () => {
     }
 
     return (<FormContainer pagetitle={"Update Product"}>
-        <form className="createProductForm" encType="multipart/form-data" onSubmit={updateProductSubmitHandler}>
-            <fieldset style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                <legend style={{fontSize: 16, marginLeft: 10}}>Attribute Set</legend>
-                <div className="selectBox">
+        <FormAction submitHandler={updateProductSubmitHandler}>
+            <FieldSet legend={'Attribute Set'}>                
+                <div className="input">
                     <Select 
                         options={reordeAttributesets}
                         value={attributeSetId}
                         onChange={(e) => setAttributeSetId(e)}
                     />
                 </div>
-            </fieldset>
-            <fieldset style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                <legend style={{fontSize: 16, marginLeft: 10}}>Category</legend>
-                <div className="selectBox">
+            </FieldSet>
+            <FieldSet legend="Category">
+                <div className="input">
                     <Select 
                         options={reorderCategories}
                         value={category}
@@ -657,81 +662,75 @@ const UpdateProduct = () => {
                         isMulti
                     />
                 </div>
-            </fieldset>
+            </FieldSet>
             {formElementArray.map(({attributeGroupId, attributeGroup, attributes}, index) => {
-                return <fieldset key={attributeGroupId} style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                    <legend style={{fontSize: 16, marginLeft: 10}}>{attributeGroup}</legend>
-                    <div>
-                        {attributes.map(attribute => {
-                            switch (attribute.config.elementType) {
-                                case 'select':
-                                case "multiselect":
+                return <FieldSet legend={attributeGroup} key={attributeGroupId}>
+                    {attributes.map(attribute => {
+                        switch (attribute.config.elementType) {
+                            case 'select':
+                            case "multiselect":
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    removeImage={removeImage}
+                                    changed={(e)=> selectOptionChangeHandler(e, index, attribute.id)}
+                                />
+                            case "radio":
+                            case "checkbox":
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    removeImage={removeImage}
+                                    changed={(e)=> checkboxOptionChangeHandler(e, index, attribute.id)}
+                                />
+                            case 'file': 
                                     return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        removeImage={removeImage}
-                                        changed={(e)=> selectOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                                case "radio":
-                                case "checkbox":
-                                    return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        removeImage={removeImage}
-                                        changed={(e)=> checkboxOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                                case 'file': 
-                                        return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        removeImage={removeImage}
-                                        changed={(e)=> createProductImageChange(e, index, attribute.id)}
-                                    />  
-                                default:
-                                    return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        removeImage={removeImage}
-                                        changed={(e)=> inputOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                            }
-                        })}
-                    </div>
-                </fieldset>
-            })}                 
-            <div>
-                <Button id="backToProductListBtn" type="button" onClick={() => navigate('/admin/products')}>Back</Button>
-                <Button id="createProductBtn" type="submit" disabled={ loading ? true : false}>Update</Button>
-            </div>
-        </form>
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    removeImage={removeImage}
+                                    changed={(e)=> createProductImageChange(e, index, attribute.id)}
+                                />  
+                            default:
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    removeImage={removeImage}
+                                    changed={(e)=> inputOptionChangeHandler(e, index, attribute.id)}
+                                />
+                        }
+                    })}
+                </FieldSet>
+            })}
+            <SubmitActionButton title={'Update Product'} />
+        </FormAction>
     </FormContainer>)
 }
 

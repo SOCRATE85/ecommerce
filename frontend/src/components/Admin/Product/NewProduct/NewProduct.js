@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, createProduct, reserAddNewProduct } from "../../../../store";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
-import { Button } from '@mui/material';
-import { FormContainer } from "../../../../common/components/FormContainer";
-import { getAllCategories, getAttributeSets } from '../../../../store';
 import Select from 'react-select';
+import { FormContainer } from "../../../../common/components/FormContainer";
+import FieldSet from '../../../../common/components/FieldSet';
+import FormAction from '../../../../common/components/FormAction';
+import SubmitActionButton from '../../../../common/components/SubmitActionButton';
+import { getAllCategories, getAttributeSets, clearErrors, createProduct, reserAddNewProduct } from '../../../../store';
 import Loader from "../../../layout/Loader/Loader";
-import Input from '../../../Controls/Input';
+import Input from '../../../../common/components/Controls/Input';
 import { getValue } from "../../../../common/attribute";
 import { checkValidation, validateProductData, validatedProductForm} from "../../../../common/validation";
-import "./NewProduct.css";
 
 const NewProduct = () => {
     const dispatch = useDispatch();
@@ -482,20 +482,18 @@ const NewProduct = () => {
     }, [attributesets]);
 
     return (<FormContainer pagetitle={"Create Product"}>
-        {loading || loadingAttributeSet || loadingCategories || defaultFormAttributes === undefined ? <Loader /> : <form className="createProductForm" encType="multipart/form-data" onSubmit={createProductSubmitHandler}>
-            <fieldset style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                <legend style={{fontSize: 16, marginLeft: 10}}>Attribute Set</legend>
-                <div className="selectBox">
+        {loading || loadingAttributeSet || loadingCategories || defaultFormAttributes === undefined ? <Loader /> : <FormAction submitHandler={createProductSubmitHandler}>
+            <FieldSet legend={'Attribute Set'}>
+                <div className="input">
                     <Select 
                         options={reordeAttributesets}
                         value={attributeSetId}
                         onChange={(e) => setAttributeSetId(e)}
                     />
                 </div>
-            </fieldset>
-            <fieldset style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                <legend style={{fontSize: 16, marginLeft: 10}}>Category</legend>
-                <div className="selectBox">
+            </FieldSet>
+            <FieldSet legend={'Category'}>
+                <div className="input">
                     <Select 
                         options={reorderCategories}
                         value={category}
@@ -503,81 +501,75 @@ const NewProduct = () => {
                         isMulti
                     />
                 </div>
-            </fieldset>
+            </FieldSet>
             {formElementArray.map(({attributeGroupId, attributeGroup, attributes}, index) => {
-                return <fieldset key={attributeGroupId} style={{display:'block', width: 400, marginBottom: 20, border: '1px solid rgba(0, 0,0, 0.267)'}}>
-                    <legend style={{fontSize: 16, marginLeft: 10}}>{attributeGroup}</legend>
-                    <div>
-                        {attributes.map(attribute => {
-                            switch (attribute.config.elementType) {
-                                case 'select':
-                                case "multiselect":
+                return <FieldSet key={attributeGroupId} legend={attributeGroup}>
+                    {attributes.map(attribute => {
+                        switch (attribute.config.elementType) {
+                            case 'select':
+                            case "multiselect":
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    isValid={!attribute.config.valid}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    changed={(e)=> selectOptionChangeHandler(e, index, attribute.id)}
+                                />
+                            case "checkbox":
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    isValid={!attribute.config.valid}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    changed={(e)=> checkboxOptionChangeHandler(e, index, attribute.id)}
+                                />
+                            case 'file': 
                                     return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        isValid={!attribute.config.valid}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        changed={(e)=> selectOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                                case "checkbox":
-                                    return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        isValid={!attribute.config.valid}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        changed={(e)=> checkboxOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                                case 'file': 
-                                        return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        isValid={!attribute.config.valid}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        removeImage={removeImage}
-                                        changed={(e)=> createProductImageChange(e, index, attribute.id)}
-                                    />  
-                                default:
-                                    return <Input 
-                                        id={attribute.id}
-                                        key={attribute.id}
-                                        hideLabel={attribute.config.hideLabel}
-                                        elementType={attribute.config.elementType}
-                                        label={attribute.config.elementConfig.placeholder}
-                                        elementConfig={attribute.config.elementConfig}
-                                        value={attribute.config.value}
-                                        isValid={!attribute.config.valid}
-                                        shouldValidate={attribute.config.validation.required}
-                                        touched={attribute.config.touched}
-                                        changed={(e)=> inputOptionChangeHandler(e, index, attribute.id)}
-                                    />
-                            }
-                        })}
-                    </div>
-                </fieldset>
-            })}                 
-            <div>
-                <Button id="backToProductListBtn" type="button" onClick={() => navigate('/admin/products')}>Back</Button>
-                <Button id="createProductBtn" type="submit" disabled={ loading ? true : false}>Create</Button>
-            </div>
-        </form>}
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    isValid={!attribute.config.valid}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    removeImage={removeImage}
+                                    changed={(e)=> createProductImageChange(e, index, attribute.id)}
+                                />  
+                            default:
+                                return <Input 
+                                    id={attribute.id}
+                                    key={attribute.id}
+                                    hideLabel={attribute.config.hideLabel}
+                                    elementType={attribute.config.elementType}
+                                    label={attribute.config.elementConfig.placeholder}
+                                    elementConfig={attribute.config.elementConfig}
+                                    value={attribute.config.value}
+                                    isValid={!attribute.config.valid}
+                                    shouldValidate={attribute.config.validation.required}
+                                    touched={attribute.config.touched}
+                                    changed={(e)=> inputOptionChangeHandler(e, index, attribute.id)}
+                                />
+                        }
+                    })}
+                </FieldSet>
+            })}
+            <SubmitActionButton title="Create Product" />
+        </FormAction>}
     </FormContainer>)
 }
 
