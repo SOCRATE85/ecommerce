@@ -15,7 +15,7 @@ const AddUserInAdmin = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const alert = useAlert();
-    const [doAddUser, isLoadingUser, isErrorInUser] = useThunk(addUser)
+    const [doAddUser, isLoadingUser, isErrorInUser] = useThunk(addUser);
     const { images: uploadedImage } = useSelector(state => state.uploadImage);
     const [ images, setImages ] = useState([]);
     const { success } = useSelector(state => state.addUser);
@@ -159,7 +159,7 @@ const AddUserInAdmin = () => {
         }
     }, [uploadedImage, imageUpload, actioncontrol]);
 
-    const createSubmitHandler = (state) => { console.log('state: ', state);
+    const createSubmitHandler = (state) => {
         const myForm = new FormData();
         for(let key in state) {
             myForm.set(key, state[key].value);

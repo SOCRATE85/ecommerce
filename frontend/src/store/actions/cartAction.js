@@ -16,11 +16,28 @@ export const validateAddress = createAsyncThunk("cart/validateAddress", async (a
     }
 });
 
+export const loadCartItems = createAsyncThunk('cart/loadCartItems', async (_, thunkAPI) => {
+    try {
+        const items = localStorage.getItem("cartItems");
+        return items ? JSON.parse(items) : [];
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+//Update Cart Items Action
+export const updateItemsInCart = createAsyncThunk("cart/updateItemsInCart", async ({id, quantity}, thunkAPI) => {
+    try {
+        return { id, quantity };
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
 //Add to cart action
 export const addItemsToCart = createAsyncThunk("cart/addItemsToCart", async ({id, quantity}, thunkAPI) => {
     try {
         const { data } = await axios.get(`/api/v1/product/${id}`);
-        localStorage.setItem("cartItems", JSON.stringify(thunkAPI.getState().cart.cartItems));
         return { product: data.product, quantity };
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -30,7 +47,6 @@ export const addItemsToCart = createAsyncThunk("cart/addItemsToCart", async ({id
 //remove item from cart
 export const removeItemFromcart = createAsyncThunk("cart/removeItemFromcart", async (id, thunkAPI) => {
     try {
-        localStorage.setItem("cartItems", JSON.stringify(thunkAPI.getState().cart.cartItems));
         return id;
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -41,6 +57,7 @@ export const removeItemFromcart = createAsyncThunk("cart/removeItemFromcart", as
 export const removeItemFromcartAfterOrderSuccess = createAsyncThunk("cart/removeItemFromcartAfterOrderSuccess", (_, thunkAPI) => {
     try {
         localStorage.setItem("cartItems", "");
+        localStorage.setItem("shippingInfo", "");
         return [];
     } catch (error) {
         return thunkError(error, thunkAPI);
@@ -51,7 +68,11 @@ export const removeItemFromcartAfterOrderSuccess = createAsyncThunk("cart/remove
 export const loadShippingAndBillingAddress = createAsyncThunk("cartd/loadShippingAndBillingAddress", (_, thunkAPI) => {
      try {
         const data = localStorage.getItem("shippingInfo");
-        return JSON.parse(data);
+        if(data) {
+            return JSON.parse(data);
+        } else {
+            return JSON.parse({});
+        }
     } catch (error) {
         return thunkError(error, thunkAPI);
     }

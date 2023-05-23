@@ -132,19 +132,37 @@ const Shipping = () => {
         dispatch(loadShippingAndBillingAddress());
     }, [dispatch]);
 
+    const shippingSameAsBillingHandler = (e) => {
+        setShippingSameAsBilling(e.target.checked);
+        if(e.target.checked) {
+            setBillingAddress({
+            addressId: selectedShippingAddress,
+            firstname: shippingAddress.firstname, 
+            lastname: shippingAddress.lastname,
+            address: shippingAddress.address,
+            city: shippingAddress.city,
+            state: shippingAddress.state,
+            country: shippingAddress.country,
+            pinCode: shippingAddress.pinCode,
+            phoneNo: shippingAddress.phoneNo
+        });
+        }
+    }
+
     const shippingSubmit = (e) => {
         e.preventDefault();
         if(shippingAddress.phoneNo.length < 10 || shippingAddress.phoneNo.length > 10) {
             alert.error("Shipping Phone number should be 10 digit long");
             return;
         }
-        
-        if(billingAddress.phoneNo.length < 10 || billingAddress.phoneNo.length > 10) {
-            alert.error("Billing Phone number should be 10 digit long");
-            return;
+        if(!_shippingSameAsBilling) {
+            if(billingAddress.phoneNo.length < 10 || billingAddress.phoneNo.length > 10) {
+                alert.error("Billing Phone number should be 10 digit long");
+                return;
+            }
         }
-
-        const _billingAddress ={
+        
+        const _billingAddress = {
                 addressId: selectedBillingAddress,
                 firstname: billingAddress.firstname, 
                 lastname: billingAddress.lastname,
@@ -179,7 +197,7 @@ const Shipping = () => {
     }
 
     if(loading || loadingCart) {return (<></>)}
-    console.log( "shippingInfo: ", shippingInfo, "billingInfo: ", billingInfo);
+    
     return <>
         <MetaData title="Shipping Details" />
         <CheckoutSteps activeStep={0} />
@@ -209,7 +227,7 @@ const Shipping = () => {
                         />
                     }
                     <ControlContainer label={"Billing Address same as Shipping Addresses"}>
-                        <input type="checkbox" defaultChecked={shippingSameAsBilling} onClick={(e) => setShippingSameAsBilling(e.target.checked)}/>
+                        <input type="checkbox" defaultChecked={shippingSameAsBilling} onClick={(e) => shippingSameAsBillingHandler(e)}/>
                     </ControlContainer>
                     {!shippingSameAsBilling && <>
                             <ControlContainer label={"Billing Addresses"}>
@@ -235,7 +253,11 @@ const Shipping = () => {
                             }
                         </>
                     }
-                    <SubmitActionButton disabled={shippingAddress.state ? false : true } title={"Continue"} />
+                    <SubmitActionButton 
+                        disabled={shippingAddress.state ? false : true } 
+                        title={"Continue"} 
+                        backurl="/cart"
+                    />
                 </form>
             </div>
         </div>

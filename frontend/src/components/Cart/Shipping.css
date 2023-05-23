@@ -39,7 +39,7 @@
 }
 
 @media screen and (max-width: 600px){
-    .shippingBox { width: 100%; height: 95vh; }
+    .shippingBox { width: 100%; height: 100%; }
     .shippingHeading { font: 400 6vw "Roboto", sans-serif; }
     .shippingForm { padding: 11vw; }
 }

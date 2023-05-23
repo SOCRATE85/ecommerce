@@ -264,7 +264,7 @@ const NewCategory = () => {
         />
     );
 
-    return (<FormContainer pagetitle={"Create Category"}>        
+    return (<FormContainer pagetitle={"Create Category"}> 
         {
             loading || loadingCategory || createCategoryLoading ? 
             <Loader /> : 

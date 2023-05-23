@@ -65,6 +65,7 @@ import {
     bannersSlice,
     deleteBannerSlice
 } from './reducers/bannerReducer';
+import {updateCatalogRuleObjectSlice} from './reducers/catalogRuleReducer';
 
 const reducer = combineReducers({
     addUser: addUserSlice.reducer,
@@ -133,7 +134,8 @@ const reducer = combineReducers({
     updateSlider: updateSliderSlice.reducer,
     slider: sliderSlice.reducer,
     sliders: slidersSlice.reducer,
-    deleteSlider: deleteSliderSlice.reducer
+    deleteSlider: deleteSliderSlice.reducer,
+    catalogrule: updateCatalogRuleObjectSlice.reducer
 });
 
 const initialStore = {
@@ -141,7 +143,7 @@ const initialStore = {
         cartItems: localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [],
         shippingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).shippingAddress : {},
         billingInfo: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).billingAddress : {},
-        shippingSameAsBilling: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).shippingSameAsBilling : {},
+        shippingSameAsBilling: localStorage.getItem("shippingInfo") ? JSON.parse(localStorage.getItem("shippingInfo")).shippingSameAsBilling : true,
     }
 };
 
@@ -220,3 +222,5 @@ export const { createSettingsReset } = settingsSlice.actions;
 export * from './actions/cartAction';
 export * from './actions/orderAction';
 export const { updateOrderReset, deleteOrderReset } = updateOrderSlice.actions;
+
+export * from './actions/catalogRuleAction';

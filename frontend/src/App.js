@@ -27,6 +27,7 @@ import {NewCategory, CategoryList, UpdateCategory} from './components/Admin/Cate
 import {NewProduct, ProductList, UpdateProduct} from './components/Admin/Product';
 import {OrderList, ProcessOrder} from './components/Admin/Order';
 import {Users, UpdateUser, AddUserInAdmin} from './components/Admin/User';
+import {AddNewCatalogPriceRule, EditCatalogPriceRule, ListCatalogPriceRule} from './components/Admin/CatalogRule';
 
 import Reviews from './components/Admin/Reviews';
 import Settings from './components/Admin/Settings';
@@ -169,6 +170,10 @@ function App() {
         <Route path='/admin/banner/new' element={<ProtectedRoute isAdmin={true}><AddBanner /></ProtectedRoute>} />
         <Route path='/admin/banners' element={<ProtectedRoute isAdmin={true}><ListBanners /></ProtectedRoute>} />
         <Route path='/admin/banner/:id' element={<ProtectedRoute isAdmin={true}><UpdateBanner /></ProtectedRoute>} />
+        
+        <Route path='/admin/catalog_rule/new' element={<ProtectedRoute isAdmin={true}><AddNewCatalogPriceRule /></ProtectedRoute>} />
+        <Route path='/admin/catalog_rule/:id' element={<ProtectedRoute isAdmin={true}><EditCatalogPriceRule /></ProtectedRoute>} />
+        <Route path='/admin/catalog_rules' element={<ProtectedRoute isAdmin={true}><ListCatalogPriceRule /></ProtectedRoute>} />
         
         <Route path='/admin/settings' element={<ProtectedRoute isAdmin={true}><Settings /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />

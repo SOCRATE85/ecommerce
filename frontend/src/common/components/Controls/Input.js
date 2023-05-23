@@ -6,6 +6,7 @@ import Boolean from "./Boolean";
 import Select from 'react-select';
 import Images from "./Images";
 import ControlContainer from '../ControlContainer';
+import Conditions from "./Conditions";
 
 const Input = (props) => {
     let inputElement = null;
@@ -48,9 +49,9 @@ const Input = (props) => {
         break;
         case 'boolean':
             inputElement = <Boolean 
-            onChange={props.changed} 
-            value={props.value} 
-            {...props.elementConfig}
+                onChange={props.changed} 
+                value={props.value} 
+                {...props.elementConfig}
             />     
         break;
         case "textarea":
@@ -70,7 +71,6 @@ const Input = (props) => {
                 options.push({label: option.defaultValue, value: option.value});
                 return true;
             });
-            
             inputElement = <Select 
                                 options={props.options ? props.options : options} 
                                 value={props.value !== null ? props.value : []}
@@ -104,6 +104,9 @@ const Input = (props) => {
         case "editor":
             inputElement = (<Editor initData={props.value} id={props.id} changed={props.changed} />)
         break;
+        case "conditions":
+            inputElement = <Conditions />;
+        break;
         case 'date':
             inputElement = (<input 
                 onChange={props.changed}
@@ -123,23 +126,14 @@ const Input = (props) => {
             />);
         break;
     }
-    return <ControlContainer
+    return (<ControlContainer
         hideLabel={props.hideLabel}
         label={props.label}
         shouldValidate={props.shouldValidate}
         error={props.elementConfig.error}
     >
         {inputElement}
-    </ControlContainer>
-    /*return (<div className="input">
-        {!props.hideLabel && (
-            <label>{props.label}{" "}{props.shouldValidate && <span style={{color:"red"}}>*</span>}</label>
-        )}
-        {inputElement}
-        {props.shouldValidate && props.elementConfig.error !== "" && (
-            <div style={{color:"red"}}>{props.elementConfig.error}</div>
-        )}
-    </div>);*/
+    </ControlContainer>);
 }
 
 Input.defaultProps={

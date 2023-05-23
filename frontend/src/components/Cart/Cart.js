@@ -1,24 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { addItemsToCart, removeItemFromcart } from '../../store';
+import { removeItemFromcart, loadCartItems, updateItemsInCart } from '../../store';
 import RemoveShoppingCartOutlined from '@mui/icons-material/RemoveShoppingCartOutlined';
 import { getValue } from "../../common/attribute";
 import CartItemCard from './CartItemCard';
 import MetaData from '../layout/MetaData';
+import Loader from "../layout/Loader/Loader";
 import "./Cart.css";
 
 const Cart = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { cartItems } = useSelector( state => state.cart );
+    const { cartItems, loading } = useSelector( state => state.cart );
+
+    useEffect(() => {
+        dispatch(loadCartItems());
+    }, [dispatch]);
+
     const increaseQuantity = (id, quantity, stock) => {
         const newQty = quantity + 1;
         if(stock <= quantity) {
             return;
         }
-        dispatch(addItemsToCart({id, quantity: newQty}));
+        dispatch(updateItemsInCart({id, quantity: newQty}));
     }
 
     const decreaseQuantity = (id, quantity) => {
@@ -26,21 +32,27 @@ const Cart = () => {
         if(1 >= quantity) {
             return;
         }
-        dispatch(addItemsToCart({id, quantity: newQty}));
+        dispatch(updateItemsInCart({id, quantity: newQty}));
     }
     
     const checkoutHandler = () => {
         navigate("/login?redirect=shipping");
     }
     
+    if(loading) {
+        return <Loader />
+    }
+
     return <>
         <MetaData title="Checkout Page" />
         {
-            cartItems.length === 0 ? <div className="emptyCart">
+            cartItems && cartItems.length === 0 ? <div className="emptyCart">
+                <div className="w-full text-black py-10 px-16 text-3xl">My Cart</div>
                 <RemoveShoppingCartOutlined />
                 <Typography>No Product in Your Cart!</Typography>
                 <Link to="/">Continue shopping</Link>
             </div> :  (<div className="cartPage">
+                    <div className="w-full text-black py-10 px-16 text-3xl">My Cart</div>
                     <div className="cartHeader">
                         <p>Product</p>
                         <p>Quantity</p>
@@ -60,7 +72,7 @@ const Cart = () => {
                             </div>)
                         })
                     }
-                    <div className="cartGrossProfit">
+                    {cartItems && <div className="cartGrossProfit">
                         <div></div>
                         <div className="cartGrossProfitBox">
                             <p>Gross Total</p>
@@ -75,7 +87,7 @@ const Cart = () => {
                         <div className="checkoutBtn">
                             <button onClick={checkoutHandler}>Check Out</button>
                         </div>
-                    </div>
+                    </div>}
                 </div>)
         }
        

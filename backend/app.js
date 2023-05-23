@@ -8,7 +8,11 @@ const path = require("path");
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({
+    limit: '500mb',
+    extended: true, 
+    parameterLimit:50000
+}));
 app.use(fileUpload());
 
 //config
@@ -58,20 +62,26 @@ const slider = require("./routes/sliderRoute");
 //manage banner
 const banner = require("./routes/bannerRoute");
 
-app.use("/api/v1", product)
-app.use("/api/v1", user);
-app.use("/api/v1", order);
-app.use("/api/v1", payment);
-app.use("/api/v1", category);
-app.use("/api/v1", attribute);
-app.use("/api/v1", attributegroup);
-app.use("/api/v1", settings);
-app.use("/api/v1", address);
-app.use("/api/v1", blogCategory);
-app.use("/api/v1", blog);
-app.use("/api/v1", upload);
-app.use("/api/v1", slider);
-app.use("/api/v1", banner);
+//catalog rule
+const catalogrule = require('./routes/catalogruleRoute');
+
+app.use("/api/v1", [
+    product, 
+    user,
+    order,
+    payment,
+    category,
+    attribute,
+    attributegroup,
+    settings,
+    address,
+    blogCategory,
+    blog,
+    upload,
+    slider,
+    banner,
+    catalogrule
+]);
 
 app.use(express.static(path.join(__dirname, "./public")));
 

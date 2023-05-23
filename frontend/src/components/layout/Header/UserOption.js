@@ -38,7 +38,7 @@ const UserOption = ({ user }) => {
     const options = [
         { icon: <ListAltOutlined />, name: "Order", func: orders },
         { icon: <PersonOutline />, name: "Profile", func: account },
-        { icon: <ShoppingCartOutlined style={{color : cartItems.length > 0 ? "tomato" : "unset"}} />, name: `Cart(${cartItems.length})`, func: cart },
+        { icon: <ShoppingCartOutlined style={{color : cartItems && cartItems.length > 0 ? "tomato" : "unset"}} />, name: `Cart(${ cartItems && cartItems.length})`, func: cart },
         { icon: <ExitToAppOutlined/>, name: "Logout", func: logoutUser }
     ];
 

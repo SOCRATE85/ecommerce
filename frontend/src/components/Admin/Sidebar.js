@@ -5,7 +5,8 @@ import {
     AddCircleOutline,
     ListAltOutlined,
     PeopleAltOutlined,
-    SettingsOutlined
+    SettingsOutlined,
+    PriceChangeOutlined
 } from "@mui/icons-material";
 import { SiderbarLinkContainer } from "../../common/components/SiderbarLinkContainer";
 
@@ -54,6 +55,11 @@ const siderbarItems = [
         url: "/admin/attributeset/new",
         font: <AddCircleOutline />,
         title: "Add Attribute Set"
+    },
+    {
+        url: "/admin/catalog_rules",
+        font: <PriceChangeOutlined />,
+        title: "Catalog Price Rule"
     },
     {
         url: "/admin/orders",

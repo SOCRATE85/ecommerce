@@ -76,7 +76,7 @@ exports.updateBlog = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
         sucess: true,
         blog
-    })
+    });
 });
 
 exports.getAllBlog = catchAsyncError(async (_req, res, _next) => {

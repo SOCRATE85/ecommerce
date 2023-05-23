@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MetaData from "../layout/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
 import { getValue } from '../../common/attribute';
+import ActionButton  from '../../common/components/ActionButton';
 import "./ConfirmOrder.css";
 
 const ConfirmOrder = () => {
@@ -99,7 +100,10 @@ const ConfirmOrder = () => {
                     <p><b>Total: </b></p>
                     <span>${totalPrice}</span>
                 </div>
-                <button className="button" onClick={proceedToPayment}>Procced To Payment</button>
+                <ActionButton
+                    onClick={proceedToPayment} 
+                    title="Procced To Payment"
+                />
             </div>
         </div>
     </>

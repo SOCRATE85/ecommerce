@@ -14,6 +14,7 @@ const Category = require("../models/categoryModel");
 const cloudinary = require("cloudinary");
 const {getproductDetailsWithAttributes} = require("../utils/productAttribute");
 const slugify = require("../utils/slugify");
+const Catalogrule = require("../models/catalogruleModel"); 
 
 function removeDuplicates(arr) {
     return arr.filter((item, 
@@ -958,7 +959,7 @@ exports.getProductDetails = catchAsyncError(async (req, res) => {
                                 _id: result._id,
                                 productId: product._id,
                             };
-                        }                        
+                        }              
                     break;
                     case 'select':
                         result = await ProductValueText.findOne({productId: product._id, attributeId: attributes[attributeKey].attributeId});

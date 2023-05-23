@@ -2,16 +2,16 @@ import React, { useEffect, useRef } from "react";
 import CheckoutSteps from "./CheckoutSteps";
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layout/MetaData";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { useAlert } from "react-alert";
 import { CardNumberElement, CardCvcElement, CardExpiryElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { removeItemFromcartAfterOrderSuccess, clearErrors, createOrder } from '../../store';
 import { CreditCardOutlined, EventOutlined,VpnKeyOutlined } from "@mui/icons-material";
-
-import "./Payment.css";
+import Loader from '../layout/Loader';
 import { useNavigate } from "react-router-dom";
 import { getValue } from "../../common/attribute";
+import "./Payment.css";
 
 const Payment = () => {
     const payBtn = useRef(null);
@@ -20,14 +20,16 @@ const Payment = () => {
     const alert = useAlert();
     const stripe = useStripe();
     const elements = useElements();
-    const { shippingInfo, cartItems } = useSelector( state => state.cart);
+    const { shippingInfo, billingInfo, shippingSameAsBilling, cartItems, loading } = useSelector( state => state.cart);
     const { user } = useSelector( state => state.user );
     const { error } = useSelector( state => state.newOrder );
     const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
     const paymentData = { amount : Math.round(orderInfo.totalPrice * 100)};
     
-    const order = {
+    const orderData = {
         shippingInfo,
+        billingInfo,
+        shippingSameAsBilling,
         orderItems: cartItems,
         itemsPrice: orderInfo.subtotal,
         taxPrice: orderInfo.tax,
@@ -52,7 +54,6 @@ const Payment = () => {
                     "Content-Type": "application/json",
                 }
             };
-            
             const { data } = await axios.post("/api/v1/payment/process", paymentData , config);
             const client_secret = data.client_secret;
             if(!stripe || !elements ) return;
@@ -72,12 +73,13 @@ const Payment = () => {
                     }
                 }
             });
+            console.log('result: ', result);
             if(result.error) {
                 payBtn.current.disabled = false;
                 alert.error(result.error.message);
             }else{
                 if(result.paymentIntent.status === 'succeeded') {
-                    order.paymentInfo = {
+                    orderData.paymentInfo = {
                         id: result.paymentIntent.id,
                         status: result.paymentIntent.status,
                     };
@@ -92,8 +94,9 @@ const Payment = () => {
                             product: cartItems[key].product._id,
                         });
                     }
-                    order.orderItems = items;
-                    dispatch(createOrder(order));
+                    orderData.orderItems = items;
+                    console.log('order: ', orderData);
+                    dispatch(createOrder(orderData));
                     dispatch(removeItemFromcartAfterOrderSuccess());
                     navigate("/success");
                 }else{
@@ -104,6 +107,10 @@ const Payment = () => {
             payBtn.current.disabled = false;
             alert.error("There are some error in submit an order.");
         }
+    }
+
+    if(loading) {
+        return <Loader />
     }
 
     return <>
@@ -124,12 +131,14 @@ const Payment = () => {
                     <VpnKeyOutlined />
                     <CardCvcElement className="paymentInput" />
                 </div>
-                <div>
+                <div className="w-full gap-3 flex justify-center">
                     <input 
-                        type={"submit"} 
+                        type={"submit"}
+                         id="ActionButton"
                         value={`Pay - $${orderInfo && orderInfo.totalPrice}`} 
                         ref={payBtn} className="button" 
                     />
+                    <Button id="BackActionButton" type="button" onClick={() => navigate(-1)}>Back</Button>
                 </div>
             </form>
         </div>

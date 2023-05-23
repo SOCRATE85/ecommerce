@@ -2,6 +2,7 @@
   background-color: white;
   display: grid;
   grid-template-columns: 6fr 3fr;
+  padding: 50px;
 }
 
 .confirmOrderPage > div:last-child {
@@ -9,7 +10,6 @@
 }
 
 .confirmShippingArea {
-  padding: 5vmax;
   padding-bottom: 0%;
 }
 
@@ -24,22 +24,22 @@
 
 .confirmShippingAreaBox > div {
   display: flex;
-  margin: 1vmax 0;
+  margin: 10px 0;
 }
 
 .confirmShippingAreaBox > div > p {
-  font: 400 14px "Roboto", sans-serif;
+  font-size: 14px;
   color: black;
 }
 
 .confirmShippingAreaBox > div > span {
-  margin: 0 1vmax;
-  font: 100 14px "Roboto", sans-serif;
+  margin: 0 10px;
+  font-size: 14px;
   color: #575757;
 }
 
 .confirmCartItems {
-  padding: 2vmax 5vmax;
+  padding: 40px 0;
 }
 
 .confirmCartItems > p {
@@ -68,12 +68,12 @@
 }
 
 .confirmCartItemsContainer > div > span {
-  font: 100 14px "Roboto", sans-serif;
+  font: 400 14px "Roboto", sans-serif;
   color: #5e5e5e;
 }
 
 .orderSummary {
-  padding: 7vmax;
+  padding: 20px;
 }
 
 .orderSummary > p {

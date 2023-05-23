@@ -8,6 +8,8 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 exports.newOrder = catchAsyncError(async (req, res, _next) => {
     let { 
         shippingInfo, 
+        billingInfo,
+        shippingSameAsBilling,
         orderItems, 
         paymentInfo, 
         itemsPrice, 
@@ -17,7 +19,7 @@ exports.newOrder = catchAsyncError(async (req, res, _next) => {
     } = req.body;
     
     if(shippingInfo.addressId === 'newaddress') {
-        const addressData = {
+        const shippingInfoAddressData = {
             firstname: shippingInfo.firstname,
             lastname: shippingInfo.lastname,
             address: shippingInfo.address,
@@ -28,12 +30,30 @@ exports.newOrder = catchAsyncError(async (req, res, _next) => {
             phoneNo: shippingInfo.phoneNo,
             user: req.user._id
         }
-        const address = await Address.create(addressData);
-        shippingInfo.addressId = address._id;
+        const shippingInfoAddress = await Address.create(shippingInfoAddressData);
+        shippingInfo.addressId = shippingInfoAddress._id;
+    }
+
+    if(billingInfo.addressId === 'newaddress') {
+        const billingInfoAddressData = {
+            firstname: billingInfo.firstname,
+            lastname: billingInfo.lastname,
+            address: billingInfo.address,
+            city: billingInfo.city,
+            state: billingInfo.state,
+            country: billingInfo.country,
+            pinCode: billingInfo.pinCode,
+            phoneNo: billingInfo.phoneNo,
+            user: req.user._id
+        }
+        const billingInfoAddress = await Address.create(billingInfoAddressData);
+        billingInfo.addressId = billingInfoAddress._id;
     }
 
     const order = await Order.create({
-        shippingInfo, 
+        shippingInfo,
+        billingInfo,
+        shippingSameAsBilling,
         orderItems, 
         paymentInfo, 
         itemsPrice, 
