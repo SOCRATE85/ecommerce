@@ -1,12 +1,12 @@
 import React from "react";
+import Select from 'react-select';
 import CheckBoxGroup from './CheckBoxGroup';
 import RadioBoxGroup from './RadioBoxGroup';
 import Editor from './Editor';
 import Boolean from "./Boolean";
-import Select from 'react-select';
 import Images from "./Images";
 import ControlContainer from '../ControlContainer';
-import Conditions from "./Conditions";
+import ShowCondition from "./Conditions/ShowCondition";
 
 const Input = (props) => {
     let inputElement = null;
@@ -105,7 +105,7 @@ const Input = (props) => {
             inputElement = (<Editor initData={props.value} id={props.id} changed={props.changed} />)
         break;
         case "conditions":
-            inputElement = <Conditions />;
+            inputElement = <ShowCondition {...{props}} />;
         break;
         case 'date':
             inputElement = (<input 

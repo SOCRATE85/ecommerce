@@ -43,10 +43,139 @@ export const deleteCatalogRule = createAsyncThunk("catalogrule/deleteCatalogRule
     }
 });
 
+export const loadDefaultOption = createAsyncThunk("catalogrule/loadDefaultOption", async(_, thunkAPI) => {
+    try {
+        
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+export const deleteRules = createAsyncThunk("catalogrule/deleteRules", async (level, thunkAPI) => {
+    try {
+        return level;
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+export const updateConditionTypeFlag = createAsyncThunk("catalogrule/conditionTypeFlag", async (catalogObject, thunkAPI) => {
+    try {
+        return catalogObject;
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+export const updateConditionValueFlag = createAsyncThunk("catalogrule/updateConditionValueFlag", async (catalogObject, thunkAPI) => {
+    try {
+        return catalogObject;
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatalogRuleObject", async (catalogObject, thunkAPI) => {
+    try {
+        switch(catalogObject.type) {
+            case "conditions_combinations":
+                return {
+                    level: catalogObject.level,
+                    type: catalogObject.type,
+                    conditionType: 'all',
+                    conditionValue: true,
+                    conditionTypeFlag: false,
+                    conditionValueFlag: false
+                }
+            case "attribute_set":
+                return {
+                    level: catalogObject.level,
+                    type: catalogObject.type,
+                    open: catalogObject.open,
+                    attributeset: catalogObject.attributeset
+                }
+            case "category":
+                return {
+                    level: catalogObject.level,
+                    type: catalogObject.type,
+                    conditionType: 'all',
+                    conditionValue: true,
+                    conditionTypeFlag: false,
+                    conditionValueFlag: false,
+                    category: catalogObject.category
+                }
+            case "productid":
+                return {
+                    level: catalogObject.level,
+                    type: catalogObject.type,
+                    conditionType: 'all',
+                    conditionValue: true,
+                    conditionTypeFlag: false,
+                    conditionValueFlag: false,
+                    products: catalogObject.products
+                }
+            default:
+                return {
+                    level: catalogObject.level,
+                    type: catalogObject.type,
+                    conditionType: 'all',
+                    conditionValue: true,
+                    conditionTypeFlag: false,
+                    conditionValueFlag: false,
+                }
+        };
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
 export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatalogRuleObject", async (catalogObject, thunkAPI) => {
     try {
-        console.log('catalogObject: ', catalogObject);
-        return catalogObject;
+        switch(catalogObject.type) {
+                case "conditions_combinations":
+                    return {
+                        level: catalogObject.level,
+                        type: catalogObject.type,
+                        conditionType: catalogObject.conditionType,
+                        conditionValue: catalogObject.conditionValue,
+                        conditionTypeFlag: catalogObject.conditionTypeFlag,
+                        conditionValueFlag: catalogObject.conditionValueFlag
+                    }
+                case "attribute_set":
+                    return {
+                        level: catalogObject.level,
+                        type: catalogObject.type,
+                        open: catalogObject.open,
+                        attributeset: catalogObject.attributeset
+                    }
+                case "category":
+                    return {
+                        level: catalogObject.level,
+                        type: catalogObject.type,
+                        conditionType: 'all',
+                        conditionValue: true,
+                        conditionTypeFlag: false,
+                        conditionValueFlag: false,
+                    }
+                case "productid":
+                    return {
+                        level: catalogObject.level,
+                        type: catalogObject.type,
+                        conditionType: 'all',
+                        conditionValue: true,
+                        conditionTypeFlag: false,
+                        conditionValueFlag: false,
+                    }
+                default:
+                    return {
+                        level: catalogObject.level,
+                        type: catalogObject.type,
+                        conditionType: 'all',
+                        conditionValue: true,
+                        conditionTypeFlag: false,
+                        conditionValueFlag: false,
+                    }
+            };
     } catch (error) {
         return thunkError(error, thunkAPI);
     }

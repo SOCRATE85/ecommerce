@@ -11,17 +11,18 @@ const Boolean = (props) => {
     containerBgColor.push("lefthandlebgcolor");
     handleBgColor.push("left");
   }
+
   return (
-    <div className={containerBgColor.join(" ")}>
-      <label id={props.id} className={handleBgColor.join(" ")}>
+    <label id={props.id} className={containerBgColor.join(" ")}>
+      <div className={handleBgColor.join(" ")}>
         <input
           id={props.id}
           type={"checkbox"}
           checked={props.value ? true : false}
           onChange={props.onChange}
         />
-      </label>
-    </div>
+      </div>
+    </label>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import { useAlert } from "react-alert";
 import { clearErrors, createCatalogRule } from '../../../../store';
 import { useThunk } from '../../../../common/hooks/use-thunk';
@@ -13,12 +12,8 @@ import SubmitActionButton from '../../../../common/components/SubmitActionButton
 
 const AddNewCatalogPriceRule = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const alert = useAlert();
     const [doCreateCatalogRule, isLoadingCatalogRule, isErrorInCatalogRule] = useThunk(createCatalogRule);
-    const { categories } = useSelector(state => state.categories);
-    const { products } = useSelector(state => state.products);
-    const { attributes } = useSelector( state => state.attributes);
     const stopRulesProcessing = [
         {
             value: "yes",
