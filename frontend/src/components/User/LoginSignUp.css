@@ -51,10 +51,6 @@
   transition: all 0.5s;
 }
 
-.signUpForm {
-  transform: translateY(-100%) translateX(-100vmax);
-}
-
 .loginForm > div,
 .signUpForm > div {
   display: flex;

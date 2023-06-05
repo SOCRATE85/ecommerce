@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import FaceOutlinedIcon from "@mui/icons-material/FaceOutlined";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import ActionControl from '../../common/ActionControl';
 import Loader from "../layout/Loader/Loader";
+import FormAction from '../../common/components/FormAction';
+import FormElement from '../../common/components/FormElement';
+import SubmitButton from '../../common/components/SubmitActionButton';
 import { clearErrors, register, uploadFiles } from "../../store";
 import { useAlert } from "react-alert";
 import "./LoginSignUp.css";
@@ -14,16 +15,113 @@ const SignUp = () => {
   const location = useLocation();
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector(
-    (state) => state.user
-  );
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const { loading, error, isAuthenticated } = useSelector(state => state.user);
+  const { images: uploadedImage } = useSelector(state=>state.uploadImage);
+  const [ images, setImages ] = useState([]);
+  const [ imageIdentifier, setImageIdentifier ] = useState([]);
+  const [ imageUpload, setImageUpload ] = useState(false);
+  const [formState, setFormState] = useState({
+    name: {
+      elementType: "input",
+      elementConfig: {
+          type: "text",
+          placeholder: "Name",
+          error: ""
+      },
+      value: "",
+      validation: {
+          required: true
+      },
+      hideLabel: false,
+      valid: false,
+      touched: false
+    },
+    email: {
+      elementType: "input",
+      elementConfig: {
+          type: "email",
+          placeholder: "Email",
+          error: ""
+      },
+      value: "",
+      validation: {
+          required: true,
+          isEmail: true,
+      },
+      hideLabel: false,
+      valid: false,
+      touched: false
+    },
+    password: {
+      elementType: "input",
+      elementConfig: {
+          type: "password",
+          placeholder: "Password",
+          error: ""
+      },
+      value: "",
+      validation: {
+          required: true
+      },
+      hideLabel: false,
+      valid: false,
+      touched: false
+    },
+    avatar: {
+      elementType: "file",
+      elementConfig: {
+          type: "file",
+          error: "",
+          placeholder: "Avatar"
+      },
+      value: [],
+      validation: {
+          required: false,
+          isImage: true
+      },
+      hideLabel: false,
+      valid: false,
+      touched: false
+    },
   });
-  const [avatar, setAvatar] = useState();
-  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+  
+  const actioncontrol = useMemo(() => {
+        return new ActionControl({
+          formState,
+          setFormState,
+          images,
+          setImages,
+          imageIdentifier,
+          setImageIdentifier,
+          uploadedImage,
+          imageUpload,
+          setImageUpload
+        });
+    },[
+        formState,
+        setFormState,
+        images,
+        setImages,
+        imageIdentifier,
+        setImageIdentifier,
+        uploadedImage,
+        imageUpload,
+        setImageUpload
+  ]);
+
+  useEffect(() => {
+      if(imageUpload && uploadedImage && uploadedImage.length > 0) {
+          actioncontrol.loadOption();
+      }
+  }, [uploadedImage, imageUpload, actioncontrol]);
+  
+  const createImageChange = (e, identifier) => {
+      const files = Array.from(e.target.files);
+      setImageIdentifier(identifier);
+      setImageUpload(true);
+      dispatch(uploadFiles(files));
+  }
+
   useEffect(() => {
     if (error) {
       alert.error(error.error);
@@ -36,93 +134,47 @@ const SignUp = () => {
       navigate(redirect);
     }
   }, [dispatch, error, alert, isAuthenticated, navigate, location.search]);
-  const registerSubmit = (e) => {
-    e.preventDefault();
+
+  const createSubmitHandler = (state) => {
     const myForm = new FormData();
-    myForm.set("name", user.name);
-    myForm.set("email", user.email);
-    myForm.set("password", user.password);
-    myForm.set("avatar", avatar);
+    myForm.set("name", state.name.value);
+    myForm.set("email", state.email.value);
+    myForm.set("password", state.password.value);
+    myForm.set("avatar", state.avatar.value);
+    myForm.set("status", true);
     dispatch(register(myForm));
     if (isAuthenticated) {
       navigate("/account");
     }
   };
 
-  const registerDataChange = (e) => {
-    if (e.target.name === "avatar") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
+  let formElementArray = useMemo(() => {
+        const _formElementArray = [];
+        const tempformElementArray = actioncontrol.getFormState();
+        for(let key in tempformElementArray) {
+            _formElementArray.push({
+                id: key,
+                config: tempformElementArray[key]
+            })
         }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
+        return _formElementArray;
+  }, [actioncontrol]);
+
   if (error || loading) {
     return <Loader />;
   }
   return (
     <div className="LoginSignUpContainer">
       <div className="LoginSignUpBox">
-        <form
-          className="signUpForm"
-          encType="multipart/form-data"
-          onSubmit={registerSubmit}
-        >
-          <div className="signUpName">
-            <FaceOutlinedIcon />
-            <input
-              type={"text"}
-              placeholder="Name"
-              required
-              name="name"
-              value={user.name}
-              onChange={registerDataChange}
-            />
-          </div>
-          <div className="signUpmail">
-            <EmailOutlinedIcon />
-            <input
-              type={"email"}
-              placeholder={"Email"}
-              required
-              name="email"
-              value={user.email}
-              onChange={registerDataChange}
-            />
-          </div>
-          <div className="signUpPassword">
-            <LockOpenOutlinedIcon />
-            <input
-              type={"password"}
-              name="password"
-              placeholder={"Password"}
-              required
-              value={user.password}
-              onChange={registerDataChange}
-            />
-          </div>
-          <div id="registerImage">
-            <img src={avatarPreview} alt={"Avatar Preview"} />
-            <input
-              type={"file"}
-              name="avatar"
-              accept="image/*"
-              onChange={registerDataChange}
-            />
-          </div>
-          <input
-            type={"submit"}
-            value="Register"
-            className="btn"
-            disabled={loading ? true : false}
+        <FormAction submitHandler={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}>
+          <FormElement 
+            formElementArray={formElementArray}
+            actioncontrol={actioncontrol}
+            createImageChange={createImageChange}
           />
-        </form>
+          <Link to={'/login'}>Please login if you have already account.</Link>
+          <SubmitButton title={'Register'}></SubmitButton>
+          </FormAction>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const ShowCondition = (props) => {
     if(loading) {
         return <Loader />
     }
-    
+    console.log('conditionObject: ', conditionObject);
     return (<>
         {
             conditionObject.length > 0 && conditionObject.map((item, index) => {
@@ -33,6 +33,8 @@ const ShowCondition = (props) => {
                         return (<div style={{marginLeft: index * 16}} key={index}>
                             <ConditionLayout 
                                 item={item}
+                                level={item.level}
+                                parent={item.parent}
                                 conditionObject={conditionObject}
                                 deleteCompoment={item.level !== 0 && <>:<Delete onClick={() => {
                                         if(item.level !== 0) {
@@ -56,6 +58,8 @@ const ShowCondition = (props) => {
                             <div style={{marginLeft: index * 16}} key={index}>
                                 <AttributeSet
                                     item={item}
+                                    level={item.level}
+                                    parent={item.parent}
                                     attributesets={attributesets}
                                     conditionObject={conditionObject}
                                     deleteCompoment={item.level !== 0 && <>:<Delete onClick={() => {
@@ -82,6 +86,8 @@ const ShowCondition = (props) => {
                                 <Category
                                     item={item}
                                     categories={categories}
+                                    level={item.level}
+                                    parent={item.parent}
                                     conditionObject={conditionObject}
                                     deleteCompoment={item.level !== 0 && <>:<Delete onClick={() => {
                                             if(item.level !== 0) {
@@ -106,6 +112,8 @@ const ShowCondition = (props) => {
                             <div style={{marginLeft: index * 16}} key={index}>
                                 <Product
                                     item={item}
+                                    level={item.level}
+                                    parent={item.parent}
                                     products={products}
                                     conditionObject={conditionObject}
                                     deleteCompoment={item.level !== 0 && <>:<Delete onClick={() => {
@@ -130,7 +138,9 @@ const ShowCondition = (props) => {
                         return (
                             <div style={{marginLeft: index * 16}} key={index}>
                                 <ConditionLayout 
-                                    item={item} 
+                                    item={item}
+                                    level={item.level}
+                                    parent={item.parent}
                                     conditionObject={conditionObject}
                                     deleteCompoment={item.level !== 0 && <>:<Delete onClick={() => {
                                             if(item.level !== 0) {

@@ -1,0 +1,666 @@
+[{
+  "_id": {
+    "$oid": "6320c3a34c13ccc535c7e3a7"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf0"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf1"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf2"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf3"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf4"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf5"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "637b6309f5b2187a6dd6bc34"
+      },
+      "attributeName": "Status",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf6"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "637b8b91956f34c7e9182cb0"
+      },
+      "attributeName": "Length",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf7"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-13T17:51:30.504Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6321b5890af3bd29b6ab92fb"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab92fc"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab92fd"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab92fe"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab92ff"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab9300"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "6321b5890af3bd29b6ab9301"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-14T11:04:59.426Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6321b67d6d6415db58c38a3c"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a3d"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a3e"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a3f"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a40"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a41"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "6321b67d6d6415db58c38a42"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-14T11:09:07.854Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6321b821e7608bc003ef4e9b"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab84"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab85"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab86"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab87"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab88"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-14T11:16:27.094Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635944f6e7f7a722447d8043"
+  },
+  "attribute_group_name": "Price Group",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab8a"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6329f51a05535575e3c53113"
+      },
+      "attributeName": "Model",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab8b"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "638e311135b70990f1e6ab3a"
+      },
+      "attributeName": "Testing Checkbox",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab8c"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-26T14:31:04.406Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635a8b312f260a16bf6c02ae"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91e7"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91e8"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91e9"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91ea"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91eb"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-27T13:43:24.023Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635a8b312f260a16bf6c02b6"
+  },
+  "attribute_group_name": "Price Group",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91ed"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6329f51a05535575e3c53113"
+      },
+      "attributeName": "Model",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91ee"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "638de57d9c58e3bb926c914b"
+      },
+      "attributeName": "Testing",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91ef"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-27T13:43:24.023Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635a91d03a02a9f0cc0c515e"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "635a939b303c9831f9840757"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "635a939b303c9831f9840758"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "635a939b303c9831f9840759"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "635a939b303c9831f984075a"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "635a939b303c9831f984075b"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-27T14:12:01.283Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635a91d03a02a9f0cc0c5166"
+  },
+  "attribute_group_name": "Price Group",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "635a939b303c9831f984075d"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6329f51a05535575e3c53113"
+      },
+      "attributeName": "Model",
+      "_id": {
+        "$oid": "635a939b303c9831f984075e"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-27T14:12:01.283Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6392155b46cf77b8bb64b632"
+  },
+  "attribute_group_name": "General",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318d916690ab36cf0145733"
+      },
+      "attributeName": "Images",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5ff"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9ab3f49ff8bb06d31b8"
+      },
+      "attributeName": "Name",
+      "_id": {
+        "$oid": "63932d67d93853e26903b600"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9df3f49ff8bb06d31bd"
+      },
+      "attributeName": "Short Description",
+      "_id": {
+        "$oid": "63932d67d93853e26903b601"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318d9f53f49ff8bb06d31c2"
+      },
+      "attributeName": "Description",
+      "_id": {
+        "$oid": "63932d67d93853e26903b602"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6318da573f49ff8bb06d31cc"
+      },
+      "attributeName": "Stock (Quantity)",
+      "_id": {
+        "$oid": "63932d67d93853e26903b603"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "637b6309f5b2187a6dd6bc34"
+      },
+      "attributeName": "Status",
+      "_id": {
+        "$oid": "63932d67d93853e26903b604"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "637b8b91956f34c7e9182cb0"
+      },
+      "attributeName": "Length",
+      "_id": {
+        "$oid": "63932d67d93853e26903b605"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-12-08T16:39:24.375Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "639215ac46cf77b8bb64b650"
+  },
+  "attribute_group_name": "Price Group",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "6318da1d3f49ff8bb06d31c7"
+      },
+      "attributeName": "Price",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5f9"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6329f51a05535575e3c53113"
+      },
+      "attributeName": "Model",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5fa"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "638de57d9c58e3bb926c914b"
+      },
+      "attributeName": "Testing",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5fb"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "638e311135b70990f1e6ab3a"
+      },
+      "attributeName": "Testing Checkbox",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5fc"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "63932d49d93853e26903b5a4"
+      },
+      "attributeName": "Radiobox Demo",
+      "_id": {
+        "$oid": "63932d67d93853e26903b5fd"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-12-08T16:39:24.375Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "639323f53f301c2be6fb8264"
+  },
+  "attribute_group_name": "Special Price",
+  "attributes": [
+    {
+      "attributeId": {
+        "$oid": "639323ca3f301c2be6fb821f"
+      },
+      "attributeName": "Special Price",
+      "_id": {
+        "$oid": "63932d67d93853e26903b607"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "639323783f301c2be6fb8211"
+      },
+      "attributeName": "From",
+      "_id": {
+        "$oid": "63932d67d93853e26903b608"
+      }
+    },
+    {
+      "attributeId": {
+        "$oid": "6393239e3f301c2be6fb8218"
+      },
+      "attributeName": "To",
+      "_id": {
+        "$oid": "63932d67d93853e26903b609"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-12-09T11:54:25.606Z"
+  },
+  "__v": 0
+}]

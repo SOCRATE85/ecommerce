@@ -33,7 +33,7 @@ const Images = ({removeImage, image}) => {
   }, [image]);
 
   return (<div>
-          <Delete onClick={removeImage} />
+          {removeImage && <Delete onClick={removeImage} />}
           <img src={imageData} alt="Avatar Preview" />
       </div>);
 }

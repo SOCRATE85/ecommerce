@@ -27,25 +27,52 @@ const Input = (props) => {
             />);
         break;
         case "file":
-            inputElement = (<>
-                <input 
-                    onChange={props.changed}
-                    multiple={true}
-                    className={inputClasses.join(" ")}
-                    {...props.elementConfig}
-                />
-                {props.value && <div id="createProductFormImage">
+            console.log('props.value: ', props.value);
+            if(props.multiple) {
+                inputElement = (<>
+                    <input 
+                        onChange={props.changed}
+                        multiple={props.multiple}
+                        className={inputClasses.join(" ")}
+                        {...props.elementConfig}
+                    />
                     {
-                        props.value.map((image, index) => {
-                            return <Images 
-                                key={index} 
-                                image={image} 
-                                removeImage={() => props.removeImage(index, props.id)}
-                            />
-                        })
+                        <div id="createProductFormImage">
+                            {
+                                props.value && props.value.map((image, index) => {
+                                    return <Images 
+                                        key={index} 
+                                        image={image}
+                                        removeImage={() => props.removeImage(index, props.id)}
+                                    />
+                                }) 
+                            }
+                        </div>
                     }
-                </div>}
-            </>);
+                </>);
+            } else {
+                inputElement = (<>
+                    <input 
+                        onChange={props.changed}
+                        multiple={props.multiple}
+                        className={inputClasses.join(" ")}
+                        {...props.elementConfig}
+                    />
+                    {
+                        <div id="createProductFormImage">
+                            {
+                                props.value && props.value.map((image, index) => {
+                                    return <Images 
+                                        key={index} 
+                                        image={image}
+                                        removeImage={() => props.removeImage(index, props.id)}
+                                    />
+                                }) 
+                            }
+                        </div>
+                    }
+                </>);
+            }
         break;
         case 'boolean':
             inputElement = <Boolean 

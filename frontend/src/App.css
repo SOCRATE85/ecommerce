@@ -35,7 +35,7 @@
 
 .btn {
     border: none;
-    background-color: tomato;
+    background-color: tomato !important;
     color: white;
     font: 300 18px "Roboto", sans-serif;
     padding: 10px 30px;

@@ -59,7 +59,7 @@ class ActionControl {
                     updatedFormElement.value = data[identifier] ? data[identifier] : "";
                 break;
                 case "file":
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier] ? data[identifier] : [];
                 break;
                 case "input":
                     updatedFormElement.value = data[identifier] ? data[identifier] : "";

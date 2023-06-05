@@ -22,7 +22,7 @@ export const updateCatalogRuleObjectSlice = createSlice({
                 conditionValue: true,
                 conditionTypeFlag: false,
                 conditionValueFlag: false,
-                conditions: []
+                parent: null
             }
         ]
     },

@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../layout/Loader/Loader";
 import MetaData from "../layout/MetaData";
+import ProfileImage from './ProfileImage';
 import "./Profile.css";
 
 const Profile = () => {
     const navigate = useNavigate();
     const { isAuthenticated, user, loading } = useSelector(state => state.user);
-    
+
     useEffect(() => {
         if(!isAuthenticated){
             navigate("/login");
@@ -22,7 +23,7 @@ const Profile = () => {
         <div className="profileContainer">
             <div>
                 <h1>My Profile</h1>
-                <img src={user.avatar.url} alt={user.name} />
+                <ProfileImage avatar={user.avatar} name={user.name} className="profile_image large" />
                 <Link to="/me/update">Edit Profile</Link>
             </div>
             <div>

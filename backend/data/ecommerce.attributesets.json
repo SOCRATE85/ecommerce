@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "6320c3a34c13ccc535c7e3af"
+  },
+  "attribute_set_name": "Default",
+  "attribute_group": [
+    {
+      "attributeGroupId": {
+        "$oid": "6320c3a34c13ccc535c7e3a7"
+      },
+      "attributeGroup": "General",
+      "_id": {
+        "$oid": "637b8be3956f34c7e9182cf9"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-13T17:51:30.500Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6321b821e7608bc003ef4ea3"
+  },
+  "attribute_set_name": "Cars",
+  "attribute_group": [
+    {
+      "attributeGroupId": {
+        "$oid": "6321b821e7608bc003ef4e9b"
+      },
+      "attributeGroup": "General",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab8e"
+      }
+    },
+    {
+      "attributeGroupId": {
+        "$oid": "635944f6e7f7a722447d8043"
+      },
+      "attributeGroup": "Price Group",
+      "_id": {
+        "$oid": "638e313b35b70990f1e6ab8f"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-09-14T11:16:27.092Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "635a8b312f260a16bf6c02ba"
+  },
+  "attribute_set_name": "New Toys",
+  "attribute_group": [
+    {
+      "attributeGroupId": {
+        "$oid": "635a8b312f260a16bf6c02ae"
+      },
+      "attributeGroup": "General",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91f1"
+      }
+    },
+    {
+      "attributeGroupId": {
+        "$oid": "635a8b312f260a16bf6c02b6"
+      },
+      "attributeGroup": "Price Group",
+      "_id": {
+        "$oid": "638de5b29c58e3bb926c91f2"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-10-27T13:43:24.019Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6392155b46cf77b8bb64b63c"
+  },
+  "attribute_set_name": "Toy",
+  "attribute_group": [
+    {
+      "attributeGroupId": {
+        "$oid": "639215ac46cf77b8bb64b650"
+      },
+      "attributeGroup": "Price Group",
+      "_id": {
+        "$oid": "63932d67d93853e26903b60b"
+      }
+    },
+    {
+      "attributeGroupId": {
+        "$oid": "6392155b46cf77b8bb64b632"
+      },
+      "attributeGroup": "General",
+      "_id": {
+        "$oid": "63932d67d93853e26903b60c"
+      }
+    },
+    {
+      "attributeGroupId": {
+        "$oid": "639323f53f301c2be6fb8264"
+      },
+      "attributeGroup": "Special Price",
+      "_id": {
+        "$oid": "63932d67d93853e26903b60d"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2022-12-08T16:39:24.373Z"
+  },
+  "__v": 0
+}]

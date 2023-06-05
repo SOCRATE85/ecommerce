@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { SpeedDial, SpeedDialAction, Backdrop } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-import { DashboardOutlined, PersonOutline, ExitToAppOutlined, ListAltOutlined, ShoppingCartOutlined } from '@mui/icons-material';
+import {
+    DashboardOutlined,
+    PersonOutline,
+    ExitToAppOutlined,
+    ListAltOutlined,
+    ShoppingCartOutlined
+ } from '@mui/icons-material';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from "react-redux";
-import { logoutuser } from '../../../store/actions/userAction';
+import { logoutuser } from '../../../store';
 import "./UserOption.css";
 
 const UserOption = ({ user }) => {
@@ -55,7 +61,7 @@ const UserOption = ({ user }) => {
             className="speedDial"
             direction="down"
             open={open}
-            icon={<img src={ user && user.avatar.url ? user.avatar.url : "/Profile.png"} className="speedDialIcon" alt="Profile" />}
+            icon={<img src={ user && user.avatar ? user.avatar : "/Profile.png"} className="speedDialIcon" alt="Profile" />}
         >
            {
                 options.map((option, index) => {

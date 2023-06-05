@@ -23,16 +23,13 @@ const userSchema = new mongoose.Schema({
     minlength: [8, "Pasword shound be greator than 8 charactors"],
     select: false,
   },
-  image: {
-    type: String,
-    required: [false, "Please select the images"],
-    trim: true,
-  },
-  avatar: {
-    type: String,
-    required: [false, "Please select the images"],
-    trim: true,
-  },
+  avatar: [
+    {
+      type: String,
+      required: [false, "Please select the images"],
+      trim: true,
+    }
+  ],
   role: {
     type: String,
     default: "user",
@@ -40,6 +37,7 @@ const userSchema = new mongoose.Schema({
   status: {
     type: Boolean,
     required: true,
+    default: true
   },
   createdAt: {
     type: Date,

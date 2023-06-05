@@ -111,7 +111,7 @@ const AddNewCatalogPriceRule = () => {
                 error: "",
                 type: "boolean"
             },
-            value: false,
+            value: true,
             validation: {
                 required: true
             },

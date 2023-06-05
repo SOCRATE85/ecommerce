@@ -1,0 +1,391 @@
+[{
+  "_id": {
+    "$oid": "6318d916690ab36cf0145733"
+  },
+  "frontend_label": "Images",
+  "attribute_code": "images",
+  "frontend_input": "file",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:45:29.217Z"
+  },
+  "attribute_options": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6318d9ab3f49ff8bb06d31b8"
+  },
+  "frontend_label": "Name",
+  "attribute_code": "name",
+  "frontend_input": "text",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:49:23.492Z"
+  },
+  "attribute_options": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6318d9df3f49ff8bb06d31bd"
+  },
+  "frontend_label": "Short Description",
+  "attribute_code": "short_description",
+  "frontend_input": "textarea",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:49:23.492Z"
+  },
+  "attribute_options": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6318d9f53f49ff8bb06d31c2"
+  },
+  "frontend_label": "Description",
+  "attribute_code": "description",
+  "frontend_input": "textarea",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:49:23.492Z"
+  },
+  "attribute_options": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6318da1d3f49ff8bb06d31c7"
+  },
+  "frontend_label": "Price",
+  "attribute_code": "price",
+  "frontend_input": "price",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:49:23.492Z"
+  },
+  "attribute_options": [],
+  "__v": 0,
+  "default_value": "",
+  "use_in_filter": true,
+  "use_in_sorting": true
+},
+{
+  "_id": {
+    "$oid": "6318da573f49ff8bb06d31cc"
+  },
+  "frontend_label": "Stock (Quantity)",
+  "attribute_code": "stock",
+  "frontend_input": "number",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-09-07T17:49:23.492Z"
+  },
+  "attribute_options": [],
+  "__v": 0,
+  "default_value": "",
+  "use_in_filter": true,
+  "use_in_sorting": true
+},
+{
+  "_id": {
+    "$oid": "6329f51a05535575e3c53113"
+  },
+  "frontend_label": "Model",
+  "attribute_code": "model",
+  "frontend_input": "select",
+  "is_required": 2,
+  "is_user_defined": true,
+  "attribute_options": [
+    {
+      "value": "2012 Model",
+      "sortOrder": 0,
+      "_id": {
+        "$oid": "639730077bba8339313fe60e"
+      }
+    },
+    {
+      "value": "2018 Model",
+      "sortOrder": 1,
+      "_id": {
+        "$oid": "639730077bba8339313fe60f"
+      }
+    },
+    {
+      "value": "2022 Model",
+      "sortOrder": 2,
+      "_id": {
+        "$oid": "639730077bba8339313fe610"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2022-09-20T17:09:54.814Z"
+  },
+  "__v": 0,
+  "default_value": "undefined",
+  "use_in_filter": true,
+  "use_in_sorting": false
+},
+{
+  "_id": {
+    "$oid": "637b6309f5b2187a6dd6bc34"
+  },
+  "frontend_label": "Status",
+  "attribute_code": "status",
+  "frontend_input": "boolean",
+  "is_required": 2,
+  "is_user_defined": false,
+  "created_at": {
+    "$date": "2022-11-21T11:36:13.262Z"
+  },
+  "attribute_options": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "637b8b91956f34c7e9182cb0"
+  },
+  "frontend_label": "Length",
+  "attribute_code": "length",
+  "frontend_input": "number",
+  "is_required": 2,
+  "is_user_defined": true,
+  "created_at": {
+    "$date": "2022-11-21T14:29:28.110Z"
+  },
+  "attribute_options": [],
+  "__v": 0,
+  "use_in_filter": true,
+  "use_in_sorting": false,
+  "default_value": "100"
+},
+{
+  "_id": {
+    "$oid": "638de57d9c58e3bb926c914b"
+  },
+  "frontend_label": "Testing",
+  "attribute_code": "testing",
+  "frontend_input": "multiselect",
+  "is_required": 2,
+  "is_user_defined": true,
+  "use_in_filter": false,
+  "use_in_sorting": false,
+  "attribute_options": [
+    {
+      "value": "Value 1",
+      "sortOrder": 0,
+      "_id": {
+        "$oid": "638de57d9c58e3bb926c914c"
+      }
+    },
+    {
+      "value": "Value 2",
+      "sortOrder": 1,
+      "_id": {
+        "$oid": "638de57d9c58e3bb926c914d"
+      }
+    },
+    {
+      "value": "Value 3",
+      "sortOrder": 2,
+      "_id": {
+        "$oid": "638de57d9c58e3bb926c914e"
+      }
+    },
+    {
+      "value": "Value 4",
+      "sortOrder": 3,
+      "_id": {
+        "$oid": "638de57d9c58e3bb926c914f"
+      }
+    },
+    {
+      "value": "Value 5",
+      "sortOrder": 4,
+      "_id": {
+        "$oid": "638de57d9c58e3bb926c9150"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2022-12-05T12:35:09.149Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-05T12:35:09.151Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "638e311135b70990f1e6ab3a"
+  },
+  "frontend_label": "Testing Checkbox",
+  "attribute_code": "muticheckbox",
+  "frontend_input": "checkbox",
+  "is_required": 2,
+  "is_user_defined": true,
+  "use_in_filter": false,
+  "use_in_sorting": false,
+  "attribute_options": [
+    {
+      "value": "Option1",
+      "sortOrder": 0,
+      "_id": {
+        "$oid": "638e311135b70990f1e6ab3b"
+      }
+    },
+    {
+      "value": "Option2",
+      "sortOrder": 1,
+      "_id": {
+        "$oid": "638e311135b70990f1e6ab3c"
+      }
+    },
+    {
+      "value": "Option3",
+      "sortOrder": 2,
+      "_id": {
+        "$oid": "638e311135b70990f1e6ab3d"
+      }
+    },
+    {
+      "value": "Option4",
+      "sortOrder": 3,
+      "_id": {
+        "$oid": "638e311135b70990f1e6ab3e"
+      }
+    },
+    {
+      "value": "Option5",
+      "sortOrder": 4,
+      "_id": {
+        "$oid": "638e311135b70990f1e6ab3f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2022-12-05T17:57:37.385Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-05T17:57:37.386Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "639323783f301c2be6fb8211"
+  },
+  "frontend_label": "From",
+  "attribute_code": "specialprice_from",
+  "frontend_input": "date",
+  "is_required": 1,
+  "is_user_defined": true,
+  "use_in_filter": false,
+  "use_in_sorting": false,
+  "attribute_options": [],
+  "created_at": {
+    "$date": "2022-12-09T12:00:56.569Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-09T12:00:56.574Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6393239e3f301c2be6fb8218"
+  },
+  "frontend_label": "To",
+  "attribute_code": "specialprice_to",
+  "frontend_input": "date",
+  "is_required": 1,
+  "is_user_defined": true,
+  "use_in_filter": false,
+  "use_in_sorting": false,
+  "attribute_options": [],
+  "created_at": {
+    "$date": "2022-12-09T12:01:34.925Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-09T12:01:34.925Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "639323ca3f301c2be6fb821f"
+  },
+  "frontend_label": "Special Price",
+  "attribute_code": "special_price",
+  "frontend_input": "price",
+  "is_required": 1,
+  "is_user_defined": true,
+  "use_in_filter": false,
+  "use_in_sorting": false,
+  "attribute_options": [],
+  "created_at": {
+    "$date": "2022-12-09T12:02:18.489Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-09T12:02:18.490Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "63932d49d93853e26903b5a4"
+  },
+  "frontend_label": "Radiobox Demo",
+  "attribute_code": "radionbox_demo",
+  "frontend_input": "radio",
+  "is_required": 1,
+  "is_user_defined": true,
+  "use_in_filter": true,
+  "use_in_sorting": false,
+  "attribute_options": [
+    {
+      "value": "Radio 1",
+      "sortOrder": 0,
+      "_id": {
+        "$oid": "6399f092bff2bb4143f5b2c5"
+      }
+    },
+    {
+      "value": "Radio 2",
+      "sortOrder": 1,
+      "_id": {
+        "$oid": "6399f092bff2bb4143f5b2c6"
+      }
+    },
+    {
+      "value": "Radio 3",
+      "sortOrder": 2,
+      "_id": {
+        "$oid": "6399f092bff2bb4143f5b2c7"
+      }
+    },
+    {
+      "value": "Radio 4",
+      "sortOrder": 3,
+      "_id": {
+        "$oid": "6399f092bff2bb4143f5b2c8"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2022-12-09T12:42:49.637Z"
+  },
+  "updated_at": {
+    "$date": "2022-12-09T12:42:49.649Z"
+  },
+  "__v": 0,
+  "default_value": "undefined"
+}]

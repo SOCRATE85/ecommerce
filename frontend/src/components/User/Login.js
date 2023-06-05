@@ -71,6 +71,7 @@ const Login = () => {
               onChange={(e) => setLoginPassword(e.target.value)}
             />
           </div>
+          <Link to={'/register'}>Please Signup if you have no account.</Link>
           <Link to="/password/forget">Forget Password</Link>
           <button type="submit" className="btn">
             Login

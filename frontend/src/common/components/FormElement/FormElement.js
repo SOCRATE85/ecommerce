@@ -82,6 +82,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     isValid={!element.config.valid}
                     shouldValidate={element.config.validation.required}
                     touched={element.config.touched}
+                    multiple={element.config.multiple}
                     removeImage={actioncontrol.removeImage}
                     changed={(e)=> actioncontrol.createImageChange(e, element.id, createImageChange)}
                 />

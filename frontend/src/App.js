@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import Search from "./components/Product/Search";
 import ProductDetails from "./components/Product/ProductDetails";
 import Login from "./components/User/Login";
+import SignUp from "./components/User/SignUp";
 import Profile from "./components/User/Profile";
 import EditProfile from "./components/User/EditProfile";
 import UpdatePassword from "./components/User/UpdatePassword";
@@ -83,7 +84,7 @@ import Contact from "./components/Contact/Contact";
 import Category from "./components/Category/Category";
 import "./App.css";
 
-import { FrontLayout, AdminLayout, Loader } from "./components/layout";
+import { FrontLayout, AdminLayout } from "./components/layout";
 
 function App() {
   const [stripeApikey, setStripeApikey] = useState("");
@@ -103,7 +104,6 @@ function App() {
         webFont.load({
           families: ["Roboto", "Drold Sans", "Chilanka"],
         });
-
         await store.dispatch(loadUser());
         await store.dispatch(getCategoryForFrontEnd());
         await store.dispatch(getAllCategoriesForFrontEnd());
@@ -118,7 +118,7 @@ function App() {
       window.removeEventListener("load", onLoad);
     };
   }, []);
-
+  
   //To disable th write click on page
   //window.addEventListener("contextmenu", (e) => e.preventDefault());
 
@@ -144,6 +144,7 @@ function App() {
             })}
           <Route path="/search" element={<Search />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<SignUp />} />
           <Route path="/password/forget" element={<ForgotPassword />} />
           <Route path="/password/reset/:token" element={<ResetPassword />} />
           <Route

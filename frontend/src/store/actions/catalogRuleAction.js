@@ -85,14 +85,16 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
                     conditionType: 'all',
                     conditionValue: true,
                     conditionTypeFlag: false,
-                    conditionValueFlag: false
+                    conditionValueFlag: false,
+                    parent: catalogObject.parent
                 }
             case "attribute_set":
                 return {
                     level: catalogObject.level,
                     type: catalogObject.type,
                     open: catalogObject.open,
-                    attributeset: catalogObject.attributeset
+                    attributeset: catalogObject.attributeset,
+                    parent: catalogObject.parent
                 }
             case "category":
                 return {
@@ -102,7 +104,8 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
                     conditionValue: true,
                     conditionTypeFlag: false,
                     conditionValueFlag: false,
-                    category: catalogObject.category
+                    category: catalogObject.category,
+                    parent: catalogObject.parent
                 }
             case "productid":
                 return {
@@ -112,7 +115,8 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
                     conditionValue: true,
                     conditionTypeFlag: false,
                     conditionValueFlag: false,
-                    products: catalogObject.products
+                    products: catalogObject.products,
+                    parent: catalogObject.parent
                 }
             default:
                 return {
@@ -122,6 +126,7 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
                     conditionValue: true,
                     conditionTypeFlag: false,
                     conditionValueFlag: false,
+                    parent: catalogObject.parent
                 }
         };
     } catch (error) {
@@ -139,23 +144,23 @@ export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatal
                         conditionType: catalogObject.conditionType,
                         conditionValue: catalogObject.conditionValue,
                         conditionTypeFlag: catalogObject.conditionTypeFlag,
-                        conditionValueFlag: catalogObject.conditionValueFlag
+                        conditionValueFlag: catalogObject.conditionValueFlag,
+                        parent: catalogObject.parent
                     }
                 case "attribute_set":
                     return {
                         level: catalogObject.level,
                         type: catalogObject.type,
                         open: catalogObject.open,
-                        attributeset: catalogObject.attributeset
+                        attributeset: catalogObject.attributeset,
+                        parent: catalogObject.parent
                     }
                 case "category":
                     return {
                         level: catalogObject.level,
                         type: catalogObject.type,
-                        conditionType: 'all',
-                        conditionValue: true,
-                        conditionTypeFlag: false,
-                        conditionValueFlag: false,
+                        category: catalogObject.category,
+                        parent: catalogObject.parent
                     }
                 case "productid":
                     return {
@@ -165,6 +170,7 @@ export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatal
                         conditionValue: true,
                         conditionTypeFlag: false,
                         conditionValueFlag: false,
+                        parent: catalogObject.parent
                     }
                 default:
                     return {
@@ -174,6 +180,7 @@ export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatal
                         conditionValue: true,
                         conditionTypeFlag: false,
                         conditionValueFlag: false,
+                        parent: catalogObject.parent
                     }
             };
     } catch (error) {
