@@ -9,9 +9,7 @@ export const getValue = (attribute, productData) => {
     }
 }
 
-export const getPrice = () => {
-    
-}
+export const getPrice = () => {}
 
 export const generateUrl = (selectedFilters, navigate, location) => {
     const urlData = [];

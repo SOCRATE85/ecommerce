@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from "react-alert";
-import { clearErrors, createCatalogRule } from '../../../../store';
-import { useThunk } from '../../../../common/hooks/use-thunk';
+import { clearErrors, createCatalogRule, createCatalogRuleReset } from '../../../../store';
 import { FormContainer } from "../../../../common/components/FormContainer";
 import FormAction from '../../../../common/components/FormAction';
 import ActionControl from '../../../../common/ActionControl';
@@ -12,15 +12,17 @@ import SubmitActionButton from '../../../../common/components/SubmitActionButton
 
 const AddNewCatalogPriceRule = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const alert = useAlert();
-    const [doCreateCatalogRule, isLoadingCatalogRule, isErrorInCatalogRule] = useThunk(createCatalogRule);
+    const {success, error, loading} = useSelector(state => state.createCatalogRule);
+    const {conditionObject} = useSelector(state => state.updateCatalogRuleObject);
     const stopRulesProcessing = [
         {
-            value: "yes",
+            value: true,
             label: "Yes"
         },
         {
-            value: "no",
+            value: false,
             label: "No"
         },
     ];
@@ -42,7 +44,6 @@ const AddNewCatalogPriceRule = () => {
             label: "Adjust final price to discount value"
         },
     ];
-    
     const [formState, setFormState] = useState({
         name: {
             elementType: "input",
@@ -149,21 +150,6 @@ const AddNewCatalogPriceRule = () => {
             valid: false,
             touched: false
         },
-        actions_serialized: {
-            elementType: "input",
-            elementConfig: {
-                type: "hidden",
-                placeholder: "Action serialized",
-                error: ""
-            },
-            value: {},
-            validation: {
-                required: false
-            },
-            hideLabel: true,
-            valid: false,
-            touched: false
-        },
         simple_action: {
             elementType: "select",
             elementConfig: {
@@ -216,24 +202,40 @@ const AddNewCatalogPriceRule = () => {
             formState,
             setFormState
         });
-    },[
+    }, [
         formState,
         setFormState,
     ]);
 
     useEffect(() => {
-        if(isErrorInCatalogRule) {
-            alert.error(isErrorInCatalogRule.error);
+        if(success) {
+            alert.success("Rule added successfully");
+            dispatch(createCatalogRuleReset());
+            navigate('/admin/catalog_rules');
+        }
+    }, [success, dispatch, alert, navigate]);
+
+    useEffect(() => {
+        if(error) {
+            alert.error(error.error);
             dispatch(clearErrors());
         }
-    }, [dispatch, alert, isErrorInCatalogRule]);
+    }, [dispatch, alert, error]);
 
     const createSubmitHandler = (state) => {
         const myForm = new FormData();
         for(let key in state) {
-            myForm.set(key, state[key].value);
+            if(key === 'conditions_serialized') {
+                myForm.set(key, JSON.stringify(conditionObject));
+            } else if(key === 'simple_action') {
+                myForm.set(key, state[key].value.value);
+            } else if(key === 'stop_rules_processing')  {
+                myForm.set(key, state[key].value.value);
+            } else {
+                myForm.set(key, state[key].value);
+            }
         }
-        doCreateCatalogRule(myForm);
+        dispatch(createCatalogRule(myForm));
     }
 
     let formElementArray = useMemo(() => {
@@ -248,12 +250,13 @@ const AddNewCatalogPriceRule = () => {
         return _formElementArray;
     }, [actioncontrol]);
     
-    if(isLoadingCatalogRule) {
+    if(loading) {
         return <Loader />
     }
 
     return <FormContainer pagetitle={"Add Catalog Rule"}>
-        <FormAction submitHandler={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}
+        <FormAction 
+            submitHandler={(e) => actioncontrol.createSubmitHandler(e, createSubmitHandler)}
         >
             <FormElement 
                 formElementArray={formElementArray}

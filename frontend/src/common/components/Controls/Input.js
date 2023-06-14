@@ -7,6 +7,7 @@ import Boolean from "./Boolean";
 import Images from "./Images";
 import ControlContainer from '../ControlContainer';
 import ShowCondition from "./Conditions/ShowCondition";
+import moment from "moment";
 
 const Input = (props) => {
     let inputElement = null;
@@ -18,16 +19,19 @@ const Input = (props) => {
 
     switch(props.elementType) {
         case "input":
+            let value = props.value;
+            if(props.elementConfig.type === 'date') {
+                value = moment(props.value).format("YYYY-MM-DD");
+            }
             inputElement = (<input 
-                onChange={props.changed}
-                onBlur={props.changed}
-                className={inputClasses.join(" ")}
-                {...props.elementConfig}
-                value={props.value}
-            />);
+                        onChange={props.changed}
+                        onBlur={props.changed}
+                        className={inputClasses.join(" ")}
+                        {...props.elementConfig}
+                        value={value}
+                    />);
         break;
         case "file":
-            console.log('props.value: ', props.value);
             if(props.multiple) {
                 inputElement = (<>
                     <input 
@@ -98,16 +102,18 @@ const Input = (props) => {
                 options.push({label: option.defaultValue, value: option.value});
                 return true;
             });
-            inputElement = <Select 
-                                options={props.options ? props.options : options} 
-                                value={props.value !== null ? props.value : []}
-                                isMulti={props.elementType === 'multiselect' ? true : false}
-                                onChange={props.changed}
-                                onClick={props.click}
-                            />
+            inputElement = (
+                <Select 
+                    options={props.options ? props.options : options} 
+                    value={props.value !== null ? props.value : []}
+                    isMulti={props.elementType === 'multiselect' ? true : false}
+                    onChange={props.changed}
+                    onClick={props.click}
+                />
+            );
         break;
         case "checkbox":
-            inputElement = (<CheckBoxGroup 
+            inputElement = (<CheckBoxGroup
                 changed={props.changed}
                 multiple={props.multiple}
                 name={props.id}
@@ -132,25 +138,18 @@ const Input = (props) => {
             inputElement = (<Editor initData={props.value} id={props.id} changed={props.changed} />)
         break;
         case "conditions":
-            inputElement = <ShowCondition {...{props}} />;
-        break;
-        case 'date':
-            inputElement = (<input 
-                onChange={props.changed}
-                onBlur={props.changed}
-                className={inputClasses.join(" ")}
-                {...props.elementConfig}
-                value={props.value}
-            />);
+            inputElement = <ShowCondition value={props.value} id={props.id} changed={props.changed} />;
         break;
         default:
-            inputElement = (<input 
-                onChange={props.changed}
-                onBlur={props.changed}
-                className={inputClasses.join(" ")}
-                {...props.elementConfig}
-                value={props.value}
-            />);
+            inputElement = (
+                <input 
+                    onChange={props.changed}
+                    onBlur={props.changed}
+                    className={inputClasses.join(" ")}
+                    {...props.elementConfig}
+                    value={props.value}
+                />
+            );
         break;
     }
     return (<ControlContainer

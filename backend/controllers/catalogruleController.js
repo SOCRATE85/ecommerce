@@ -12,7 +12,7 @@ exports.createCatalogRule = catchAsyncError(async (req, res, _next) => {
 
 exports.getCatalogRule = catchAsyncError(async (req, res, next) => {
     const rule = await Catalogrule.findById(req.params.id);
-    if(rule){
+    if(!rule){
         return next(new ErrorHandler("Catalogrule is not exists", 404));
     }
     res.status(200).json({
@@ -30,8 +30,8 @@ exports.getAllCatalogRule = catchAsyncError(async (_req, res, _next) => {
 });
 
 exports.updateCatalogRule = catchAsyncError(async (req, res, next) => {
-    const rule = await Catalogrule.findById(req.params.id);
-    if(rule){
+    let rule = await Catalogrule.findById(req.params.id);
+    if(!rule){
         return next(new ErrorHandler("Catalogrule is not exists", 404));
     }
     rule = await Catalogrule.findByIdAndUpdate(req.params.id, req.body, {
@@ -39,9 +39,8 @@ exports.updateCatalogRule = catchAsyncError(async (req, res, next) => {
         runValidators: true,
         useFindAndModify: false
     });
-
     res.status(200).json({
-        sucess: true,
+        success: true,
         catalogrule: rule
     });
 });

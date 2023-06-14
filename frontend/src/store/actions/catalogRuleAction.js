@@ -16,6 +16,20 @@ export const createCatalogRule = createAsyncThunk("catalogrule/createCatalogRule
     }
 });
 
+export const updateCatalogRule = createAsyncThunk("catalogrule/updateCatalogRule", async ({catalogRuleData, catalogRuleId}, thunkAPI) => {
+    try {
+        const config = {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            };
+            const { data } = await axios.put(`/api/v1/admin/catalog_rule/${catalogRuleId}`, catalogRuleData, config);
+            return data.success;
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
 export const getAllCatalogRules = createAsyncThunk("catalogrule/getAllCatalogRules", async(_, thunkAPI) => {
     try {
         const { data } = await axios.get(`/api/v1/admin/catalog_rules`);
@@ -25,7 +39,7 @@ export const getAllCatalogRules = createAsyncThunk("catalogrule/getAllCatalogRul
     }
 });
 
-export const getCatalogRule = createAsyncThunk("catalogrule/getAllCatalogRules", async(catalogruleId, thunkAPI) => {
+export const getCatalogRule = createAsyncThunk("catalogrule/getCatalogRule", async(catalogruleId, thunkAPI) => {
     try {
         const { data } = await axios.get(`/api/v1/admin/catalog_rule/${catalogruleId}`);
         return data.catalogrule;
@@ -37,7 +51,7 @@ export const getCatalogRule = createAsyncThunk("catalogrule/getAllCatalogRules",
 export const deleteCatalogRule = createAsyncThunk("catalogrule/deleteCatalogRule", async (catalogruleId, thunkAPI) => {
     try {
         const { data } = await axios.delete(`/api/v1/admin/catalog_rule/${catalogruleId}`);
-        return data;
+        return data.success;
     } catch (error) {
         return thunkError(error, thunkAPI);
     }
@@ -81,7 +95,7 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
             case "conditions_combinations":
                 return {
                     level: catalogObject.level,
-                    type: catalogObject.type,
+                    type: "conditions_combinations",
                     conditionType: 'all',
                     conditionValue: true,
                     conditionTypeFlag: false,
@@ -91,7 +105,7 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
             case "attribute_set":
                 return {
                     level: catalogObject.level,
-                    type: catalogObject.type,
+                    type: "attribute_set",
                     open: catalogObject.open,
                     attributeset: catalogObject.attributeset,
                     parent: catalogObject.parent
@@ -99,23 +113,17 @@ export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatal
             case "category":
                 return {
                     level: catalogObject.level,
-                    type: catalogObject.type,
-                    conditionType: 'all',
-                    conditionValue: true,
-                    conditionTypeFlag: false,
-                    conditionValueFlag: false,
+                    type: "category",
+                    open: catalogObject.open,
                     category: catalogObject.category,
                     parent: catalogObject.parent
                 }
             case "productid":
                 return {
                     level: catalogObject.level,
-                    type: catalogObject.type,
-                    conditionType: 'all',
-                    conditionValue: true,
-                    conditionTypeFlag: false,
-                    conditionValueFlag: false,
-                    products: catalogObject.products,
+                    type: "productid",
+                    open: catalogObject.open,
+                    product: catalogObject.product,
                     parent: catalogObject.parent
                 }
             default:
@@ -166,10 +174,7 @@ export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatal
                     return {
                         level: catalogObject.level,
                         type: catalogObject.type,
-                        conditionType: 'all',
-                        conditionValue: true,
-                        conditionTypeFlag: false,
-                        conditionValueFlag: false,
+                        product: catalogObject.product,
                         parent: catalogObject.parent
                     }
                 default:
@@ -183,6 +188,14 @@ export const updateCatalogRuleObject = createAsyncThunk("catalogrule/updateCatal
                         parent: catalogObject.parent
                     }
             };
+    } catch (error) {
+        return thunkError(error, thunkAPI);
+    }
+});
+
+export const setConditionObject = createAsyncThunk("catalogrule/setConditionObject", async (catalogObject, thunkAPI) => {
+    try {
+        return catalogObject;
     } catch (error) {
         return thunkError(error, thunkAPI);
     }

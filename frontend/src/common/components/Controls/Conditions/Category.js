@@ -1,46 +1,51 @@
-import React, { useMemo, useState } from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateCatalogRuleObject} from '../../../../store';
 
-const Category = ({ categories, children, deleteCompoment, level, parent }) => {
+const Category = ({ categories, children, deleteCompoment, item, changed, id  }) => {
+    const { level, parent} = item;
     const dispatch = useDispatch();
-    const [option, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("");
+    const {conditionObject, loading} = useSelector(state => state.updateCatalogRuleObject);
 
+    const category = categories.find(category => {
+        if(category._id === item.category) {
+            return true;
+        }
+        return false;
+    });
+    
     const changeOptionHandler = (e) => {
         setSelectedCategory(e.target.value);
         dispatch(updateCatalogRuleObject({
             type: "category",
             category: e.target.value,
             level,
-            parent
+            parent,
+            open
         }));
+        changed(conditionObject, id);
         setOpen(false);
     }
-
-    const _category = useMemo(() => {
-        if(selectedCategory) {
-            const matched = categories.find(category => category._id === selectedCategory);
-            return matched.name;
-        }
-        return null;
-    }, [selectedCategory, categories]);
+    
+    if(loading) {return <></>}
 
     return (<div className="flex flex-col">
         <div className="flex">
-            Category is &nbsp;{!option && <span onClick={() => setOpen(true)}>
-                {_category ? _category : "..."}</span>
-            }&nbsp;{option && <span className="element">
+            Category is &nbsp;{!open && <span onClick={() => setOpen(true)}>
+                {category ? category.name : "..."}</span>
+            }&nbsp;{open && <span className="element">
                 <select
                     value={selectedCategory}
-                    onChange={changeOptionHandler}
+                    onChange={(e) => changeOptionHandler(e)}
                     onMouseOver={() => setOpen(true)}
                     onMouseOut={() => setOpen(false)}
                 >
                     <option value={""}>Select Category</option>
-                    {categories.map(category => {
-                        return (<option value={category._id} key={category._id}>
-                            {category.name}
+                    {categories.map(_category => {
+                        return (<option value={_category._id} key={_category._id}>
+                            {_category.name}
                         </option>);
                     })}
                 </select>

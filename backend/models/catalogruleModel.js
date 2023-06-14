@@ -28,14 +28,9 @@ const catalogruleScheme = new mongoose.Schema({
         type: String,
         required: [true, "This is required"],
     },
-    actions_serialized: {
-        type: String,
-        required: [true, "This is required"],
-    },
     stop_rules_processing: {
-        type: Number,
-        required: true,
-        default: 1
+        type: Boolean,
+        required: true
     },
     sort_order: {
         type: Number,
@@ -46,7 +41,7 @@ const catalogruleScheme = new mongoose.Schema({
         type: String,
         required: false
     },
-    discount__amount: {
+    discount_amount: {
         type: Number,
         required: true,
         default: 0.000000

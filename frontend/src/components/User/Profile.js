@@ -1,14 +1,22 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../layout/Loader/Loader";
+import {loadUser} from '../../store';
 import MetaData from "../layout/MetaData";
 import ProfileImage from './ProfileImage';
 import "./Profile.css";
 
 const Profile = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isAuthenticated, user, loading } = useSelector(state => state.user);
+
+    useEffect(() => {
+        if(!user) {
+           dispatch(loadUser());
+        }
+    }, [dispatch, user]);
 
     useEffect(() => {
         if(!isAuthenticated){

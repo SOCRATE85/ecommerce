@@ -15,9 +15,7 @@ router
     .get(isAuthenticatedUser, authorizeRole("admin"), getCatalogRule)
     .put(isAuthenticatedUser, authorizeRole("admin"), updateCatalogRule)
     .delete(isAuthenticatedUser, authorizeRole("admin"), deleteCatalogRule);
-router
-    .route('/catalog_rule')
-    .get(getCatalogRule);
+
 router
     .route("/admin/catalog_rules")
     .get(isAuthenticatedUser, authorizeRole("admin"), getAllCatalogRule);

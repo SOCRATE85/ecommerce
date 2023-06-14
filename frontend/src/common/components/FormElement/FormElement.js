@@ -14,7 +14,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
         switch (element.config.elementType) {
             case 'select':
             case "multiselect":
-                return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}
@@ -29,7 +29,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     changed={(e)=> actioncontrol.selectOptionChangeHandler(e, element.id)}
                 />
             case 'conditions':
-                return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}
@@ -71,7 +71,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     changed={(e)=> actioncontrol.checkboxOptionChangeHandler(e, element.id)}
                 />
             case 'file': 
-                    return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}
@@ -87,7 +87,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     changed={(e)=> actioncontrol.createImageChange(e, element.id, createImageChange)}
                 />
             case "input":
-                return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}
@@ -101,7 +101,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
                 />
             case "textarea":
-                return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}
@@ -115,7 +115,7 @@ const FormElement = ({formElementArray, actioncontrol, options, createImageChang
                     changed={(e)=> actioncontrol.inputOptionChangeHandler(e, element.id)}
                 />
             case "boolean":
-                return <Input 
+                return <Input
                     id={element.id}
                     key={element.id}
                     hideLabel={element.config.hideLabel}

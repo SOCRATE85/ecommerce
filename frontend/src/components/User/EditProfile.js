@@ -159,8 +159,7 @@ const EditProfile = () => {
     if(loadingUser || loading){
         return <Loader />
     }
-    console.log("formElementArray: ", formElementArray);
-    console.log("uploadedImage: ", uploadedImage);
+   
     return <>
         <MetaData title = {`Update ${userData && userData.name }'s Profile`} />
         <div className='updatePofileContainer'>

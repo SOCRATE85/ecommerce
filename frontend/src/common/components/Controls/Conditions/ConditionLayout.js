@@ -1,11 +1,12 @@
 import React, {useMemo} from "react";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateCatalogRuleObject} from '../../../../store';
 
-const ConditionLayout = ({ children, item, deleteCompoment }) => {
+const ConditionLayout = ({ children, item, deleteCompoment, changed, id }) => {
     const dispatch = useDispatch();
     const {level, conditionType, conditionValue, conditionTypeFlag, conditionValueFlag} = item;
-    
+    const {conditionObject, loading} = useSelector(state => state.updateCatalogRuleObject);
+
     const conditionTypes = useMemo(() => {
         return [{value: "all", label: "ALL"},{value: "any", label: "ANY"}];
     }, []);
@@ -32,6 +33,8 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
         });
         return _tempValue.label;
     }, [conditionValue, conditionValues]);
+    
+    if(loading) {return (<></>)}
 
     return (
         <>
@@ -39,6 +42,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                 <div className="flex justify-center text-center gap-2">if{' '} 
                     <span className="rule-param underline">
                         {!conditionTypeFlag && <span onClick={() => {
+                            changed(conditionObject, id);
                             dispatch(updateCatalogRuleObject({
                                 type: 'conditions_combinations',
                                 level,
@@ -51,6 +55,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                         {
                             conditionTypeFlag && <span className="element">
                                 <select value={conditionType} onChange={(e) => {
+                                    changed(conditionObject, id);
                                     dispatch(updateCatalogRuleObject({
                                         type: 'conditions_combinations',
                                         level,
@@ -61,6 +66,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                                     }));
                                 }}
                                 onMouseOver={() => {
+                                    changed(conditionObject, id);
                                     dispatch(updateCatalogRuleObject({
                                         type: 'conditions_combinations',
                                         level,
@@ -71,6 +77,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                                     }));
                                 }}
                                 onMouseOut={() => {
+                                    changed(conditionObject, id);
                                     dispatch(updateCatalogRuleObject({
                                         type: 'conditions_combinations',
                                         level,
@@ -92,6 +99,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                     </span> of these conditions are{' '}
                     <span className="rule-param underline">
                         {!conditionValueFlag && <span onClick={() => {
+                            changed(conditionObject, id);
                             dispatch(updateCatalogRuleObject({
                                 type: 'conditions_combinations',
                                 level,
@@ -103,6 +111,7 @@ const ConditionLayout = ({ children, item, deleteCompoment }) => {
                         }}>{getConditionValue}</span>}
                         {conditionValueFlag && <span className="element">
                             <select value={conditionValue} onChange={(e) => {
+                                changed(conditionObject, id);
                                 dispatch(updateCatalogRuleObject({
                                     type: 'conditions_combinations',
                                     level,

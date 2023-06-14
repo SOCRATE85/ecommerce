@@ -247,7 +247,7 @@ const UpdateBlog = () => {
             dispatch(clearErrors());
         }
     }, [error, dispatch, alert, updateError]);
-
+    
     useEffect(() => {
         if(isUpdated) {
             alert.success("Blog is updated successfully");

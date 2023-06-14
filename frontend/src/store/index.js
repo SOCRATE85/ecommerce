@@ -44,7 +44,14 @@ import {
     bannersSlice,
     deleteBannerSlice
 } from './reducers/bannerReducer';
-import {updateCatalogRuleObjectSlice} from './reducers/catalogRuleReducer';
+import {
+  createCatalogRuleSlice,
+  updateCatalogRuleObjectSlice,
+  getAllCatalogRulesSlice,
+  getCatalogRuleSlice,
+  updateCatalogRuleSlice,
+  deleteCatalogRuleSlice
+} from './reducers/catalogRuleReducer';
 import {
   addAddressSlice,
   updateAddressSlice,
@@ -158,7 +165,12 @@ const reducer = combineReducers({
     slider: sliderSlice.reducer,
     sliders: slidersSlice.reducer,
     deleteSlider: deleteSliderSlice.reducer,
-    catalogrule: updateCatalogRuleObjectSlice.reducer
+    createCatalogRule: createCatalogRuleSlice.reducer,
+    catalogrules: getAllCatalogRulesSlice.reducer,
+    catalogrule: getCatalogRuleSlice.reducer,
+    updateCatalongrule: updateCatalogRuleSlice.reducer,
+    deleteCatalogRule: deleteCatalogRuleSlice.reducer,
+    updateCatalogRuleObject: updateCatalogRuleObjectSlice.reducer
 });
 
 const initialStore = {};
@@ -240,3 +252,6 @@ export * from './actions/orderAction';
 export const { updateOrderReset, deleteOrderReset } = updateOrderSlice.actions;
 
 export * from './actions/catalogRuleAction';
+export const {createCatalogRuleReset} = createCatalogRuleSlice.actions;
+export const {updateCatalogRuleReset} = updateCatalogRuleSlice.actions;
+export const {deleteCatalogRuleReset} = deleteCatalogRuleSlice.actions;

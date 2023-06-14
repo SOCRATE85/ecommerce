@@ -36,6 +36,9 @@ class ActionControl {
             this.setFormState(_updatedFormElement);
             this.setImageUpload(false);
     }
+    selectedValues = (value, options) => {
+        return options.find(option => option.value === value);
+    }
     setFormDataValues = (data, setStatus) => {
         const _updatedFormElement = {...this.formState};
         for(let identifier in _updatedFormElement) {
@@ -44,34 +47,34 @@ class ActionControl {
             
             switch (updatedFormElement.elementType) {
                 case "select":
-                    updatedFormElement.value = data[identifier] ? {
-                        value: data[identifier]._id, 
-                        label: data[identifier].title ? data[identifier].title : data[identifier].name
-                    } : "";
+                    updatedFormElement.value = this.selectedValues(data[identifier], updatedFormElement.elementConfig.options);
                 break;
                 case "multiselect":
                     updatedFormElement.value = data[identifier] ? data[identifier].map(item => ({ value: item._id, label: item.title ? item.title : item.name })) : "";
                 break;
                 case "editor":
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier];
                 break;
                 case "checkbox":
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier];
                 break;
                 case "file":
                     updatedFormElement.value = data[identifier] ? data[identifier] : [];
                 break;
+                case "conditions":
+                    updatedFormElement.value = data[identifier] ? JSON.parse(data[identifier]) : [];
+                break;
                 case "input":
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier];
                 break;
                 case "textarea":
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier];
                 break;
                 case "boolean":
                     updatedFormElement.value = data[identifier] ? data[identifier] : false;
                 break;
                 default:
-                    updatedFormElement.value = data[identifier] ? data[identifier] : "";
+                    updatedFormElement.value = data[identifier];
                 break;
             }
             

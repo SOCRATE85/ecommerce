@@ -4,14 +4,15 @@ import {createCatalogRuleObject} from '../../../../store';
 import {AddCircleOutline} from "@mui/icons-material";
 
 const OptionSelector = ({
-        addConditions,
         selectedConditionOption,
         setSelectedConditionOption,
-        level
+        item: {level},
+        changed,
+        id
     }) => {
     const dispatch = useDispatch();
     const [option, setOpen] = useState(false);
-    const {/*conditionObject,*/ loading} = useSelector(state => state.catalogrule);
+    const {conditionObject, loading} = useSelector(state => state.updateCatalogRuleObject);
 
     const optionChangeHandler = (e) => {
         setSelectedConditionOption(e.target.value);
@@ -32,21 +33,24 @@ const OptionSelector = ({
                 optionObject = {
                     type: 'attribute_set',
                     level: level + 1,
-                    parent: level
+                    parent: level,
+                    attributeset: null
                 };
             break;
             case "category":
                 optionObject = {
                     type: 'category',
                     level: level + 1,
-                    parent: level
+                    parent: level,
+                    category: null
                 };
             break;
             case "productid":
                 optionObject = {
                     type: 'productid',
                     level: level + 1,
-                    parent: level
+                    parent: level,
+                    product: null
                 };
             break;
             default:
@@ -57,6 +61,7 @@ const OptionSelector = ({
                 };
             break;
         }
+        changed(conditionObject, id);
         dispatch(createCatalogRuleObject(optionObject));
     }
 
@@ -68,7 +73,6 @@ const OptionSelector = ({
                 !option && <AddCircleOutline 
                     onBlur={() => setOpen(false)}
                     onClick={() => {
-                        addConditions(setOpen);
                         setOpen(true);
                     }} 
                 />

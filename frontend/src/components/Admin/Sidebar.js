@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Logo from "../layout/Header/Logo/Logo";
 import {
     PostAddOutlined,
@@ -6,8 +7,10 @@ import {
     ListAltOutlined,
     PeopleAltOutlined,
     SettingsOutlined,
-    PriceChangeOutlined
+    PriceChangeOutlined,
+    ExitToAppOutlined
 } from "@mui/icons-material";
+import { logoutuser } from "../../store";
 import { SiderbarLinkContainer } from "../../common/components/SiderbarLinkContainer";
 
 const siderbarItems = [
@@ -129,6 +132,7 @@ const siderbarItems = [
 ]
 
 const Sidebar = () => {
+    const dispatch = useDispatch()
     return <div className="flex flex-col bg-white border-r border-gray-300 w-[250px]">
         <Logo />
         <ul>
@@ -142,6 +146,10 @@ const Sidebar = () => {
                     />
                 }) 
             }
+            <li className="pl-5 pt-2 hover:cursor-pointer hover:underline">
+                <ExitToAppOutlined />
+                <span onClick={() => dispatch(logoutuser())} className="ml-3">Log Out</span>
+            </li>
         </ul>
     </div>
 }

@@ -1,12 +1,12 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import './FormAction.css';
 
-const FormAction = ({submitHandler, children}) => {
+const FormAction = forwardRef(({submitHandler, children}, ref) => {
     return (
-        <form className="formContentContainer" encType="multipart/form-data" onSubmit={(e) => submitHandler(e)}>
+        <form ref={ref} className="formContentContainer" encType="multipart/form-data" onSubmit={(e) => submitHandler(e)}>
             {children}
         </form>
     );
-}
+});
 
 export default FormAction;

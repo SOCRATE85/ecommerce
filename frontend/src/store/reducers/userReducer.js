@@ -33,7 +33,10 @@ export const addUserSlice = createSlice({
 
 export const userSlice = createSlice({
     name: "user",
-    initialState: {},
+    initialState: {
+        loading: true,
+        isAuthenticated: false
+    },
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
