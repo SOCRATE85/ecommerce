@@ -5,7 +5,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { getOrderDetails, clearErrors } from "../../store";
 import Loader from "../layout/Loader/Loader";
-import { useAlert } from "react-alert";
+import { useAlert } from "../../common/hooks/use-alert";
 
 import "./OrderDetails.css";
 const OrderDetails = () => {
@@ -62,7 +62,8 @@ const OrderDetails = () => {
                   order.paymentInfo && order.paymentInfo.status === "succeeded"
                     ? "greenColor"
                     : "redColor"
-                }>
+                }
+              >
                 {order.paymentInfo && order.paymentInfo.status === "succeeded"
                   ? "PAID"
                   : "NOT PAID"}
@@ -83,7 +84,8 @@ const OrderDetails = () => {
                   order.orderStatus && order.orderStatus === "Delivered"
                     ? "greenColor"
                     : "redColor"
-                }>
+                }
+              >
                 {order.orderStatus && order.orderStatus}
               </p>
             </div>
@@ -106,7 +108,12 @@ const OrderDetails = () => {
               ))}
           </div>
           <div>
-            <input type={"button"} className="button" value="Back" onClick={() => navigate(-1)} />
+            <input
+              type={"button"}
+              className="button"
+              value="Back"
+              onClick={() => navigate(-1)}
+            />
           </div>
         </div>
       </div>
