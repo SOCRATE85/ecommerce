@@ -8,7 +8,7 @@ import {
     ListAltOutlined,
     ShoppingCartOutlined
  } from '@mui/icons-material';
-import { useAlert } from 'react-alert';
+import { useAlert } from '../../../common/hooks/use-alert';
 import { useDispatch, useSelector } from "react-redux";
 import { logoutuser } from '../../../store';
 import "./UserOption.css";

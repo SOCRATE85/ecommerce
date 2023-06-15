@@ -6,7 +6,7 @@ import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
 import { clearErrors, updatePassword, updatePasswordReset } from '../../store';
-import { useAlert} from 'react-alert';
+import { useAlert} from '../../common/hooks/use-alert';
 import MetaData from '../layout/MetaData';
 import "./UpdatePassword.css";
 

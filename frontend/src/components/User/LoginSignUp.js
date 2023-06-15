@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Loader from "../layout/Loader/Loader";
 import { login, clearErrors, register } from "../../store";
-import { useAlert } from "react-alert";
+import { useAlert } from "../../common/hooks/use-alert";
 import "./LoginSignUp.css";
 
 const LoginSignUp = () => {

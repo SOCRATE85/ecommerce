@@ -7,7 +7,7 @@ import FormAction from '../../common/components/FormAction';
 import FormElement from '../../common/components/FormElement';
 import SubmitButton from '../../common/components/SubmitActionButton';
 import { clearErrors, register, uploadFiles } from "../../store";
-import { useAlert } from "react-alert";
+import { useAlert } from "../../common/hooks/use-alert";
 import "./LoginSignUp.css";
 
 const SignUp = () => {

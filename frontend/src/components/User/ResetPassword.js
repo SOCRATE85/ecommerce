@@ -5,7 +5,7 @@ import LockOutlined from '@mui/icons-material/LockOutlined';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../layout/Loader/Loader';
 import { clearErrors, resetPassword } from '../../store';
-import { useAlert} from 'react-alert';
+import { useAlert} from '../../common/hooks/use-alert';
 import MetaData from '../layout/MetaData';
 import "./ResetPassword.css";
 
