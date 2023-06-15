@@ -1,0 +1,41 @@
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE could not resolve
+npm ERR! 
+npm ERR! While resolving: react-image-magnify@2.7.4
+npm ERR! Found: react@18.2.0
+npm ERR! node_modules/react
+npm ERR!   peer react@"^16.13.1 || ^17.0.0 || ^18.0.0" from @ckeditor/ckeditor5-react@5.1.0
+npm ERR!   node_modules/@ckeditor/ckeditor5-react
+npm ERR!   peer react@">=16.8.0" from @emotion/react@11.10.6
+npm ERR!   node_modules/@emotion/react
+npm ERR!     peer @emotion/react@"^11.0.0-rc.0" from @emotion/styled@11.10.6
+npm ERR!     node_modules/@emotion/styled
+npm ERR!       peerOptional @emotion/styled@"^11.3.0" from @mui/lab@5.0.0-alpha.124
+npm ERR!       node_modules/@mui/lab
+npm ERR!         @mui/lab@"^5.0.0-alpha.90" from the root project
+npm ERR!       5 more (@mui/material, @mui/styled-engine, @mui/system, ...)
+npm ERR!     peerOptional @emotion/react@"^11.5.0" from @mui/lab@5.0.0-alpha.124
+npm ERR!     node_modules/@mui/lab
+npm ERR!       @mui/lab@"^5.0.0-alpha.90" from the root project
+npm ERR!     6 more (@mui/material, @mui/styled-engine, @mui/system, ...)
+npm ERR!   64 more (@emotion/styled, ...)
+npm ERR! 
+npm ERR! Could not resolve dependency:
+npm ERR! peer react@"~0.14.9 || ^15.0.0 || ^16.0.0" from react-image-magnify@2.7.4
+npm ERR! node_modules/react-image-magnify
+npm ERR!   react-image-magnify@"^2.7.4" from the root project
+npm ERR! 
+npm ERR! Conflicting peer dependency: react@16.14.0
+npm ERR! node_modules/react
+npm ERR!   peer react@"~0.14.9 || ^15.0.0 || ^16.0.0" from react-image-magnify@2.7.4
+npm ERR!   node_modules/react-image-magnify
+npm ERR!     react-image-magnify@"^2.7.4" from the root project
+npm ERR! 
+npm ERR! Fix the upstream dependency conflict, or retry
+npm ERR! this command with --force, or --legacy-peer-deps
+npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+npm ERR! 
+npm ERR! See /Users/vidyasagarkushwaha/.npm/eresolve-report.txt for a full report.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/vidyasagarkushwaha/.npm/_logs/2023-06-15T09_45_12_803Z-debug-0.log

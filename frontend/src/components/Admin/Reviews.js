@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
-import { useAlert } from "react-alert";
-import { getAllReviews, clearErrors, deleteReview, deleteReviewReset } from "../../store";
+import { useAlert } from "../../common/hooks/use-alert";
+import {
+  getAllReviews,
+  clearErrors,
+  deleteReview,
+  deleteReviewReset,
+} from "../../store";
 import { useNavigate } from "react-router-dom";
 import { FormContainer } from "../../common/components/FormContainer";
 import Loader from "../layout/Loader/Loader";
@@ -48,7 +53,8 @@ const Reviews = () => {
             <Button
               onClick={() =>
                 deleteReviewHandler(params.getValue(params.id, "id"))
-              }>
+              }
+            >
               <Delete />
             </Button>
           </>
@@ -96,56 +102,63 @@ const Reviews = () => {
   }, [alert, deleteError, dispatch]);
 
   useEffect(() => {
-    if(productId.length === 24) {
+    if (productId.length === 24) {
       dispatch(getAllReviews(productId));
     }
-  },[dispatch, productId]);
+  }, [dispatch, productId]);
 
   const productReviewsSubmitHandler = (e) => {
     e.preventDefault();
     dispatch(getAllReviews(productId));
   };
 
-  return (<FormContainer pagetitle={"Admin Reviews Listing"}>
-          {loading ? <Loader /> : <>
-            <form
-              className="productReviewsForm"
-              onSubmit={productReviewsSubmitHandler}>
-              <h1 className="productReviewsFormHeading">ALL REVIEWS</h1>
-              <div>
-                <Star />
-                <input
-                  type="text"
-                  placeholder="Product Id"
-                  required
-                  value={productId}
-                  onChange={(e) => setProductId(e.target.value)}
-                />
-              </div>
-
-              <Button
-                id="createProductBtn"
-                type="submit"
-                disabled={
-                  loading ? true : false || productId === "" ? true : false
-                }>
-                Search
-              </Button>
-            </form>
-
-            {reviews && reviews.length > 0 ? (
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={10}
-                disableSelectionOnClick
-                className="productListTable"
-                autoHeight
+  return (
+    <FormContainer pagetitle={"Admin Reviews Listing"}>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <form
+            className="productReviewsForm"
+            onSubmit={productReviewsSubmitHandler}
+          >
+            <h1 className="productReviewsFormHeading">ALL REVIEWS</h1>
+            <div>
+              <Star />
+              <input
+                type="text"
+                placeholder="Product Id"
+                required
+                value={productId}
+                onChange={(e) => setProductId(e.target.value)}
               />
-            ) : (
-              <h1 className="productReviewsFormHeading">No Reviews Found</h1>
-            )}
-          </>}
+            </div>
+
+            <Button
+              id="createProductBtn"
+              type="submit"
+              disabled={
+                loading ? true : false || productId === "" ? true : false
+              }
+            >
+              Search
+            </Button>
+          </form>
+
+          {reviews && reviews.length > 0 ? (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={10}
+              disableSelectionOnClick
+              className="productListTable"
+              autoHeight
+            />
+          ) : (
+            <h1 className="productReviewsFormHeading">No Reviews Found</h1>
+          )}
+        </>
+      )}
     </FormContainer>
   );
 };

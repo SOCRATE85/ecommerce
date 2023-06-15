@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from "react-alert";
+import { useDispatch, useSelector } from "react-redux";
+import { useAlert } from "../../../../common/hooks/use-alert";
 import {
-    clearErrors,
-    getAllCatalogRules,
-    getCatalogRule,
-    setConditionObject,
-    updateCatalogRuleReset,
-    updateCatalogRule
-} from '../../../../store';
+  clearErrors,
+  getAllCatalogRules,
+  getCatalogRule,
+  setConditionObject,
+  updateCatalogRuleReset,
+  updateCatalogRule,
+} from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
-import FormAction from '../../../../common/components/FormAction';
-import ActionControl from '../../../../common/ActionControl';
-import FormElement from '../../../../common/components/FormElement';
-import SubmitActionButton from '../../../../common/components/SubmitActionButton';
+import FormAction from "../../../../common/components/FormAction";
+import ActionControl from "../../../../common/ActionControl";
+import FormElement from "../../../../common/components/FormElement";
+import SubmitActionButton from "../../../../common/components/SubmitActionButton";
 import { Loader } from "../../../layout";
 import { Button } from "@mui/material";
 
@@ -279,53 +279,52 @@ const EditCatalogPriceRule = () => {
             dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
         }
     }
-
     const saveAndApplySubmitHandler = () => {
         setSaveAndApply(true);
-        console.log("saveAndApplySubmitHandler: ", saveAndApply);
-        ref?.current.submit();
     }
 
-    let formElementArray = useMemo(() => {
-        const _formElementArray = [];
-        const tempformElementArray = actioncontrol.getFormState();
-        for(let key in tempformElementArray) {
-            _formElementArray.push({
-                id: key,
-                config: tempformElementArray[key]
-            })
-        }
-        return _formElementArray;
-    }, [actioncontrol]);
-
-    if(loading || updateLoading) {
-        return (<Loader />);
+  let formElementArray = useMemo(() => {
+    const _formElementArray = [];
+    const tempformElementArray = actioncontrol.getFormState();
+    for (let key in tempformElementArray) {
+      _formElementArray.push({
+        id: key,
+        config: tempformElementArray[key],
+      });
     }
+    return _formElementArray;
+  }, [actioncontrol]);
 
-    return (<FormContainer pagetitle={'Edit Catalog Rule'}>
-        <FormAction 
-            ref={ref}
-            submitHandler={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}
-        >
-            <FormElement 
-                formElementArray={formElementArray}
-                actioncontrol={actioncontrol}
-                options={[
-                    {
-                        key: "simple_action",
-                        option: simpleAction
-                    },
-                    {
-                        key: "stop_rules_processing",
-                        option: stopRulesProcessing
-                    }
-                ]}
-            />
-            <SubmitActionButton title={'Update Rule'}>
-                <Button type="button" onClick={saveAndApplySubmitHandler}>Save and Apply</Button>
-            </SubmitActionButton>
-        </FormAction>
-    </FormContainer>);
-}
+  if (loading || updateLoading) {
+    return <Loader />;
+  }
+
+  return (
+        <FormContainer pagetitle={'Edit Catalog Rule'}>
+            <FormAction 
+                ref={ref}
+                submitHandler={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}
+            >
+                <FormElement 
+                    formElementArray={formElementArray}
+                    actioncontrol={actioncontrol}
+                    options={[
+                        {
+                            key: "simple_action",
+                            option: simpleAction
+                        },
+                        {
+                            key: "stop_rules_processing",
+                            option: stopRulesProcessing
+                        }
+                    ]}
+                />
+                <SubmitActionButton title={'Update Rule'}>
+                    <Button type="button" onClick={saveAndApplySubmitHandler}>Save and Apply</Button>
+                </SubmitActionButton>
+            </FormAction>
+        </FormContainer>
+    );
+};
 
 export default EditCatalogPriceRule;
