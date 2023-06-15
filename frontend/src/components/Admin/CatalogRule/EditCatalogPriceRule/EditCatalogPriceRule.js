@@ -25,6 +25,7 @@ const EditCatalogPriceRule = () => {
     const alert = useAlert();
     const dispatch = useDispatch();
     const [status, setStatus] = useState(false);
+    const [saveAndApply, setSaveAndApply] = useState(false);
     const {conditionObject} = useSelector(state => state.updateCatalogRuleObject);
     const {catalogrule, error, loading} = useSelector(state => state.catalogrule);
     const {isUpdated, loading: updateLoading, error: updateError} = useSelector(state=>state.updateCatalongrule);
@@ -257,6 +258,7 @@ const EditCatalogPriceRule = () => {
     },[dispatch, catalogrule, catalogRuleId, actioncontrol, status, loading]);
 
     const updateSubmitHandler = (state) => {
+        console.log("updateSubmitHandler");
         const myForm = new FormData();
         for(let key in state) {
             if(key === 'conditions_serialized') {
@@ -269,11 +271,19 @@ const EditCatalogPriceRule = () => {
                 myForm.set(key, state[key].value);
             }
         }
-        dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
+        if (saveAndApply) {
+            console.log("updateSubmitHandler if: ", saveAndApply);
+            dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
+        } else {
+            console.log("updateSubmitHandler else: ", saveAndApply);
+            dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
+        }
     }
 
-    const saveAndApplySubmitHandler = (state) => {
-        ref?.current.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    const saveAndApplySubmitHandler = () => {
+        setSaveAndApply(true);
+        console.log("saveAndApplySubmitHandler: ", saveAndApply);
+        ref?.current.submit();
     }
 
     let formElementArray = useMemo(() => {
@@ -312,7 +322,7 @@ const EditCatalogPriceRule = () => {
                 ]}
             />
             <SubmitActionButton title={'Update Rule'}>
-                <Button onClick={saveAndApplySubmitHandler}>Save and Apply</Button>
+                <Button type="button" onClick={saveAndApplySubmitHandler}>Save and Apply</Button>
             </SubmitActionButton>
         </FormAction>
     </FormContainer>);

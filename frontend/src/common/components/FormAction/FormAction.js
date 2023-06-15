@@ -3,7 +3,13 @@ import './FormAction.css';
 
 const FormAction = forwardRef(({submitHandler, children}, ref) => {
     return (
-        <form ref={ref} className="formContentContainer" encType="multipart/form-data" onSubmit={(e) => submitHandler(e)}>
+        <form 
+            ref={ref}
+            method="post"
+            className="formContentContainer"
+            encType="multipart/form-data"
+            onSubmit={submitHandler}
+        >
             {children}
         </form>
     );
