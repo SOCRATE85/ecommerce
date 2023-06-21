@@ -259,7 +259,7 @@ const AddNewCatalogPriceRule = () => {
   if (loading) {
     return <Loader />;
   }
-
+  
   return (
     <FormContainer pagetitle={"Add Catalog Rule"}>
       <FormAction
