@@ -7,6 +7,7 @@ import Boolean from "./Boolean";
 import Images from "./Images";
 import ControlContainer from '../ControlContainer';
 import ShowCondition from "./Conditions/ShowCondition";
+import Managecoupons from './Managecoupons';
 import moment from "moment";
 
 const Input = (props) => {
@@ -109,6 +110,7 @@ const Input = (props) => {
                     isMulti={props.elementType === 'multiselect' ? true : false}
                     onChange={props.changed}
                     onClick={props.click}
+                   isDisabled={props.elementConfig.disabled}
                 />
             );
         break;
@@ -138,7 +140,18 @@ const Input = (props) => {
             inputElement = (<Editor initData={props.value} id={props.id} changed={props.changed} />)
         break;
         case "conditions":
-            inputElement = <ShowCondition value={props.value} id={props.id} changed={props.changed} />;
+            inputElement = <ShowCondition 
+                value={props.value} 
+                id={props.id} 
+                changed={props.changed}
+            />;
+        break;
+        case "managecoupons":
+            inputElement = <Managecoupons
+                value={props.value}
+                id={props.id}
+                changed={props.changed}
+            />;
         break;
         default:
             inputElement = (

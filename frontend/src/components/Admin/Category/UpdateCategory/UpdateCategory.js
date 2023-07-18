@@ -85,12 +85,7 @@ const UpdateCategory = () => {
       elementConfig: {
         placeholder: "Parent Category",
         error: "",
-        options: [
-          {
-            value: 0,
-            defaultValue: "Select category",
-          },
-        ],
+        options: [],
       },
       value: null,
       validation: {
@@ -134,12 +129,7 @@ const UpdateCategory = () => {
   });
 
   const categoriesOption = useMemo(() => {
-    let _categories = [
-      {
-        value: 0,
-        label: "Select Category",
-      },
-    ];
+    let _categories = [];
     for (let key in categories) {
       _categories.push({
         value: categories[key]._id,
@@ -328,8 +318,12 @@ const UpdateCategory = () => {
       <FormElement
         formElementArray={formElementArray}
         actioncontrol={actioncontrol}
-        options={categoriesOption}
-        optionKey={"parent"}
+        options={[
+          {
+            key: "parent",
+            option: categoriesOption
+          }
+        ]}
         createImageChange={createImageChange}
       />
       <SubmitActionButton title={"Update Category"} />

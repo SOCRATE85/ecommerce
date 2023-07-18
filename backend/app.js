@@ -65,6 +65,9 @@ const banner = require("./routes/bannerRoute");
 //catalog rule
 const catalogrule = require('./routes/catalogruleRoute');
 
+//cart rule
+const cartrule = require('./routes/cartruleRoute');
+
 app.use("/api/v1", [
     product, 
     user,
@@ -80,7 +83,8 @@ app.use("/api/v1", [
     upload,
     slider,
     banner,
-    catalogrule
+    catalogrule,
+    cartrule
 ]);
 
 app.use(express.static(path.join(__dirname, "./public")));

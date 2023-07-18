@@ -279,8 +279,12 @@ const AddBanner = () => {
         <FormElement
           formElementArray={formElementArray}
           actioncontrol={actioncontrol}
-          options={sliderOption}
-          optionKey={"slider_id"}
+          options={[
+                {
+                  key: "slider_id",
+                  option: sliderOption,
+                }
+          ]}
           createImageChange={createImageChange}
         />
         <SubmitButton title={"Create Banner"} />

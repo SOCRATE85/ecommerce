@@ -86,15 +86,18 @@ class ActionControl {
     getFormState = () => {
         return this.formState;
     }
+    setNewFormState = (state) => {    
+        this.setFormState(state);
+    }
     checkValidation = (value, rules, type) => {
         let isValid = true;
         let message = "";
         
         if (!rules) return { isValid: true, message};
-
+        
         if(rules.required) {
             if(type === "boolean") {
-                isValid = !(value !== true && isValid);
+                isValid = !(value === null && isValid);
                 
                 if (!isValid) {
                     message = "This is required!";

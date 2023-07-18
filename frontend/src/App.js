@@ -53,6 +53,7 @@ import {
   EditCatalogPriceRule,
   ListCatalogPriceRule,
 } from "./components/Admin/CatalogRule";
+import { AddCartRule, EditCartRule, ListCartRule } from './components/Admin/CartRule'
 
 import Reviews from "./components/Admin/Reviews";
 import Settings from "./components/Admin/Settings";
@@ -510,6 +511,32 @@ function App() {
             element={
               <ProtectedRoute isAdmin={true}>
                 <ListCatalogPriceRule />
+              </ProtectedRoute>
+            }
+          />
+
+          
+          <Route
+            path="/admin/cartrule/new"
+            element={
+              <ProtectedRoute isAdmin={true}>
+                <AddCartRule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/cartrule/:id"
+            element={
+              <ProtectedRoute isAdmin={true}>
+                <EditCartRule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/cartrules"
+            element={
+              <ProtectedRoute isAdmin={true}>
+                <ListCartRule />
               </ProtectedRoute>
             }
           />

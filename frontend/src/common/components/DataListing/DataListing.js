@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import './DataListing.css';
 
 const DataListing = (props) => {
@@ -23,6 +23,9 @@ const DataListing = (props) => {
         checkboxSelection = {props.checkboxSelection}
         onSelectionModelChange={props.onSelectionModelChange}
         selectionModel={props.selectedProducts}
+        components={{Toolbar: GridToolbar}}
+        disableVirtualization={true}
+        disableDensitySelector={true}
     />
 }
 

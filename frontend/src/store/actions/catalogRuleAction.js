@@ -5,12 +5,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 export const createCatalogRule = createAsyncThunk("catalogrule/createCatalogRule", async (catalogRuleData, thunkAPI) => {
     try {
         const config = {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            };
-            const { data } = await axios.post(`/api/v1/admin/catalog_rule/new`, catalogRuleData, config);
-            return data;
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const { data } = await axios.post(`/api/v1/admin/catalog_rule/new`, catalogRuleData, config);
+        return data;
     } catch (error) {
         return thunkError(error, thunkAPI);
     }
@@ -19,12 +19,12 @@ export const createCatalogRule = createAsyncThunk("catalogrule/createCatalogRule
 export const updateCatalogRule = createAsyncThunk("catalogrule/updateCatalogRule", async ({catalogRuleData, catalogRuleId}, thunkAPI) => {
     try {
         const config = {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            };
-            const { data } = await axios.put(`/api/v1/admin/catalog_rule/${catalogRuleId}`, catalogRuleData, config);
-            return data.success;
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const { data } = await axios.put(`/api/v1/admin/catalog_rule/${catalogRuleId}`, catalogRuleData, config);
+        return data.success;
     } catch (error) {
         return thunkError(error, thunkAPI);
     }
@@ -57,14 +57,6 @@ export const deleteCatalogRule = createAsyncThunk("catalogrule/deleteCatalogRule
     }
 });
 
-export const loadDefaultOption = createAsyncThunk("catalogrule/loadDefaultOption", async(_, thunkAPI) => {
-    try {
-        
-    } catch (error) {
-        return thunkError(error, thunkAPI);
-    }
-});
-
 export const deleteRules = createAsyncThunk("catalogrule/deleteRules", async (level, thunkAPI) => {
     try {
         return level;
@@ -80,7 +72,7 @@ export const updateConditionTypeFlag = createAsyncThunk("catalogrule/conditionTy
         return thunkError(error, thunkAPI);
     }
 });
-
+/*
 export const updateConditionValueFlag = createAsyncThunk("catalogrule/updateConditionValueFlag", async (catalogObject, thunkAPI) => {
     try {
         return catalogObject;
@@ -88,7 +80,7 @@ export const updateConditionValueFlag = createAsyncThunk("catalogrule/updateCond
         return thunkError(error, thunkAPI);
     }
 });
-
+*/
 export const createCatalogRuleObject = createAsyncThunk("catalogrule/createCatalogRuleObject", async (catalogObject, thunkAPI) => {
     try {
         switch(catalogObject.type) {

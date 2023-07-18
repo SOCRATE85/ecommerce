@@ -293,8 +293,12 @@ const UpdateBanner = () => {
         <FormElement
           formElementArray={formElementArray}
           actioncontrol={actioncontrol}
-          options={sliderOption}
-          optionKey={"slider_id"}
+          options={[
+              {
+                key: "slider_id",
+                option: sliderOption,
+              }
+          ]}
           createImageChange={createImageChange}
         />
         <SubmitActionButton title={"Update Slider"}></SubmitActionButton>

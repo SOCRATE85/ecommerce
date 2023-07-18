@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "../../../../common/hooks/use-alert";
@@ -8,7 +8,7 @@ import {
   getCatalogRule,
   setConditionObject,
   updateCatalogRuleReset,
-  updateCatalogRule,
+  updateCatalogRule
 } from "../../../../store";
 import { FormContainer } from "../../../../common/components/FormContainer";
 import FormAction from "../../../../common/components/FormAction";
@@ -19,13 +19,11 @@ import { Loader } from "../../../layout";
 import { Button } from "@mui/material";
 
 const EditCatalogPriceRule = () => {
-    const ref = useRef(null);
     const params = useParams();
     const navigate = useNavigate();
     const alert = useAlert();
     const dispatch = useDispatch();
     const [status, setStatus] = useState(false);
-    const [saveAndApply, setSaveAndApply] = useState(false);
     const {conditionObject} = useSelector(state => state.updateCatalogRuleObject);
     const {catalogrule, error, loading} = useSelector(state => state.catalogrule);
     const {isUpdated, loading: updateLoading, error: updateError} = useSelector(state=>state.updateCatalongrule);
@@ -128,7 +126,7 @@ const EditCatalogPriceRule = () => {
             },
             value: true,
             validation: {
-                required: true
+                required: false
             },
             hideLabel: false,
             valid: false,
@@ -226,7 +224,7 @@ const EditCatalogPriceRule = () => {
             alert.success("Rule is updated successfully");
             dispatch(getCatalogRule(catalogRuleId));
             dispatch(updateCatalogRuleReset());
-            navigate('/admin/catalog_rules');
+            //navigate('/admin/catalog_rules');
         }
     }, [dispatch, isUpdated, alert, navigate, catalogRuleId]);
 
@@ -258,8 +256,8 @@ const EditCatalogPriceRule = () => {
     },[dispatch, catalogrule, catalogRuleId, actioncontrol, status, loading]);
 
     const updateSubmitHandler = (state) => {
-        console.log("updateSubmitHandler");
         const myForm = new FormData();
+        myForm.set("saveandapply", false);
         for(let key in state) {
             if(key === 'conditions_serialized') {
                 myForm.set(key, JSON.stringify(conditionObject));
@@ -271,16 +269,24 @@ const EditCatalogPriceRule = () => {
                 myForm.set(key, state[key].value);
             }
         }
-        if (saveAndApply) {
-            console.log("updateSubmitHandler if: ", saveAndApply);
-            dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
-        } else {
-            console.log("updateSubmitHandler else: ", saveAndApply);
-            dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
-        }
+        dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
     }
-    const saveAndApplySubmitHandler = () => {
-        setSaveAndApply(true);
+
+    const saveAndApplySubmitHandler = (state) => {
+        const myForm = new FormData();
+        myForm.set("saveandapply", true);
+        for(let key in state) {
+            if(key === 'conditions_serialized') {
+                myForm.set(key, JSON.stringify(conditionObject));
+            } else if(key === 'simple_action') {
+                myForm.set(key, state[key].value.value);
+            } else if(key === 'stop_rules_processing')  {
+                myForm.set(key, state[key].value.value);
+            } else {
+                myForm.set(key, state[key].value);
+            }
+        }
+        dispatch(updateCatalogRule({catalogRuleData: myForm, catalogRuleId}));
     }
 
   let formElementArray = useMemo(() => {
@@ -298,13 +304,10 @@ const EditCatalogPriceRule = () => {
   if (loading || updateLoading) {
     return <Loader />;
   }
-
+  
   return (
         <FormContainer pagetitle={'Edit Catalog Rule'}>
-            <FormAction 
-                ref={ref}
-                submitHandler={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}
-            >
+            <FormAction>
                 <FormElement 
                     formElementArray={formElementArray}
                     actioncontrol={actioncontrol}
@@ -319,8 +322,10 @@ const EditCatalogPriceRule = () => {
                         }
                     ]}
                 />
-                <SubmitActionButton title={'Update Rule'}>
-                    <Button type="button" onClick={saveAndApplySubmitHandler}>Save and Apply</Button>
+                <SubmitActionButton title={'Update Rule'} actions={(e) => actioncontrol.updateSubmitHandler(e, updateSubmitHandler)}>
+                    <Button
+                        type="submit"
+                        onClick={(e) => actioncontrol.updateSubmitHandler(e, saveAndApplySubmitHandler)}>Save and Apply</Button>
                 </SubmitActionButton>
             </FormAction>
         </FormContainer>

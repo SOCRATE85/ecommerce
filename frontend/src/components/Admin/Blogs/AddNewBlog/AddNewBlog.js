@@ -95,12 +95,7 @@ const AddNewBlog = () => {
       elementConfig: {
         placeholder: "Blog Category",
         error: "",
-        options: [
-          {
-            value: 0,
-            defaultValue: "Select category",
-          },
-        ],
+        options: [],
       },
       value: null,
       validation: {
@@ -225,12 +220,7 @@ const AddNewBlog = () => {
   }, [dispatch]);
 
   const categoryOption = useMemo(() => {
-    let _category = [
-      {
-        value: 0,
-        label: "Select category",
-      },
-    ];
+    let _category = [];
     for (let key in blogcategories) {
       _category.push({
         value: blogcategories[key]._id,
@@ -306,8 +296,12 @@ const AddNewBlog = () => {
           <FormElement
             formElementArray={formElementArray}
             actioncontrol={actioncontrol}
-            options={categoryOption}
-            optionKey={"categories"}
+            options={[
+              {
+                key: "categories",
+                option: categoryOption
+              }
+            ]}
             createImageChange={createImageChange}
           />
           <SubmitButton title={"Create Post"}></SubmitButton>

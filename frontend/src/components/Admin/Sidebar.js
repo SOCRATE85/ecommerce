@@ -65,6 +65,11 @@ const siderbarItems = [
         title: "Catalog Price Rule"
     },
     {
+        url: "/admin/cartrules",
+        font: <PriceChangeOutlined />,
+        title: "Cart Price Rule"
+    },
+    {
         url: "/admin/orders",
         font: <ListAltOutlined />,
         title: "Orders"
@@ -134,7 +139,7 @@ const siderbarItems = [
 const Sidebar = () => {
     const dispatch = useDispatch()
     return <div className="flex flex-col bg-white border-r border-gray-300 w-[250px]">
-        <Logo />
+        <Logo url={'/admin/dashboard'} />
         <ul>
             {
                 siderbarItems.map((item, index) => {

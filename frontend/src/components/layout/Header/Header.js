@@ -74,7 +74,7 @@ const Header = () => {
                 items={items}
             />
         </>}        
-        <Logo />
+        <Logo url={'/'} />
         {innerWidth > 768 && <nav className='DesktopOnly z-11'>
             <NavigationItems items={items} />
         </nav>}

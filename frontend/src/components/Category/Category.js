@@ -580,7 +580,6 @@ const Category = (props) => {
                   switch (flag[1]) {
                     case "price":
                     case "number":
-                      console.log("flag[2]: ", flag[2]);
                       if (
                         filters[key1].length > 1 &&
                         filters[key1][0] < filters[key1][1]
@@ -672,6 +671,7 @@ const Category = (props) => {
     if (products.length <= 0) {
       return <>These are not product for listing</>;
     }
+    
     return (
       <>
         {getToolber("top-toolbar")}
@@ -737,7 +737,7 @@ const Category = (props) => {
             {categoryDetails.images.map((image) => {
               return (
                 <img
-                  key={image.public_id}
+                  key={`img-${image.public_id}`}
                   src={image.url}
                   alt={categoryDetails.name}
                 />
